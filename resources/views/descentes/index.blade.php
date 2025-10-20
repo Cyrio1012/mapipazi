@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Descente')
 @section('content')
 <div class="container">
     <h2 class="mb-4">📋 Liste des descentes</h2>

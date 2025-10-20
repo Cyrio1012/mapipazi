@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">🔍 Détail FT #{{ $ft->id }}</h2>
+<div class="container row">
+    <h2 class="mb-4">🔍 Détail FT num {{ $ft->id }}</h2>
 
     {{-- 📍 Localisation --}}
-    <div class="card mb-3">
+    <div class="card col-6 mb-3">
         <div class="card-header bg-warning text-dark">📍 Localisation</div>
         <div class="card-body">
             <p><strong>District :</strong> {{ $ft->dist_desc }}</p>
@@ -16,7 +16,7 @@
     </div>
 
     {{-- 🔍 Constat --}}
-    <div class="card mb-3">
+    <div class="card col-6 mb-3">
         <div class="card-header bg-info text-white">🔍 Constat</div>
         <div class="card-body">
             @forelse ($ft->constat_desc ?? [] as $c)
@@ -28,7 +28,7 @@
     </div>
 
     {{-- 📝 Informations FT --}}
-    <div class="card mb-3">
+    <div class="card col-6 mb-3">
         <div class="card-header bg-dark text-white">📝 Informations FT</div>
         <div class="card-body">
             <p><strong>Numéro FT :</strong> {{ $ft->num_ft }}</p>

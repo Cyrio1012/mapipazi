@@ -3,13 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Descentes;
+use App\Models\Ft;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class DescentesController extends Controller
 {
+    public function dashboard()
+    {
+        $descentes = Descentes::latest()->paginate(10);
+        return view('dashboard', compact('descentes'));
+    }
     public function index()
     {
+
         $descentes = Descentes::latest()->paginate(10);
         return view('descentes.index', compact('descentes'));
     }
@@ -65,7 +72,9 @@ class DescentesController extends Controller
 
     public function show(Descentes $descente)
     {
-        return view('descentes.show', compact('descente'));
+        $fts = FT::where('id_descent', $descente->id)->get();
+
+        return view('descentes.show', compact('descente','fts'));
     }
 
     public function edit(Descentes $descente)
