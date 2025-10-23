@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ft;
 use App\Models\Descentes;
+use App\Models\Propriete;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -23,7 +24,7 @@ class FtController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {  
         $descente = Descentes::findOrFail($request->id_descent);
 
         $validated = $request->validate([
@@ -57,13 +58,28 @@ class FtController extends Controller
         $validated['y_desc'] = $descente->y;
         $validated['constat_desc'] = $descente->constat;
 
+        $validated_prop = $request->validate([
+            'id_descent' => 'required|exists:descentes,id',
+            'superficie' => 'nullable|numeric',
+            'sup_remblais' => 'nullable|numeric',
+            'titre' => 'nullable|string|max:255',
+            'plle' => 'nullable|string|max:255',
+            'imm' => 'nullable|string|max:255',
+            'pu' => 'nullable|string|max:255',
+            'zone' => 'required|in:zc,zi,zd',
+            'destination' => 'required|in:h,c',
+        ]);
+        $validated_prop['comm_desc'] = $descente->comm;
+
         Ft::create($validated);
+        Propriete::create($validated_prop);
         return redirect()->route('fts.index')->with('success', 'FT enregistrée avec succès.');
     }
 
     public function show(Ft $ft)
     {
-        return view('fts.show', compact('ft'));
+        $fts = FT::findOrFail($ft->id);
+        return view('fts.show', compact('fts'));
     }
 
     public function edit(Ft $ft)

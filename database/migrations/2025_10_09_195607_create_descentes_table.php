@@ -42,6 +42,7 @@ return new class extends Migration
             $table->time('heure_rdv_ft')->nullable(); // HEURE_RDV_FT
 
             $table->json('pieces_a_fournir')->nullable(); // PIECES_A_FOURNIR
+            $table->json('pieces_fournis')->nullable(); // PIECES_FOURNIS
 
             $table->timestamps(); // created_at & updated_at
         });

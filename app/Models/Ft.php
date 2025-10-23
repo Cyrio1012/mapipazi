@@ -20,9 +20,9 @@ class Ft extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime',
         'heure' => 'datetime:H:i',
-        'date_rdv_ft' => 'date',
+        'date_rdv_ft' => 'datetime',
         'heure_rdv_ft' => 'datetime:H:i',
 
         'x_desc' => 'float',

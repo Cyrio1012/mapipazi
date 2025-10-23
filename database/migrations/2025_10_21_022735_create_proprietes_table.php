@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('aps', function (Blueprint $table) {
+        Schema::create('proprietes', function (Blueprint $table) {
             $table->id(); // ID
             $table->foreignId('id_descent')->constrained('descentes')->onDelete('cascade'); // ID_DESCENT
-            $table->string('num_ap')->nullable(); // NUM_AP
-            $table->string('type')->nullable(); // TYPE
-            $table->date('date_ap')->nullable(); // DATE_AP
-            $table->decimal('sup_remblais', 10, 2)->nullable(); // SUP_REMBLAIS
-            $table->string('comm_propriete')->nullable(); // COMM_PROPRIETE
+
+            $table->decimal('x', 12, 6)->nullable(); // X
+            $table->decimal('y', 12, 6)->nullable(); // Y
+            $table->string('titre')->nullable(); // TITRE
+            $table->string('plle')->nullable(); // PLLE
+            $table->string('imm')->nullable(); // IMM
+            $table->decimal('superficie', 10, 3)->nullable(); // 
+            $table->decimal('sup_remblais', 10, 3)->nullable(); // 
+            $table->string('comm_desc')->nullable(); // COMM_DESC
             $table->string('pu')->nullable(); // PU
             $table->enum('zone', ['zc', 'zi', 'zd']); // ZONE
             $table->enum('destination', ['h', 'c']); // DESTINATION
-            $table->decimal('taux', 5, 2)->nullable(); // TAUX
-            $table->string('situation')->nullable(); // SITUATION
 
             $table->timestamps();
         });
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('aps');
+        Schema::dropIfExists('proprietes');
     }
 };

@@ -73,8 +73,9 @@ class DescentesController extends Controller
     public function show(Descentes $descente)
     {
         $fts = FT::where('id_descent', $descente->id)->get();
-
-        return view('descentes.show', compact('descente','fts'));
+        $info_ft = FT::where('id_descent', $descente->id)->latest()->first();
+        // dd($info_ft);
+        return view('descentes.show', compact('descente','fts','info_ft'));
     }
 
     public function edit(Descentes $descente)

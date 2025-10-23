@@ -12,7 +12,7 @@
       --sidebar-collapsed-width: 80px;
       --topbar-height: 56px;
       --transition-speed: 0.3s;
-      --primary-color: #63afe2ff;
+      --primary-color: #0060a0ff;
       --hover-color: #064272ff;
     }
 
