@@ -43,17 +43,14 @@
     <form action="{{ route('fts.store') }}" method="POST">
         @csrf
         <input type="hidden" name="id_descent" value="{{ $descente->id }}">
+        {{-- 👤 Personne venue & coordonnées --}}
         {{-- 🏗️ Informations foncières --}}
         <div class="form-section">
             <h5>Informations foncières</h5>
             <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="num_ft" class="form-label">Numéro FT</label>
-                    <input type="text" name="num_ft" class="form-control" value="{{ old('num_ft') }}">
-                </div>
-                <div class="col-md-6">
-                    <label for="antony_ft" class="form-label">Motif FT</label>
-                    <input type="text" name="antony_ft" class="form-control" value="{{ old('antony_ft') }}">
+                <div class="col-md-12">
+                    <label for="num_ft" class="form-label">Nom proprietaire</label>
+                    <input type="text" name="proprietaire" class="form-control" value="{{ old('proprietaire') }}">
                 </div>
                 <div class="col-md-4">
                     <label for="titre" class="form-label">Titre</label>
@@ -111,25 +108,13 @@
             </div>
         </div>
 
-        {{-- 🔍 Constat lié --}}
-        <div class="card mb-3">
-            <div class="card-header bg-info text-white">🔍 Constat lié</div>
-            <div class="card-body">
-                @php
-                    $constats = ['Infraction', 'Présence suspecte', 'Non-conformité', 'Absence'];
-                    $selectedConstats = old('constat_desc', $descente->constat ?? []);
-                @endphp
-                @foreach ($constats as $c)
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" name="constat_desc[]" value="{{ $c }}" class="form-check-input"
-                            {{ in_array($c, $selectedConstats) ? 'checked' : '' }}>
-                        <label class="form-check-label">{{ $c }}</label>
-                    </div>
-                @endforeach
-            </div>
+        <label for="" class="form-label mt-2"> Objet </label>
+        <div class="col-md-12 mt-1">
+            <textarea name="objet_ft"  class="form-control w-100" >{{ old('objet_ft') }}</textarea>
         </div>
-
-        <button type="submit" class="btn btn-primary w-100">✅ Enregistrer la FT</button>
+        
+        
+        <button type="submit" class="btn btn-primary w-100 mt-2">✅ Enregistrer la FT</button>
     </form>
 </div>
 @endsection

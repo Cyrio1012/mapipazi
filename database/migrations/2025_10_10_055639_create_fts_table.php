@@ -19,7 +19,6 @@ return new class extends Migration
             $table->time('heure')->nullable(); // HEURE
 
             $table->string('num_ft')->nullable(); // NUM_FT
-            $table->string('antony_ft')->nullable(); // MOTIF_FT
 
             $table->json('constat_desc')->nullable(); // CONSTAT_DESC
             $table->string('dist_desc')->nullable(); // DIST_DESC

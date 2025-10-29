@@ -8,7 +8,7 @@ class Propriete extends Model
     protected $fillable = [
         'id_descent', 'x', 'y', 'titre', 'plle', 'imm',
         'superficie', 'sup_remblais', 'comm_desc', 'pu',
-        'zone', 'destination'
+        'zone', 'destination','proprietaire'
     ];
 
     protected $casts = [

@@ -27,7 +27,7 @@ class DescentesController extends Controller
         $equipeOptions = ['Brigade Specialisé', 'PAT', 'APIPA'];
         $actionOptions = ['Depôt Convocation(PV)', 'Depôt AIT', 'Non respect','Immobilisation MR'];
         $constatOptions = ['Ri','rir','Crir','NR AIT','cellage'];
-        $piecesOption = ['CSJ','Plan topo(Scr labord)','delimitation surface terrain remblayée','PU(srat,dlat) avec allignement','Procuration','PC','PR', 'Autorisation exeptionnelle de circulé'];
+        $piecesOption = ['CSJ','Plan topo(Scr labord)','delimitation surface terrain remblayée','PU(srat,dlat) avec allignement','Procuration','Acte de vente','PC','PR', 'Autorisation exeptionnelle de circulé'];
         $locations = DB::table('fokontany')->select('fkt', 'firaisana', 'distrika')->get();
         return view('descentes.create', compact('locations','equipeOptions', 'actionOptions', 'constatOptions', 'pvOptions' , 'piecesOption'));
     }

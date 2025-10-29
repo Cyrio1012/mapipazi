@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('proprietes', function (Blueprint $table) {
             $table->id(); // ID
             $table->foreignId('id_descent')->constrained('descentes')->onDelete('cascade'); // ID_DESCENT
-
+            $table->string('proprietaire')->nullable(); // TITRE
             $table->decimal('x', 12, 6)->nullable(); // X
             $table->decimal('y', 12, 6)->nullable(); // Y
             $table->string('titre')->nullable(); // TITRE

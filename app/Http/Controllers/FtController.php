@@ -63,6 +63,7 @@ class FtController extends Controller
             'superficie' => 'nullable|numeric',
             'sup_remblais' => 'nullable|numeric',
             'titre' => 'nullable|string|max:255',
+            'proprietaire' => 'nullable|string|max:255',
             'plle' => 'nullable|string|max:255',
             'imm' => 'nullable|string|max:255',
             'pu' => 'nullable|string|max:255',
@@ -109,7 +110,7 @@ class FtController extends Controller
 
         // Génération du PDF (exemple avec DomPDF)
         $pdf = Pdf::loadView('fts.pdf', compact('ft'))->setPaper('A4', 'portrait');
-        return $pdf->download("FT_{$ft->num_ft}.pdf");
+        return $pdf->download("FT_{$ft->id}.pdf");
     }
 
 

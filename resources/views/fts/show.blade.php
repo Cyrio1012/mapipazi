@@ -121,7 +121,7 @@
         <h4>Personne venue</h4>
         <div class="grid">
             <div class="field"><label>Nom</label>{{ $fts->nom_pers_venue }}</div>
-            <div class="field"><label>Quantité</label>{{ $fts->qte_pers_venue }}</div>
+            <div class="field"><label>Qualité</label>{{ $fts->qte_pers_venue }}</div>
             <div class="field"><label>Contact</label>{{ $fts->contact }}</div>
             <div class="field"><label>Adresse</label>{{ $fts->adresse }}</div>
             <div class="field"><label>CIN</label>{{ $fts->cin }}</div>

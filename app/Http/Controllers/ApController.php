@@ -18,14 +18,17 @@ class ApController extends Controller
     {
         //
     }
-    public function etablir_ap($id_descente)
+    public function etablir_ap($id_descente, Request $request)
     {
         $descente = Descentes::findOrFail($id_descente);
         $fts = Ft::where('id_descent', $id_descente)->latest()->first();
         $proprietes = Propriete::where('id_descent', $id_descente)->latest()->first();
         $taux= $this->calculerTauxAp($proprietes->zone, $proprietes->destination, $proprietes->sup_remblais, $proprietes->comm_desc, 'redevance');
-        
-        return view('aps.create', compact('descente','fts' ,'proprietes'));
+        $taux_lettre= $this->chiffreEnLettre($taux);
+        $type = $request->type_ap;
+        $base = $this->calculerBase($proprietes->zone, $proprietes->destination, $proprietes->sup_remblais, $proprietes->comm_desc, 'redevance');;
+        // dd($descente, $fts, $proprietes, $taux ,$taux_lettre, $request->all());
+        return view('aps.create', compact('descente','fts' ,'proprietes','taux_lettre','taux','type','base'));
     }
     /**
      * Show the form for creating a new resource.
@@ -66,7 +69,38 @@ class ApController extends Controller
                     $base = $base;
                 }
             }
-        return $sup * $base;
+        return $sup * $base;;
+    }
+    private function calculerBase($zone, $destination, $sup, $commune, $type = 'redevance')
+    {
+        $commune = strtolower(trim($commune));
+        $isCUA = $commune === 'cua';
+        $isPeripherie = !$isCUA;
+
+        $base = 0;
+
+            if ($sup < 100) {
+                $base = 6250;
+            } elseif ($destination === 'h' && 100< $sup ) {
+                $base = 12500;
+            } elseif ($destination === 'c' && $sup < 2000) {
+                $base = 18750;
+            } else {
+                $base = 25000;
+            }
+            if ($isPeripherie) {
+                    $base = $base/2;
+            }else {
+                $base = $base;
+            }
+            if($type ==='amande'){
+                if ($isCUA) {
+                    $base *= 2;
+                }else {
+                    $base = $base;
+                }
+            }
+        return $base;
     }
 
     function chiffreEnLettre($nombre) { $f = new NumberFormatter("fr", NumberFormatter::SPELLOUT); return ucfirst($f->format($nombre)) . ' Ariary'; }

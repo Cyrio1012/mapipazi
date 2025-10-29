@@ -122,14 +122,14 @@
                 </div>
                 <div class="modal-body"> 
                     @if ($info_ft->zone === "zc" || $info_ft->zone === "zd" ) 
-                    <a href="{{ route('aps.create', $descente->id) }}">
+                    <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'redevance']) }}">
                         <p class="alert alert-secondary">Avis de payement redevance</p>
                     </a> 
-                    <a href="{{ route('aps.create', $descente->id) }}">
+                    <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
                         <p class="alert alert-secondary">Avis de payement Amande</p>
                     </a> 
                     @else 
-                        <a href="{{ route('aps.create', $descente->id) }}">
+                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
                             <p class="alert alert-secondary">Avis de payement Amande</p>
                         </a> 
                     @endif 

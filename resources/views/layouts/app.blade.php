@@ -19,8 +19,10 @@
     body {
       overflow-x: hidden;
       background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    /* ======= Topbar ======= */
     .topbar {
       position: fixed;
       top: 0;
@@ -36,6 +38,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
+    /* ======= Sidebar ======= */
     .sidebar {
       position: fixed;
       top: var(--topbar-height);
@@ -52,6 +55,24 @@
       width: var(--sidebar-collapsed-width);
     }
 
+    .sidebar-header {
+      text-align: center;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sidebar-header h5 {
+      margin: 0;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .sidebar-header small {
+      color: gray;
+      font-size: 0.8rem;
+    }
+
+    /* ======= Sidebar links ======= */
     .sidebar .nav-link {
       color: #333;
       padding: 0.75rem 1rem;
@@ -59,10 +80,17 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .sidebar .nav-link i {
+      font-size: 1.2rem;
+      width: 20px;
+      text-align: center;
     }
 
     .sidebar .nav-link:hover {
-      background-color: #eee;
+      background-color: #f0f0f0;
     }
 
     .sidebar .nav-link.active {
@@ -75,6 +103,7 @@
       display: none;
     }
 
+    /* ======= Content ======= */
     .content {
       margin-left: var(--sidebar-width);
       margin-top: var(--topbar-height);
@@ -86,6 +115,7 @@
       margin-left: var(--sidebar-collapsed-width);
     }
 
+    /* ======= Animation ======= */
     .fade-in {
       animation: fadeIn 0.5s ease-in-out;
     }
@@ -106,6 +136,9 @@
 
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h5>APIPA</h5>
+    </div>
     <nav class="nav flex-column mt-3">
         <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" onclick="setActive(this)"><i class="bi bi-bar-chart"></i> <span>Dashboard</span></a>
       <a class="nav-link {{ request()->routeIs('descentes.index') ? 'active' : '' }}" href="{{ route('descentes.index') }}" onclick="setActive(this)"><i class="bi bi-house-door"></i> <span>Descentes</span></a>
@@ -132,5 +165,6 @@
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  @yield('scripts')
 </body>
 </html>
