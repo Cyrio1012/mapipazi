@@ -461,11 +461,32 @@
                 <button class="map-btn" id="locate-me" title="Me Localiser">
                     <i class="fas fa-location-arrow"></i>
                 </button>
+                <!-- Bouton pour activer le mode piquer (cliquer pour inspecter un point) -->
+                <button class="map-btn" id="piquer-toggle" title="Activer le mode piquer">
+                    <i class="fas fa-crosshairs"></i>
+                </button>
+                <!-- Bouton pour calibrer les conversions Laborde <-> WGS84 -->
+                <button class="map-btn" id="calibrate-btn" title="Calibrer la conversion Laborde">
+                    <i class="fas fa-wrench"></i>
+                </button>
             </div>
 
             <!-- Recherche -->
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Rechercher par référence, adresse, commune...">
+
+                <!-- Recherche Laborde : entrer X et Y puis cliquer Aller -->
+                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                    <input id="laborde-x" type="text" placeholder="X Laborde" style="flex:1; padding:0.6rem; border-radius:6px; border:1px solid #e2e8f0;">
+                    <input id="laborde-y" type="text" placeholder="Y Laborde" style="flex:1; padding:0.6rem; border-radius:6px; border:1px solid #e2e8f0;">
+                    <button id="laborde-search" class="btn btn-primary" style="padding:0.5rem 0.8rem;">Aller</button>
+                </div>
+            </div>
+
+            <!-- Info du point cliqué (piquer) -->
+            <div id="clicked-info" style="position:absolute; top:5.5rem; left:1rem; z-index:1200; background:white; padding:0.6rem 0.8rem; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.1); display:none; min-width:220px;">
+                <strong>Point cliqué</strong>
+                <div id="clicked-coords" style="font-size:0.9rem; margin-top:0.4rem; color:#374151;">—</div>
             </div>
 
             <!-- Statistiques -->
@@ -521,11 +542,27 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <!-- Optional: proj4 for accurate datum/projection transforms (EPSG:4326 etc.) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
     <script>
-        // Données dynamiques depuis le contrôleur
-        const descentesData = @json($descentes ?? []);
-        
-        console.log('Données des descentes chargées:', descentesData);
+    // Données dynamiques depuis le contrôleur
+    const descentesData = @json($descentes ?? []);
+
+    // Configuration : utilisation d'EPSG:4326 / WGS84 pour plus de précision
+    // Si vous avez la définition proj4 du système Laborde (proj4 string),
+    // placez-la ici pour effectuer des transformations exactes via proj4.
+    // Exemple (NON fourni par défaut) :
+    // const LABORDE_PROJ4 = "+proj=tmerc +lat_0=... +lon_0=... +x_0=... +y_0=... +ellps=... +units=m +no_defs";
+    const LABORDE_PROJ4 = null; // mettre la string proj4 ici si disponible
+
+    // Précision d'affichage pour WGS84 (décimales)
+    const COORD_DECIMALS = 7; // 7 décimales ~ 1 cm de précision à l'équateur
+
+    // Toujours utiliser WGS84 pour positionner et afficher par défaut
+    const displayLabordeDirect = false;
+    const placeMarkersUsingLaborde = false;
+
+    console.log('Données des descentes chargées:', descentesData);
 
         // Debug des données
         console.log('Nombre de descentes:', descentesData.length);
@@ -562,24 +599,50 @@
         // Groupe pour les marqueurs
         const markers = L.markerClusterGroup();
         let descentesLayers = {};
+    // Marqueur pour le mode "piquer" (point cliqué)
+    let piquerMode = false;
+    let piquerMarker = null;
+    // Marqueur pour résultat de recherche Laborde
+    let labordeSearchMarker = null;
+    // Calibration offsets (en unités Laborde). Appliqués pour compenser erreurs systématiques.
+    // Valeurs initiales basées sur votre signalement (observé -> attendu):
+    // observé X:500613, Y:795003  => attendu X:512028, Y:795728
+    // dx = attendu - observé = 11415, dy = 725
+    const CALIB = { dx: 11415, dy: 725 };
         
         // Fonction de conversion Laborde -> WGS84 ULTRA-PRÉCISE pour Madagascar
         function labordeToWGS84(x, y) {
-            if (!x || !y || x == 0 || y == 0) {
+            x = parseFloat(x);
+            y = parseFloat(y);
+            if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
                 console.log('Coordonnées invalides:', x, y);
                 return null;
             }
 
+            // Apply calibration offsets to input Laborde coordinates before inverse transform
+            const xAdj = x - (CALIB.dx || 0);
+            const yAdj = y - (CALIB.dy || 0);
+
+            // If proj4 and a valid LABORDE_PROJ4 definition is provided, use it
+            if (typeof proj4 !== 'undefined' && LABORDE_PROJ4) {
+                try {
+                    // proj4 expects [x, y] -> returns [x', y'] in target (lon, lat for EPSG:4326)
+                    const out = proj4(LABORDE_PROJ4, 'EPSG:4326', [xAdj, yAdj]);
+                    const lon = parseFloat(out[0]);
+                    const lat = parseFloat(out[1]);
+                    console.log(`Conversion proj4: Laborde(x=${x}, y=${y}) -> WGS84(lon=${lon.toFixed(COORD_DECIMALS)}, lat=${lat.toFixed(COORD_DECIMALS)}) (après calib)`);
+                    return [lat, lon];
+                } catch (err) {
+                    console.warn('proj4 conversion failed, falling back to linear approx:', err);
+                }
+            }
+
             try {
-                console.log(`Conversion: Laborde(x=${x}, y=${y})`);
-                
-                // Facteurs de conversion ultra-précis pour le système Laborde Madagascar
-                // Optimisés pour Tananarivo et environs
+                console.log(`Conversion (approx): Laborde(x=${x}, y=${y})`);
+                // Fallback : facteurs linéaires approximatifs
                 const lon = 47.5 + ((x - 500000) * 0.000001635);
                 const lat = -18.9 + ((y - 800000) * 0.000007395);
-                
-                console.log(`Conversion ULTRA-PRÉCISE: Laborde(x=${x}, y=${y}) -> WGS84(lon=${lon.toFixed(9)}, lat=${lat.toFixed(9)})`);
-                
+                console.log(`Conversion (approx): Laborde(x=${xAdj}, y=${yAdj}) -> WGS84(lon=${lon.toFixed(COORD_DECIMALS)}, lat=${lat.toFixed(COORD_DECIMALS)}) (après calib)`);
                 return [lat, lon];
             } catch (error) {
                 console.error('Erreur de conversion:', error);
@@ -587,15 +650,52 @@
             }
         }
 
+        // Conversion inverse approximative (WGS84 -> Laborde) basée sur la
+        // relation linéaire utilisée dans labordeToWGS84.
+        // ATTENTION: ces formules sont l'inverse simple de la fonction de dessus
+        // telle qu'implémentée ici (approximative). Utilisez-les pour inspection
+        // et recherche rapide, pas pour des conversions cartographiques précises.
+        // wgs84ToLaborde: convertit lat,lon (WGS84) -> [X,Y] Laborde.
+        // Paramètre optionnel `skipCalib` : si true retourne la valeur non calibrée
+        // (utile pour calculer l'offset de calibration).
+        function wgs84ToLaborde(lat, lon, skipCalib = false) {
+            try {
+                // If proj4 and LABORDE_PROJ4 defined, use it for accurate inverse transform
+                if (typeof proj4 !== 'undefined' && LABORDE_PROJ4) {
+                    const out = proj4('EPSG:4326', LABORDE_PROJ4, [lon, lat]);
+                    const x = out[0];
+                    const y = out[1];
+                    const rx = Math.round(x) + (skipCalib ? 0 : CALIB.dx);
+                    const ry = Math.round(y) + (skipCalib ? 0 : CALIB.dy);
+                    return [rx, ry];
+                }
+
+                // Fallback linear approx
+                const x = 500000 + ( (lon - 47.5) / 0.000001635 );
+                const y = 800000 + ( (lat + 18.9) / 0.000007395 );
+                const rx = Math.round(x) + (skipCalib ? 0 : CALIB.dx);
+                const ry = Math.round(y) + (skipCalib ? 0 : CALIB.dy);
+                return [rx, ry];
+            } catch (err) {
+                console.error('Erreur conversion inverse WGS84->Laborde:', err);
+                return null;
+            }
+        }
+
         // Test de positionnement manuel pour vérifier la précision
         function testPositionPrecision() {
+            if (placeMarkersUsingLaborde) {
+                console.log('⚠️ Test de précision désactivé : les marqueurs utilisent directement les coordonnées Laborde.');
+                return null;
+            }
+
             const testCoords = labordeToWGS84(514374, 792072);
-            console.log('🎯 TEST Position Tongarivo calculée:', testCoords);
+                console.log('🎯 TEST Position Tongarivo calculée:', testCoords);
             console.log('🎯 TEST Position Tongarivo attendue: [-18.969659, 47.523502]');
-            
+
             // Calcul de la différence
-            const diffLat = (testCoords[0] - (-18.969659)).toFixed(6);
-            const diffLon = (testCoords[1] - 47.523502).toFixed(6);
+            const diffLat = (testCoords[0] - (-18.969659)).toFixed(COORD_DECIMALS);
+            const diffLon = (testCoords[1] - 47.523502).toFixed(COORD_DECIMALS);
             console.log(`🎯 TEST Différence: lat=${diffLat}, lon=${diffLon}`);
             
             // Créer un marqueur de test rouge
@@ -612,7 +712,7 @@
                     <h3 style="color: red; margin-bottom: 10px;">🎯 TEST Tongarivo</h3>
                     <div style="font-size: 0.9rem;">
                         <p><strong>Position attendue:</strong><br>-18.969659, 47.523502</p>
-                        <p><strong>Position calculée:</strong><br>${testCoords[0].toFixed(6)}, ${testCoords[1].toFixed(6)}</p>
+                        <p><strong>Position calculée:</strong><br>${testCoords[0].toFixed(COORD_DECIMALS)}, ${testCoords[1].toFixed(COORD_DECIMALS)}</p>
                         <p><strong>Différence:</strong><br>lat: ${diffLat}, lon: ${diffLon}</p>
                         <p style="margin-top: 10px; font-size: 0.8rem; color: #666;">Ce marqueur rouge montre la position calculée</p>
                     </div>
@@ -624,6 +724,135 @@
             
             return testCoords;
         }
+
+        // Gestion du mode "piquer" : lorsque activé, un clic sur la carte affiche
+        // un marqueur et les coordonnées WGS84 + Laborde (approx.) dans le panneau.
+        function enablePiquerMode(enable) {
+            piquerMode = !!enable;
+            const btn = document.getElementById('piquer-toggle');
+            if (piquerMode) {
+                btn.classList.add('active');
+                document.getElementById('clicked-info').style.display = 'block';
+            } else {
+                btn.classList.remove('active');
+                document.getElementById('clicked-info').style.display = 'none';
+                if (piquerMarker) {
+                    map.removeLayer(piquerMarker);
+                    piquerMarker = null;
+                }
+            }
+        }
+
+        // Handler du clic sur la carte
+        map.on('click', function(e) {
+            if (!piquerMode) return;
+
+            const lat = e.latlng.lat;
+            const lon = e.latlng.lng;
+
+            // Calculer les coordonnées Laborde approximatives
+            const lab = wgs84ToLaborde(lat, lon);
+
+            // Mettre à jour (ou créer) le marqueur "piquer"
+            if (piquerMarker) {
+                piquerMarker.setLatLng([lat, lon]);
+            } else {
+                piquerMarker = L.marker([lat, lon], {
+                    icon: L.divIcon({
+                        html: `<div class="descente-marker" style="border-color:#111; color:#111; width:28px; height:28px; font-size:11px;">•</div>`,
+                        className: 'piquer-marker-container',
+                        iconSize: [28, 28]
+                    })
+                }).addTo(map);
+            }
+
+            const infoEl = document.getElementById('clicked-coords');
+            infoEl.innerHTML = `Lat: ${lat.toFixed(COORD_DECIMALS)}, Lon: ${lon.toFixed(COORD_DECIMALS)}<br>Laborde X: ${lab ? lab[0] : 'N/A'}, Y: ${lab ? lab[1] : 'N/A'}`;
+            piquerMarker.bindPopup(`<strong>Point cliqué</strong><br>Lat: ${lat.toFixed(COORD_DECIMALS)}<br>Lon: ${lon.toFixed(COORD_DECIMALS)}<br>Laborde X: ${lab ? lab[0] : 'N/A'}<br>Laborde Y: ${lab ? lab[1] : 'N/A'}`).openPopup();
+        });
+
+        // Écouteur pour le bouton piquer
+        document.getElementById('piquer-toggle').addEventListener('click', function() {
+            enablePiquerMode(!piquerMode);
+        });
+
+        // Calibrage : permet d'ajuster les offsets X/Y Laborde en cliquant un point
+        // et en fournissant les valeurs Laborde attendues.
+        document.getElementById('calibrate-btn').addEventListener('click', function() {
+            // We require a piquerMarker (user should activate piquer and click a point)
+            if (!piquerMarker) {
+                alert('Activez le mode Piquer et cliquez un point sur la carte, puis cliquez à nouveau Calibrer.');
+                return;
+            }
+
+            const latlng = piquerMarker.getLatLng();
+            const lat = latlng.lat;
+            const lon = latlng.lng;
+
+            // compute uncalibrated Laborde for that lat/lon
+            const computed = wgs84ToLaborde(lat, lon, true);
+            if (!computed) {
+                alert('Impossible de calculer les coordonnées Laborde pour ce point (conversion échouée).');
+                return;
+            }
+
+            const expectedX = window.prompt(`Coordonnée X Laborde attendue (ex: 512028). Valeur calculée actuelle: ${computed[0]}`);
+            if (expectedX === null) return; // cancelled
+            const expectedY = window.prompt(`Coordonnée Y Laborde attendue (ex: 795728). Valeur calculée actuelle: ${computed[1]}`);
+            if (expectedY === null) return;
+
+            const ex = parseFloat(expectedX);
+            const ey = parseFloat(expectedY);
+            if (isNaN(ex) || isNaN(ey)) {
+                alert('Valeurs X/Y invalides. Calibration annulée.');
+                return;
+            }
+
+            // Compute offsets to apply: desired - computed
+            CALIB.dx = Math.round(ex - computed[0]);
+            CALIB.dy = Math.round(ey - computed[1]);
+
+            alert(`Calibration appliquée. Offsets: dx=${CALIB.dx}, dy=${CALIB.dy}`);
+
+            // Update clicked-info if visible
+            const infoEl = document.getElementById('clicked-coords');
+            if (infoEl && piquerMarker) {
+                const lab = wgs84ToLaborde(lat, lon, false);
+                infoEl.innerHTML = `Lat: ${lat.toFixed(COORD_DECIMALS)}, Lon: ${lon.toFixed(COORD_DECIMALS)}<br>Laborde X: ${lab ? lab[0] : 'N/A'}, Y: ${lab ? lab[1] : 'N/A'}`;
+            }
+        });
+
+        // Recherche par coordonnées Laborde (X, Y)
+        document.getElementById('laborde-search').addEventListener('click', function() {
+            const x = document.getElementById('laborde-x').value.trim();
+            const y = document.getElementById('laborde-y').value.trim();
+            if (!x || !y) {
+                alert('Veuillez entrer X et Y Laborde.');
+                return;
+            }
+
+            const coords = labordeToWGS84(parseFloat(x), parseFloat(y));
+            if (!coords) {
+                alert('Coordonnées Laborde invalides ou conversion échouée.');
+                return;
+            }
+
+            // Créer / déplacer le marqueur de recherche
+            if (labordeSearchMarker) {
+                labordeSearchMarker.setLatLng(coords);
+            } else {
+                labordeSearchMarker = L.marker(coords, {
+                    icon: L.divIcon({
+                        html: `<div class="descente-marker" style="border-color:#2563eb; color:#2563eb; width:30px; height:30px;">S</div>`,
+                        className: 'laborde-search-marker',
+                        iconSize: [30, 30]
+                    })
+                }).addTo(map);
+            }
+
+            labordeSearchMarker.bindPopup(`<strong>Recherche Laborde</strong><br>X: ${x}<br>Y: ${y}<br>Lat: ${coords[0].toFixed(COORD_DECIMALS)}<br>Lon: ${coords[1].toFixed(COORD_DECIMALS)}`).openPopup();
+            map.setView(coords, 16);
+        });
 
         // Fonction pour déterminer la couleur selon le statut
         function getDescenteColor(descente) {
@@ -668,9 +897,18 @@
             
             // Ajouter les descentes
             descentes.forEach(descente => {
-                // Convertir les coordonnées Laborde en WGS84
-                const coords = labordeToWGS84(descente.x_laborde, descente.y_laborde);
-                
+                // Déterminer les coordonnées à utiliser pour le marqueur :
+                // - si placeMarkersUsingLaborde === true, on utilise directement les valeurs X/Y
+                //   fournies (attention au format attendu par Leaflet : [lat, lon]).
+                // - sinon on convertit Laborde -> WGS84 pour positionner les marqueurs.
+                let coords = null;
+                if (placeMarkersUsingLaborde) {
+                    // Interpréter Y comme latitude et X comme longitude (y, x)
+                    coords = [parseFloat(descente.y_laborde), parseFloat(descente.x_laborde)];
+                } else {
+                    coords = labordeToWGS84(descente.x_laborde, descente.y_laborde);
+                }
+
                 if (!coords) {
                     console.log('Coordonnées invalides pour la descente:', descente.id);
                     return;
@@ -691,6 +929,14 @@
                 });
                 
                 // Popup d'information
+                // Préparer l'affichage des coordonnées dans la popup :
+                // On affiche les coordonnées WGS84 en priorité, et on ajoute
+                // les coordonnées Laborde en secondaire pour référence.
+                const coordsHtml = `
+                    ${coords ? `<p><strong>Coordonnées WGS84:</strong> Lat: ${coords[0].toFixed(COORD_DECIMALS)}, Lon: ${coords[1].toFixed(COORD_DECIMALS)}</p>` : ''}
+                    <p style="font-size:0.85rem; color:#666;"><strong>Laborde:</strong> X: ${descente.x_laborde}, Y: ${descente.y_laborde}</p>
+                `;
+
                 const popupContent = `
                     <div style="font-family: 'Inter', sans-serif; max-width: 350px;">
                         <h3 style="color: ${markerColor}; margin-bottom: 0.5rem; border-bottom: 2px solid ${markerColor}; padding-bottom: 0.5rem;">
@@ -703,7 +949,7 @@
                             ${descente.num_pv ? `<p><strong>Num. PV:</strong> ${descente.num_pv}</p>` : ''}
                             <p><strong>Adresse:</strong> ${descente.adresse || 'Non spécifié'}</p>
                             <p><strong>Commune:</strong> ${descente.comm || 'Non spécifié'}</p>
-                            <p><strong>Coordonnées WGS84:</strong> Lat: ${coords[0].toFixed(6)}, Lon: ${coords[1].toFixed(6)}</p>
+                            ${coordsHtml}
                         </div>
                         <button style="width: 100%; padding: 0.5rem; background-color: ${markerColor}; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem;" onclick="showDetail('${descente.id}')">
                             Voir Détails Complets
@@ -736,7 +982,12 @@
             if (!descente) return;
             
             const markerColor = getDescenteColor(descente);
-            const coords = labordeToWGS84(descente.x_laborde, descente.y_laborde);
+            // Calculer les coordonnées pour affichage des détails :
+            // si placeMarkersUsingLaborde est activé on utilisera directement les valeurs brutes,
+            // sinon on tentera la conversion Laborde -> WGS84.
+            const coords = placeMarkersUsingLaborde
+                ? [parseFloat(descente.y_laborde), parseFloat(descente.x_laborde)]
+                : labordeToWGS84(descente.x_laborde, descente.y_laborde);
             
             const detailContent = `
                 <div class="detail-section">
@@ -825,20 +1076,20 @@
                     <h4 style="color: ${markerColor};">Coordonnées</h4>
                     <div class="detail-grid">
                         <div class="detail-item">
+                            <span class="detail-label">Latitude WGS84</span>
+                            <span class="detail-value">${coords ? coords[0].toFixed(COORD_DECIMALS) : 'N/A'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Longitude WGS84</span>
+                            <span class="detail-value">${coords ? coords[1].toFixed(COORD_DECIMALS) : 'N/A'}</span>
+                        </div>
+                        <div class="detail-item">
                             <span class="detail-label">X Laborde</span>
                             <span class="detail-value">${descente.x_laborde}</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Y Laborde</span>
                             <span class="detail-value">${descente.y_laborde}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Latitude WGS84</span>
-                            <span class="detail-value">${coords ? coords[0].toFixed(6) : 'N/A'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Longitude WGS84</span>
-                            <span class="detail-value">${coords ? coords[1].toFixed(6) : 'N/A'}</span>
                         </div>
                     </div>
                 </div>
