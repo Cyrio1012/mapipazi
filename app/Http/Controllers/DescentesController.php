@@ -57,8 +57,9 @@ class DescentesController extends Controller
             'comm' => 'nullable|string|max:255',
             'fkt' => 'nullable|string|max:255',
 
-            'x' => 'nullable|numeric|between:-180,180',
-            'y' => 'nullable|numeric|between:-90,90',
+            'x'=> 'nullable|numeric',
+
+            'y' => 'nullable|numeric',
 
             'date_rdv_ft' => 'nullable|date',
             'heure_rdv_ft' => 'nullable|date_format:H:i',
@@ -108,9 +109,7 @@ class DescentesController extends Controller
             'comm' => 'nullable|string|max:255',
             'fkt' => 'nullable|string|max:255',
 
-            'x' => 'nullable|numeric|between:-180,180',
-            'y' => 'nullable|numeric|between:-90,90',
-
+        
             'date_rdv_ft' => 'nullable|date',
             'heure_rdv_ft' => 'nullable|date_format:H:i',
 

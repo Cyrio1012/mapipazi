@@ -35,8 +35,8 @@ return new class extends Migration
             $table->string('comm')->nullable(); // COMM
             $table->string('fkt')->nullable(); // FKT
 
-            $table->decimal('x', 12, 6)->nullable(); // X (longitude)
-            $table->decimal('y', 12, 6)->nullable(); // Y (latitude)
+            $table->double('x')->nullable(); // X (longitude)
+            $table->double('y')->nullable(); // Y (latitude)
 
             $table->date('date_rdv_ft')->nullable(); // DATE_RDV_FT
             $table->time('heure_rdv_ft')->nullable(); // HEURE_RDV_FT

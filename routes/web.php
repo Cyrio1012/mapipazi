@@ -5,6 +5,7 @@ use App\Http\Controllers\DescentesController;
 use App\Http\Controllers\ProprieteController;
 use App\Http\Controllers\FtController;
 use App\Http\Controllers\ApController;
+use App\Http\Controllers\CartographieController;
 
 Route::resource('descentes', DescentesController::class);
 Route::get('/', [DescentesController::class, 'dashboard'])->name('dashboard');
@@ -20,4 +21,7 @@ Route::post('/proprietes', [ProprieteController::class, 'store'])->name('proprie
 
 Route::get('/descentes/{descente}/aps/create', [ApController::class, 'etablir_ap'])->name('aps.create');
 Route::post('/aps', [ApController::class, 'store'])->name('aps.store');
+
+
+Route::get('/cartographie', [CartographieController::class, 'index'])->name('cartographie.index');
 

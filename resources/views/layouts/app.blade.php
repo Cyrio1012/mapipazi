@@ -128,7 +128,7 @@
 </head>
 <body>
 
-  <!-- Top-Bar -->
+  <!-- Topbar -->
   <div class="topbar">
     <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
     <h5 class="mb-0">@yield('title', 'Dashboard')</h5>
@@ -138,12 +138,22 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-header">
       <h5>APIPA</h5>
+      <small>Gestion des Remblais</small>
     </div>
+
     <nav class="nav flex-column mt-3">
-        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}" onclick="setActive(this)"><i class="bi bi-bar-chart"></i> <span>Dashboard</span></a>
-      <a class="nav-link {{ request()->routeIs('descentes.index') ? 'active' : '' }}" href="{{ route('descentes.index') }}" onclick="setActive(this)"><i class="bi bi-house-door"></i> <span>Descentes</span></a>
-      <a class="nav-link {{ request()->routeIs('fts.index') ? 'active' : '' }}" href="{{ route('fts.index') }}" onclick="setActive(this)"><i class="bi bi-gear"></i> <span>Confisquation</span></a>
-      <a class="nav-link" href="#" onclick="setActive(this)"><i class="bi bi-box-arrow-right"></i> <span>Déconnexion</span></a>
+      <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a>
+      <a class="nav-link {{ request()->routeIs('proprietes.*') ? 'active' : '' }}" href="{{ route('proprietes.create', ['descente' => 1]) }}"><i class="bi bi-file-earmark-text"></i> <span>Demande PC</span></a>
+
+      <a class="nav-link {{ request()->routeIs('descentes.*') ? 'active' : '' }}" href="{{ route('descentes.index') }}"><i class="bi bi-arrow-down-circle"></i> <span>Descentes</span></a>
+
+      <a class="nav-link {{ request()->routeIs('fts.*') ? 'active' : '' }}" href="{{ route('fts.index') }}"><i class="bi bi-clipboard-check"></i> <span>F.T</span></a>
+
+      {{-- <a class="nav-link {{ request()->routeIs('') ? 'active' : '' }}" href="{{ route('apipa') }}"><i class="bi bi-building"></i> <span>APIPA</span></a> --}}
+      <a class="nav-link {{ request()->routeIs('cartographie.*') ? 'active' : '' }}" href="{{ route('cartographie.index') }}"><i class="bi bi-map"></i> <span>Cartographie</span></a>
+
+      <hr>
+      <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i> <span>Déconnexion</span></a>
     </nav>
   </div>
 
@@ -152,19 +162,14 @@
     @yield('content')
   </div>
 
+  <!-- Scripts -->
   <script>
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('collapsed');
       document.getElementById('mainContent').classList.toggle('collapsed');
     }
-
-    function setActive(el) {
-      document.querySelectorAll('.sidebar .nav-link').forEach(link => link.classList.remove('active'));
-      el.classList.add('active');
-    }
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  @yield('scripts')
 </body>
 </html>

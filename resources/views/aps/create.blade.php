@@ -35,7 +35,7 @@
       .page-1 header {
     height: 200px;
     width: 100%;
-    background-image: url(./header_vm.png);
+    background-image: url(./../../../assets/img/header_vm.png);
     background-size: cover;
     background-repeat: no-repeat;
     /* background-position: ce; */
@@ -52,7 +52,7 @@
       
                height: 200px;
     width: 100%;
-    background-image: url(./header_vm.png);
+    background-image: url(./../../../assets/img/header_vm.png);
     background-size: cover;
     background-repeat: no-repeat;
     /* background-position: ce; */
@@ -177,7 +177,7 @@
     width: 90%; /* Ajout d'une largeur fixe */
     position: relative;
     top: -160px;
-    background-image: url(./assets/img/emblème_vf.png);
+    background-image: url(./../../../assets/img/emblème_vf.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -199,7 +199,7 @@
     }
 .foot {
     height: 250px;
-    background-image: url(./assets/img/footer.png);
+    background-image: url(./../../../assets/img/footer.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -211,7 +211,7 @@
 .page-number2{
     /* background-color: bisque; */
     height: 250px;
-    background-image: url(./assets/img/footer.png);
+    background-image: url(/../../../assets/img/footer.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

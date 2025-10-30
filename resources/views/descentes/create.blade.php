@@ -198,11 +198,11 @@
                 </div>
                 <div class="col-md-6">
                     <label for="x" class="form-label">Longitude (X)</label>
-                    <input type="number" step="0.000001" name="x" class="form-control" value="{{ old('x') }}">
+                    <input type="number" name="x" class="form-control" value="{{ old('x') }}">
                 </div>
                 <div class="col-md-6">
                     <label for="y" class="form-label">Latitude (Y)</label>
-                    <input type="number" step="0.000001" name="y" class="form-control" value="{{ old('y') }}">
+                    <input type="number"  name="y" class="form-control" value="{{ old('y') }}">
                 </div>
             </div>
         </div>
