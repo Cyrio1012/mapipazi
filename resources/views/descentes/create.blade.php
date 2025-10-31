@@ -204,6 +204,14 @@
                     <label for="y" class="form-label">Latitude (Y)</label>
                     <input type="number"  name="y" class="form-control" value="{{ old('y') }}">
                 </div>
+                <div class="mt-4">
+                    <label class="form-label fw-bold">📍 Localisation géographique</label>
+                    <button type="button" class="btn btn-outline-primary btn-sm mb-2" id="locateBtn">📍 Voir ma
+                        position</button>
+                    <div id="map" style="height: 400px; border: 1px solid #ccc;"></div>
+                </div>
+
+                <input type="hidden" name="geom" id="geomField">
             </div>
         </div>
 
@@ -283,5 +291,74 @@
         }
     });
 
+</script>
+@endsection
+@section('scripts')
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 📦 Définir les couches de base
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    });
+
+    const satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        attribution: 'Imagery © <a href="https://maps.google.com">Google Maps</a>',
+        maxZoom: 19
+    });
+
+    // 🗺️ Initialiser la carte
+    const map = L.map('map', {
+        center: [-18.8792, 47.5079],
+        zoom: 15,
+        layers: [satellite] // Choisir la couche par défaut ici
+    });
+
+    // 🔄 Contrôle de bascule
+    const baseMaps = {
+        "Vue standard 🗺️": osm,
+        "Vue satellite 🌍": satellite
+    };
+    L.control.layers(baseMaps).addTo(map);
+
+    // ✏️ Dessin
+    const drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    const drawControl = new L.Control.Draw({
+        draw: {
+            polygon: true,
+            polyline: false,
+            marker: true,
+            circle: false,
+            rectangle: false
+        },
+        edit: {
+            featureGroup: drawnItems
+        }
+    });
+    map.addControl(drawControl);
+
+    map.on('draw:created', function (e) {
+        drawnItems.clearLayers();
+        drawnItems.addLayer(e.layer);
+        const geojson = e.layer.toGeoJSON();
+        document.getElementById('geomField').value = JSON.stringify(geojson.geometry);
+    });
+
+    // 📍 Bouton "Voir ma position"
+    document.getElementById('locateBtn').addEventListener('click', () => {
+        map.locate({ setView: true, maxZoom: 17 });
+    });
+
+    map.on('locationfound', function (e) {
+        L.marker(e.latlng).addTo(map).bindPopup("📍 Vous êtes ici").openPopup();
+    });
+});
 </script>
 @endsection

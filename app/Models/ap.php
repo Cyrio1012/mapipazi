@@ -6,9 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class ap extends Model
 {
-     protected $fillable = [
-        'id_descent', 'num_ap', 'type', 'date_ap', 'sup_remblais',
-        'comm_propriete', 'pu', 'zone', 'destination', 'taux', 'situation'
+    protected $fillable = [
+        'id_descent',
+        'num_ap',
+        'nom_proprietaire',
+        'type',
+        'date_ap',
+        'sup_remblais',
+        'comm_propriete',
+        'x',
+        'y',
+        'fkt',
+        'zone',
+        'titre',
+        'destination',
+        'taux',
+        'taux_payer',
+        'notifier',
+        'delais_md',
+        'situation'    
     ];
 
     protected $casts = [

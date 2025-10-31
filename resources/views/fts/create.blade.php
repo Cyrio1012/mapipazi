@@ -44,6 +44,42 @@
         @csrf
         <input type="hidden" name="id_descent" value="{{ $descente->id }}">
         {{-- 👤 Personne venue & coordonnées --}}
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Num FT</label>
+                <input type="number" name="num_ft" class="form-control" value="{{ old('num_ft') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Date</label>
+                <input type="date" name="date" class="form-control" value="{{ old('date', optional($descente->date)->format('Y-m-d')) }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Heure</label>
+                <input type="time" name="heure" class="form-control" value="{{ old('heure', optional($descente->heure)->format('H:i')) }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Nom personne venue</label>
+                <input type="text" name="nom_pers_venue" class="form-control" value="{{ old('nom_pers_venue') }}">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Qualité personnes</label>
+                <input type="number" name="qte_pers_venue" class="form-control" value="{{ old('qte_pers_venue') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Contact</label>
+                <input type="text" name="contact" class="form-control" value="{{ old('contact') }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Adresse</label>
+                <input type="text" name="adresse" class="form-control" value="{{ old('adresse', $descente->adresse) }}">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">CIN / N° pièce</label>
+                <input type="text" name="cin" class="form-control" value="{{ old('cin') }}">
+            </div>
+        </div>
         {{-- 🏗️ Informations foncières --}}
         <div class="form-section">
             <h5>Informations foncières</h5>
@@ -107,6 +143,16 @@
                 </div>
             </div>
         </div>
+        <div class="mb-3">
+                <label class="form-label">pieces apporter</label><br>
+                @foreach ($descente->pieces_a_fournir as $act)
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" name="piece_apporter[]" value="{{ $act }}" class="form-check-input"
+                            {{ is_array(old('piece_apporter')) && in_array($act, old('piece_apporter')) ? 'checked' : '' }}>
+                        <label class="form-check-label">{{ $act }}</label>
+                    </div>
+                @endforeach
+            </div>
 
         <label for="" class="form-label mt-2"> Objet </label>
         <div class="col-md-12 mt-1">

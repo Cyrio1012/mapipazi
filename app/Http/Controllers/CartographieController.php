@@ -38,8 +38,24 @@ class CartographieController extends Controller
                 'y_laborde' => floatval($descente->y),
             ];
         });
+        $features = Descente::whereNotNull('geom')
+        ->get()
+        ->map(function ($item) {
+            return [
+                'type' => 'Feature',
+                'geometry' => json_decode($item->geom),
+                'properties' => [
+                    'ref_om' => $item->ref_om,
+                    'ref_pv' => $item->ref_pv,
+                    'num_pv' => $item->num_pv,
+                    'adresse' => $item->adresse,
+                    'contact' => $item->contact,
+                    'date' => $item->date,
+                ]
+            ];
+        });
 
-        return view('cartographie.index', compact('descentes'));
+        return view('cartographie.index', compact('descentes'),['geojson' => $features]);
     }
 
     /**

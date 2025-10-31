@@ -37,6 +37,7 @@ return new class extends Migration
 
             $table->double('x')->nullable(); // X (longitude)
             $table->double('y')->nullable(); // Y (latitude)
+            $table->json('geom')->nullable(); // GEOM
 
             $table->date('date_rdv_ft')->nullable(); // DATE_RDV_FT
             $table->time('heure_rdv_ft')->nullable(); // HEURE_RDV_FT

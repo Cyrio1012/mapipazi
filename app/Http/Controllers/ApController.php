@@ -8,6 +8,7 @@ use App\Models\Propriete;
 use App\Models\Ft;
 use Illuminate\Http\Request;
 use NumberFormatter;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ApController extends Controller
 {
@@ -16,7 +17,9 @@ class ApController extends Controller
      */
     public function index()
     {
-        //
+        $aps = Ap::with('descente')->latest()->paginate(10); // pagination facultative
+
+        return view('aps.index', compact('aps'));
     }
     public function etablir_ap($id_descente, Request $request)
     {
@@ -107,61 +110,30 @@ class ApController extends Controller
 
     public function store(Request $request)
     {   
-        // dd($request->all());
-        $zone = $request->zone;
-        $destination = $request->destination;
-        $sup = $request->sup_remblais;
-        $commune = $request->comm_propriete;
-        $t = $this->calculerTauxAp($zone, $destination, $sup, $commune, 'redevance');
-        dd($this->chiffreEnLettre($t));
-        if (in_array($zone, ['zc', 'zd'])) {
-    // 1. AP Redevance
-        Ap::create([
-            'id_descent' => $request->id_descent,
-            'num_ap' => $request->num_ap,
-            'type' => 'redevance',
-            'date_ap' => $request->date_ap,
-            'sup_remblais' => $sup,
-            'comm_propriete' => $commune,
-            'pu' => $request->pu,
-            'zone' => $zone,
-            'destination' => $destination,
-            'taux' => $this->calculerTauxAp($zone, $destination, $sup, $commune, 'redevance'),
-            'situation' => $request->situation,
-        ]);
+        $validated = $request->validate([
+        'id_descent' => 'required|exists:descentes,id',
+        'num_ap' => 'nullable|string',
+        'nom_proprietaire' => 'nullable|string',
+        'type' => 'nullable|string',
+        'date_ap' => 'nullable|date',
+        'sup_remblais' => 'nullable|numeric',
+        'comm_propriete' => 'nullable|string',
+        'x' => 'nullable|string',
+        'y' => 'nullable|string',
+        'fkt' => 'nullable|string',
+        'zone' => 'required|in:zc,zi,zd',
+        'titre' => 'nullable|string',
+        'destination' => 'required|in:h,c',
+        'taux' => 'nullable|integer',
+        'taux_payer' => 'nullable|integer',
+        'notifier' => 'nullable|date',
+        'delais_md' => 'nullable|integer',
+        'situation' => 'nullable|string',
+    ]);
 
-        // 2. AP Amande zone
-        Ap::create([
-            'id_descent' => $request->id_descent,
-            'num_ap' => $request->num_ap . '-A',
-            'type' => 'a_zone',
-            'date_ap' => $request->date_ap,
-            'sup_remblais' => $sup,
-            'comm_propriete' => $commune,
-            'pu' => $request->pu,
-            'zone' => $zone,
-            'destination' => $destination,
-            'taux' => $this->calculerTauxAp($zone, $destination, $sup, $commune, 'a_zone'),
-            'situation' => $request->situation,
-        ]);
-    }
+        $ap = Ap::create($validated);
 
-    if ($zone === 'zi') {
-        // AP unique : Amande zone
-        Ap::create([
-            'id_descent' => $request->id_descent,
-            'num_ap' => $request->num_ap,
-            'type' => 'a_zone',
-            'date_ap' => $request->date_ap,
-            'sup_remblais' => $sup,
-            'comm_propriete' => $commune,
-            'pu' => $request->pu,
-            'zone' => $zone,
-            'destination' => $destination,
-            'taux' => $this->calculerTauxAp($zone, $destination, $sup, $commune, 'a_zone'),
-            'situation' => $request->situation,
-        ]);
-    }
+        return redirect()->route('aps.index')->with('success', '✅ AP enregistrée avec succès.');
         // return redirect()->route('descentes.show', $validated['id_descent'])->with('success', 'AP enregistrée avec succès.');
     }
 
@@ -170,7 +142,9 @@ class ApController extends Controller
      */
     public function show(ap $ap)
     {
-        //
+        // $ap = Ap::with('descente')->findOrFail($ap);
+
+        return view('aps.show', compact('ap'));
     }
 
     /**
@@ -195,5 +169,16 @@ class ApController extends Controller
     public function destroy(ap $ap)
     {
         //
+    }
+    public function export($id)
+    {
+        $ap = Ap::findOrFail($id);
+        $taux_lettre= $this->chiffreEnLettre($ap->taux);
+        $type = $ap->type;
+        $base = $this->calculerBase($ap->zone, $ap->destination, $ap->sup_remblais, $ap->comm_propriete, $ap->type);;
+
+        $pdf = Pdf::loadView('aps.pdf', compact('ap','taux_lettre','type','base'))->setPaper('A4', 'portrait');
+        return $pdf->download('ap_'.$ap->id.'.pdf');
+        // return view('aps.pdf', compact('ap','taux_lettre','type','base'));
     }
 }

@@ -80,7 +80,9 @@ class FtController extends Controller
     public function show(Ft $ft)
     {
         $fts = FT::findOrFail($ft->id);
-        return view('fts.show', compact('fts'));
+        // dd($ft);
+        $pieces_a_fournir = Descentes::findOrFail($ft->id_descent)->pieces_a_fournir;
+        return view('fts.show', compact('fts','pieces_a_fournir'));
     }
 
     public function edit(Ft $ft)

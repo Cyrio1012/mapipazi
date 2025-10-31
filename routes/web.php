@@ -21,7 +21,8 @@ Route::post('/proprietes', [ProprieteController::class, 'store'])->name('proprie
 
 Route::get('/descentes/{descente}/aps/create', [ApController::class, 'etablir_ap'])->name('aps.create');
 Route::post('/aps', [ApController::class, 'store'])->name('aps.store');
-
+Route::resource('aps', ApController::class);
+Route::get('/aps/{id}/export', [ApController::class, 'export'])->name('aps.export');
 
 Route::get('/cartographie', [CartographieController::class, 'index'])->name('cartographie.index');
 

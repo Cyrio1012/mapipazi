@@ -56,17 +56,14 @@ class DescentesController extends Controller
             'dist' => 'nullable|string|max:255',
             'comm' => 'nullable|string|max:255',
             'fkt' => 'nullable|string|max:255',
-
             'x'=> 'nullable|numeric',
-
             'y' => 'nullable|numeric',
-
+            'geom' => 'nullable|json',
             'date_rdv_ft' => 'nullable|date',
             'heure_rdv_ft' => 'nullable|date_format:H:i',
 
             'pieces_a_fournir' => 'nullable|array',
         ]);
-
         Descentes::create($validated);
         return redirect()->route('descentes.index')->with('success', 'Descente créée avec succès.');
     }
@@ -75,7 +72,7 @@ class DescentesController extends Controller
     {
         $fts = FT::where('id_descent', $descente->id)->get();
         $info_ft = FT::where('id_descent', $descente->id)->latest()->first();
-        // dd($info_ft);
+        // dd($descente);
         return view('descentes.show', compact('descente','fts','info_ft'));
     }
 
