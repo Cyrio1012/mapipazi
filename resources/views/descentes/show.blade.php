@@ -121,21 +121,55 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Etablir l'Avis de Payement du Pv n° {{ $descente->num_pv }}</h1> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body"> 
-                    @if ($info_ft->zone === "zc" || $info_ft->zone === "zd" ) 
-                    <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'redevance']) }}">
-                        <p class="alert alert-secondary">Avis de payement redevance</p>
-                    </a> 
-                    <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
-                        <p class="alert alert-secondary">Avis de payement Amande</p>
-                    </a> 
-                    @else 
+                   @php
+                        $apRedevance = $info_ap->firstWhere('type', 'redevance');
+                        $apAmande = $info_ap->firstWhere('type', 'amande');
+                    @endphp
+                    @if ($apRedevance && $apAmande)
+                        {{-- ✅ Les deux AP existent --}}
+                        <p class="alert alert-success">
+                            Avis de paiement redevance déjà émis
+                            <a href="{{ route('aps.show', $apRedevance) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
+                        </p>
+                        <p class="alert alert-success">
+                            Avis de paiement amande déjà émis
+                            <a href="{{ route('aps.show', $apAmande) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
+                        </p>
+
+                    @elseif ($apRedevance && !$apAmande)
+                        {{-- ✅ Seulement redevance existe --}}
+                        <p class="alert alert-success">
+                            Avis de paiement redevance déjà émis
+                            <a href="{{ route('aps.show', $apRedevance) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
+                        </p>
                         <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
-                            <p class="alert alert-secondary">Avis de payement Amande</p>
-                        </a> 
-                    @endif 
+                            <p class="alert alert-secondary">Etablir Avis de paiement Amande</p>
+                        </a>
+
+                    @elseif (!$apRedevance && $apAmande)
+                        {{-- ✅ Seulement amande existe --}}
+                        <p class="alert alert-success">
+                            Avis de paiement amande déjà émis
+                            <a href="{{ route('aps.show', $apAmande) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
+                        </p>
+                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'redevance']) }}">
+                            <p class="alert alert-secondary">Etablir Avis de paiement Redevance</p>
+                        </a>
+
+                    @else
+                        {{-- ❌ Aucun AP encore émis --}}
+                        @if ($info_ft->zone === 'zc' || $info_ft->zone === 'zd')
+                            <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'redevance']) }}">
+                                <p class="alert alert-secondary">Etablir Avis de paiement Redevance</p>
+                            </a>
+                        @endif
+                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
+                            <p class="alert alert-secondary">Etablir Avis de paiement Amande</p>
+                        </a>
+                    @endif
                 
                 </div>
-                <div class="modal-footer"> <a href="{{ route('fts.create.from.descente', $descente->id) }}"> <button type="button" class="btn btn-primary">Nouvelle FT</button> </a> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> </div>
+                <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> </div>
             </div>
         </div>
     </div>

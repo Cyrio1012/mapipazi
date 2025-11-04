@@ -178,7 +178,7 @@ class ApController extends Controller
         $base = $this->calculerBase($ap->zone, $ap->destination, $ap->sup_remblais, $ap->comm_propriete, $ap->type);;
 
         $pdf = Pdf::loadView('aps.pdf', compact('ap','taux_lettre','type','base'))->setPaper('A4', 'portrait');
-        return $pdf->download('ap_'.$ap->id.'.pdf');
-        // return view('aps.pdf', compact('ap','taux_lettre','type','base'));
+        // return $pdf->download('ap_'.$ap->id.'.pdf');
+        return view('aps.pdf', compact('ap','taux_lettre','type','base'));
     }
 }

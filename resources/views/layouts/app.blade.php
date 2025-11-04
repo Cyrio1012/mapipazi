@@ -124,15 +124,67 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-  </style>
+    </style>
+    @stack('styles')
 </head>
 <body>
 
   <!-- Topbar -->
-  <div class="topbar">
-    <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
-    <h5 class="mb-0">@yield('title', 'Dashboard')</h5>
+   
+  <!-- <div class="topbar"> -->
+    <!-- <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
+    <h5 class="mb-0">@yield('title', 'Dashboard')</h5> -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand" href="{{ route('dashboard') }}">
+      <img src="{{ asset('assets/img/logo30ans.png') }}" alt="Logo" height="30">
+    </a>
+
+    <!-- Hamburger -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <h5 class="mb-0">@yield('title', 'Dashboard')</h5>
+        <!-- Ajoute ici d'autres liens si besoin -->
+      </ul>
+
+      <!-- Dropdown utilisateur -->
+      @auth
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ Auth::user()->name }} ({{ strtoupper(Auth::user()->statut) }})
+              
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+              <a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="dropdown-item" type="submit">Déconnexion</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      @endauth
+    </div>
   </div>
+</nav>
+
+
+  <!-- </div> -->
 
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar">
@@ -143,17 +195,16 @@
 
     <nav class="nav flex-column mt-3">
       <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a>
-      <a class="nav-link {{ request()->routeIs('proprietes.*') ? 'active' : '' }}" href="{{ route('proprietes.create', ['descente' => 1]) }}"><i class="bi bi-file-earmark-text"></i> <span>Demande PC</span></a>
-
+      
       <a class="nav-link {{ request()->routeIs('descentes.*') ? 'active' : '' }}" href="{{ route('descentes.index') }}"><i class="bi bi-arrow-down-circle"></i> <span>Descentes</span></a>
-
-      <a class="nav-link {{ request()->routeIs('fts.*') ? 'active' : '' }}" href="{{ route('fts.index') }}"><i class="bi bi-clipboard-check"></i> <span>F.T</span></a>
-
-      {{-- <a class="nav-link {{ request()->routeIs('') ? 'active' : '' }}" href="{{ route('apipa') }}"><i class="bi bi-building"></i> <span>APIPA</span></a> --}}
-      <a class="nav-link {{ request()->routeIs('cartographie.*') ? 'active' : '' }}" href="{{ route('cartographie.index') }}"><i class="bi bi-map"></i> <span>Cartographie</span></a>
+      
+      <a class="nav-link {{ request()->routeIs('aps.*') ? 'active' : '' }}" href="{{ route('aps.index') }}"><i class="bi bi-clipboard-check"></i> <span>Avis de payement</span></a>
+      
+     <a class="nav-link {{ request()->routeIs('descente.rdv') ? 'active' : '' }}" href="{{ route('descente.rdv') }}"><i class="bi bi-building"></i> <span>RDV</span></a>
+      <a class="nav-link {{ request()->routeIs('cartographie.*') ? 'active' : '' }}" href="{{ route('cartographie.index') }}"><i class="bi bi-map"></i> <span>Carte Descente</span></a>
+      <a class="nav-link {{ request()->routeIs('matros.*') ? 'active' : '' }}" href="{{ route('matros.index') }}"><i class="bi bi-file-earmark-text"></i> <span>Materielle roulante</span></a>
 
       <hr>
-      <a class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i> <span>Déconnexion</span></a>
     </nav>
   </div>
 
@@ -172,5 +223,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   @yield('scripts')
+  @stack('scripts')
 </body>
 </html>

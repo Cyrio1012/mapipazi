@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ap;
 use App\Models\Descentes;
 use App\Models\Ft;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,32 @@ class DescentesController extends Controller
     public function dashboard()
     {
         $descentes = Descentes::latest()->paginate(10);
-        return view('dashboard', compact('descentes'));
+        $total = Descentes::count();
+        $parMois = Descentes::selectRaw('EXTRACT(MONTH FROM date) AS mois, COUNT(*) AS total')
+                ->groupByRaw('EXTRACT(MONTH FROM date)')
+                ->orderByRaw('EXTRACT(MONTH FROM date)')
+                ->get();
+        $parAn = Descentes::selectRaw('EXTRACT(YEAR FROM date) AS annee, COUNT(*) AS total')
+                ->groupByRaw('EXTRACT(YEAR FROM date)')
+                ->orderByRaw('EXTRACT(YEAR FROM date)')
+                ->get();
+        $parComm = Descentes::select('comm')
+                ->selectRaw('COUNT(*) as total')
+                ->groupBy('comm')
+                ->orderByDesc('total')
+                ->get();
+        $totalRDV = Descentes::whereNotNull('date_rdv_ft')->count();
+        $rdvEnAttente = Descentes::whereNotNull('date_rdv_ft')
+                ->whereDate('date_rdv_ft', '>=', now()->toDateString())
+                ->whereNull('ft_id')
+                ->count();
+        // surface terrain remblayée par zonage
+        
+
+
+        // dd($total, $parMois, $parAn, $parComm, $totalRDV, $rdvEnAttente);
+
+        return view('dashboard', compact('descentes', 'total', 'parMois', 'parAn', 'parComm', 'totalRDV', 'rdvEnAttente'));
     }
     public function index()
     {
@@ -38,16 +64,16 @@ class DescentesController extends Controller
             'date' => 'nullable|date',
             'heure' => 'nullable|date_format:H:i',
 
-            'ref_om' => 'nullable|string|max:255',
+            'ref_om' => 'string|max:255',
             'ref_pv' => 'nullable|in:pat,fifafi',
             'ref_rapport' => 'nullable|string|max:255',
-            'num_pv' => 'nullable|string|max:255',
+            'num_pv' => 'string|max:255',
 
             'equipe' => 'nullable|array',
             'action' => 'nullable|array',
             'constat' => 'nullable|array',
 
-            'pers_verb' => 'nullable|string|max:255',
+            'pers_verb' => 'string|max:255',
             'qte_pers' => 'nullable|string|max:255',
 
             'adresse' => 'nullable|string|max:255',
@@ -59,8 +85,8 @@ class DescentesController extends Controller
             'x'=> 'nullable|numeric',
             'y' => 'nullable|numeric',
             'geom' => 'nullable|json',
-            'date_rdv_ft' => 'nullable|date',
-            'heure_rdv_ft' => 'nullable|date_format:H:i',
+            'date_rdv_ft' => 'date',
+            'heure_rdv_ft' => 'date_format:H:i',
 
             'pieces_a_fournir' => 'nullable|array',
         ]);
@@ -72,8 +98,9 @@ class DescentesController extends Controller
     {
         $fts = FT::where('id_descent', $descente->id)->get();
         $info_ft = FT::where('id_descent', $descente->id)->latest()->first();
-        // dd($descente);
-        return view('descentes.show', compact('descente','fts','info_ft'));
+        $info_ap = ap::where('id_descent', $descente->id)->get();
+        // dd($info_ap);
+        return view('descentes.show', compact('descente','fts','info_ft','info_ap'));
     }
 
     public function edit(Descentes $descente)
@@ -121,5 +148,22 @@ class DescentesController extends Controller
     {
         $descente->delete();
         return redirect()->route('descentes.index')->with('success', 'Descentes supprimée.');
-    }       
+    }
+
+    public function rdv()
+    {
+        $rdvEnAttente = Descentes::whereNotNull('date_rdv_ft')
+                ->whereDate('date_rdv_ft', '>=', now()->toDateString())
+                ->whereNull('ft_id')
+                ->paginate(10);
+        $rdvFait = Descentes::whereNotNull('date_rdv_ft')
+                ->whereNotNull('ft_id')
+                ->paginate(10);
+        $rdvRate= Descentes::whereNotNull('date_rdv_ft')
+                ->whereDate('date_rdv_ft', '<', now()->toDateString())
+                ->whereNull('ft_id')
+                ->paginate(10);
+        // dd($rdvEnAttente,$rdvFait,$rdvRate);
+        return view('descentes.rdv', compact('rdvEnAttente','rdvFait','rdvRate'));;
+    }    
 }

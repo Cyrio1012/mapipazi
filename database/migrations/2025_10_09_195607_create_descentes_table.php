@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('ref_pv',['pat','fifafi']); // REF_PV
             $table->string('ref_rapport')->nullable(); // REF_RAPPORT
             $table->string('num_pv')->nullable(); // NUM_PV
+            $table->string('ft_id')->nullable(); // NUM_PV
 
             $table->json('equipe')->nullable(); // EQUIPE
             $table->json('action')->nullable(); // ACTION

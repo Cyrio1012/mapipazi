@@ -72,9 +72,12 @@ class FtController extends Controller
         ]);
         $validated_prop['comm_desc'] = $descente->comm;
 
-        Ft::create($validated);
+        $ft = Ft::create($validated);
         Propriete::create($validated_prop);
-        return redirect()->route('fts.index')->with('success', 'FT enregistrée avec succès.');
+        $descente->ft_id=$ft->id;
+        $descente->save();
+
+        return redirect()->route('fts.show', $ft->id)->with('success', 'FT enregistrée avec succès.');
     }
 
     public function show(Ft $ft)

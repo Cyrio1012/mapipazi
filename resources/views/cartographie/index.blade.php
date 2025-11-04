@@ -23,6 +23,7 @@ color: #333;
 height: 100vh;
 display: flex;
 flex-direction: column;
+margin:0 !important;
         }
 header {
 background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -85,7 +86,8 @@ transform: translateY(-1px);
 .main-container {
 display: flex;
 flex: 1;
-height: calc(100vh - 70px);
+height: calc(97vh - 90px);
+
         }
 .map-container {
 flex: 1;
@@ -133,23 +135,27 @@ color: white;
 .map-btn.active i {
 color: white;
         }
+
+/* MODAL DÉTAIL DÉPLACÉ VERS LA GAUCHE */
 .descente-detail {
-position: absolute;
-bottom: 1rem;
-left: 1rem;
-right: 1rem;
-background-color: white;
-border-radius: 8px;
-padding: 1.5rem;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-z-index: 1000;
-max-height: 400px;
-overflow-y: auto;
-display: none;
-        }
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 400px;
+    max-height: calc(100vh - 2rem);
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: auto;
+    display: none;
+}
+
 .descente-detail.active {
-display: block;
-        }
+    display: block;
+}
+
 .detail-header {
 display: flex;
 justify-content: space-between;
@@ -177,6 +183,7 @@ line-height: 1.6;
         }
 .detail-section {
 margin-bottom: 1rem;
+
         }
 .detail-section h4 {
 color: #374151;
@@ -202,21 +209,12 @@ margin-bottom: 0.2rem;
 color: #374151;
 font-size: 0.9rem;
         }
+
+/* SUPPRESSION DE LA RECHERCHE PRINCIPALE */
 .search-container {
-position: absolute;
-top: 1rem;
-left: 1rem;
-z-index: 1000;
-width: 300px;
-        }
-.search-input {
-width: 100%;
-padding: 0.8rem 1rem;
-border-radius: 8px;
-border: none;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-font-size: 0.9rem;
-        }
+    display: none;
+}
+
 .legend-container {
 position: absolute;
 bottom: 1rem;
@@ -289,44 +287,271 @@ transition: all 0.3s ease;
 .descente-marker:hover {
 transform: scale(1.1);
         }
+
+/* MODAL DE RECHERCHE AMÉLIORÉ */
+.search-modal {
+    position: absolute;
+    top: 4rem;
+    left: 1rem;
+    z-index: 1000;
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    display: none;
+    overflow: hidden;
+}
+
+.search-modal.active {
+    display: block;
+}
+
+.search-modal-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: white;
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-modal-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.close-search-modal {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: white;
+    opacity: 0.8;
+}
+
+.close-search-modal:hover {
+    opacity: 1;
+}
+
+.search-modal-body {
+    padding: 1.5rem;
+}
+
+.coord-type-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.coord-type-btn {
+    flex: 1;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #6b7280;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.coord-type-btn.active {
+    background: white;
+    color: #2563eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.coord-input-group {
+    margin-bottom: 1rem;
+}
+
+.coord-input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.4rem;
+}
+
+.coord-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.coord-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.coord-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.coord-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.coord-btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+}
+
+.coord-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.coord-btn-secondary {
+    background-color: #6b7280;
+    color: white;
+}
+
+.coord-btn-secondary:hover {
+    background-color: #4b5563;
+}
+
+.coord-result {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    display: none;
+    border-left: 4px solid transparent;
+}
+
+.coord-result.success {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border-left-color: #0ea5e9;
+    display: block;
+}
+
+.coord-result.error {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border-left-color: #ef4444;
+    display: block;
+}
+
+.coord-system-info {
+    font-size: 0.7rem;
+    color: #6b7280;
+    margin-top: 0.3rem;
+    font-style: italic;
+}
+
+/* Ajustement responsive */
 @media (max-width: 768px) {
-.search-container {
-width: calc(100% - 2rem);
-            }
-.legend-container {
-max-width: 200px;
-            }
-.map-type-controls {
-right: 1rem;
-top: 5rem;
-            }
-.descente-detail {
-max-height: 300px;
-            }
-        }
+    .descente-detail {
+        width: calc(100% - 2rem);
+        max-height: 300px;
+    }
+    
+    .search-modal {
+        width: calc(100% - 2rem);
+        top: 5rem;
+    }
+    
+    .legend-container {
+        max-width: 200px;
+    }
+    
+    .map-type-controls {
+        right: 1rem;
+        top: 5rem;
+    }
+}
 </style>
 </head>
-<body>
-<header>
-<div class="title-container">
-<i class="fas fa-map-marked-alt"></i>
-<div class="title-group">
-<h1>Cartographie des Descentes</h1>
-<p>Visualisation interactive des descentes à Madagascar</p>
+<body style="margin:0 !important;" >
+
+
+<div style="margin:0 !important;" class="main-container">
+<div style="margin:0 !important;"  class="map-container">
+<div style="margin:-32px !important;width:2020px;height:97vh"  id="map"></div>
+
+<!-- MODAL DE RECHERCHE AMÉLIORÉ -->
+<div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+        <h3 class="search-modal-title">
+            <i class="fas fa-search-location"></i> Recherche de Coordonnées
+        </h3>
+        <button class="close-search-modal" id="close-search-modal">&times;</button>
+    </div>
+    <div class="search-modal-body">
+        <!-- Sélecteur de type de coordonnées -->
+        <div class="coord-type-selector">
+            <button class="coord-type-btn active" data-type="laborde">
+                <i class="fas fa-map-marked-alt"></i> Laborde
+            </button>
+            <button class="coord-type-btn" data-type="latlon">
+                <i class="fas fa-globe-americas"></i> Lat/Lon
+            </button>
+        </div>
+
+        <!-- Champs Laborde (visible par défaut) -->
+        <div id="laborde-fields" class="coord-fields">
+            <div class="coord-input-group">
+                <label for="coord-x">Coordonnée X (Laborde)</label>
+                <input type="number" id="coord-x" class="coord-input" placeholder="Ex: 516531" step="any">
+                <div class="coord-system-info">Système EPSG:8441 - Madagascar Laborde</div>
+            </div>
+            <div class="coord-input-group">
+                <label for="coord-y">Coordonnée Y (Laborde)</label>
+                <input type="number" id="coord-y" class="coord-input" placeholder="Ex: 802042" step="any">
+                <div class="coord-system-info">Système EPSG:8441 - Madagascar Laborde</div>
+            </div>
+        </div>
+
+        <!-- Champs Lat/Lon (caché par défaut) -->
+        <div id="latlon-fields" class="coord-fields" style="display: none;">
+            <div class="coord-input-group">
+                <label for="coord-lat">Latitude (WGS84)</label>
+                <input type="number" id="coord-lat" class="coord-input" placeholder="Ex: -18.879439" step="any" min="-25.6" max="-12.0">
+                <div class="coord-system-info">WGS84 - Entre -25.6° et -12.0° (Madagascar)</div>
+            </div>
+            <div class="coord-input-group">
+                <label for="coord-lon">Longitude (WGS84)</label>
+                <input type="number" id="coord-lon" class="coord-input" placeholder="Ex: 47.543402" step="any" min="43.0" max="50.5">
+                <div class="coord-system-info">WGS84 - Entre 43.0° et 50.5° (Madagascar)</div>
+            </div>
+        </div>
+
+        <div class="coord-buttons">
+            <button class="coord-btn coord-btn-secondary" id="clear-coord-search">
+                <i class="fas fa-eraser"></i> Effacer
+            </button>
+            <button class="coord-btn coord-btn-primary" id="search-by-coord">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+        <div class="coord-result" id="coord-result"></div>
+    </div>
 </div>
-</div>
-<div class="action-buttons">
-<a href="{{ route('dashboard') }}" class="btn btn-primary">
-<i class="fas fa-tachometer-alt"></i> Tableau de Bord
-</a>
-<a href="{{ route('descentes.index') }}" class="btn btn-secondary">
-<i class="fas fa-list"></i> Liste des Descentes
-</a>
-</div>
-</header>
-<div class="main-container">
-<div class="map-container">
-<div id="map"></div>
+
 <!-- Contrôles de type de carte -->
 <div class="map-type-controls">
 <button class="map-btn active" id="view-oms" title="Vue OMS">
@@ -335,7 +560,12 @@ max-height: 300px;
 <button class="map-btn" id="view-satellite" title="Vue Satellite">
 <i class="fas fa-satellite"></i>
 </button>
+<!-- Bouton pour recherche coordonnées -->
+<button class="map-btn" id="toggle-search-modal" title="Recherche par Coordonnées">
+    <i class="fas fa-crosshairs"></i>
+</button>
 </div>
+
 <!-- Contrôles de la carte -->
 <div class="map-controls">
 <button class="map-btn" id="zoom-in" title="Zoom In">
@@ -351,10 +581,7 @@ max-height: 300px;
 <i class="fas fa-location-arrow"></i>
 </button>
 </div>
-<!-- Recherche -->
-<div class="search-container">
-<input type="text" class="search-input" placeholder="Rechercher par référence, adresse, commune...">
-</div>
+
 <!-- Légende -->
 <div class="legend-container">
 <h3 class="legend-title"><i class="fas fa-key"></i> Légende</h3>
@@ -371,22 +598,25 @@ max-height: 300px;
 <span class="legend-label">Descente Terminée</span>
 </div>
 </div>
-<!-- Détails -->
+
+<!-- DÉTAILS DÉPLACÉS VERS LA GAUCHE -->
 <div class="descente-detail" id="descente-detail">
 <div class="detail-header">
 <h3 class="detail-title">Détails de la Descente</h3>
 <button class="close-detail" id="close-detail">&times;</button>
 </div>
 <div class="detail-content" id="detail-content">
-                    Sélectionnez une descente pour voir les détails
+Sélectionnez une descente pour voir les détails
 </div>
 </div>
+
 <!-- Loading -->
 <div class="loading" id="loading">
 <i class="fas fa-spinner fa-spin"></i> Chargement des données...
 </div>
 </div>
 </div>
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
@@ -395,25 +625,34 @@ max-height: 300px;
 const descentesData = @json($descentes ?? []);
 console.log('=== CHARGEMENT DES DONNÉES DESCENTES ===');
 console.log('Nombre total de descentes:', descentesData.length);
+
+// Variables globales
+let coordMarker = null;
+let currentCoordType = 'laborde';
+
 // Initialiser la carte centrée sur Madagascar
 const map = L.map('map').setView([-18.766947, 46.869107], 6);
+
 // Définitions des styles de carte
 const mapStyles = {
 'OMS': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 maxZoom: 19
             }),
-'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
 attribution: 'Imagery © <a href="https://maps.google.com">Google Maps</a>',
 maxZoom: 22
             })
         };
+
 // Style de carte initial (OMS)
 mapStyles['OMS'].addTo(map);
 let currentMapStyle = 'OMS';
+
 // Groupe pour les marqueurs
 const markers = L.markerClusterGroup();
 let descentesLayers = {};
+
 // CONFIGURATION PROJ4 - SYSTÈME LABORDE MADAGASCAR (EPSG:8441)
 try {
 // Définition projection EPSG:8441 (Laborde Madagascar)
@@ -425,6 +664,7 @@ console.log("✅ Projection EPSG:8441 (Laborde Madagascar) configurée avec succ
         } catch (e) {
 console.error("❌ Erreur configuration EPSG:8441:", e);
         }
+
 // FONCTION DE CONVERSION PRÉCISE LABORDE -> WGS84
 function labordeToWGS84(x, y) {
 if (!x || !y || x == 0 || y == 0 || isNaN(x) || isNaN(y)) {
@@ -455,6 +695,32 @@ console.error('❌ Erreur de conversion Laborde->WGS84:', error);
 return null;
             }
         }
+
+// FONCTION DE CONVERSION WGS84 -> LABORDE
+function wgs84ToLaborde(lat, lon) {
+    if (!lat || !lon || isNaN(lat) || isNaN(lon)) {
+        console.log('Coordonnées WGS84 invalides:', lat, lon);
+        return null;
+    }
+    try {
+        if (!proj4.defs("EPSG:8441")) {
+            console.error("Projection EPSG:8441 non définie");
+            return null;
+        }
+        // Conversion WGS84 vers Laborde
+        const fromProj = "EPSG:4326";
+        const toProj = "EPSG:8441";
+        const result = proj4(fromProj, toProj, [lon, lat]);
+        const x = result[0];
+        const y = result[1];
+        console.log(`📍 Conversion PROJ4: WGS84(${lat}, ${lon}) -> Laborde(${x.toFixed(2)}, ${y.toFixed(2)})`);
+        return { x: Math.round(x), y: Math.round(y) };
+    } catch (error) {
+        console.error('❌ Erreur de conversion WGS84->Laborde:', error);
+        return null;
+    }
+}
+
 // Fonction pour tester la conversion avec vos points connus
 function testConversion() {
 console.log('🧪 TEST DE CONVERSION AVEC PROJ4');
@@ -496,20 +762,13 @@ console.log('❌ Précision insuffisante');
                 }
             });
         }
-// Fonction pour déterminer la couleur selon le statut
+
+// Fonction pour déterminer la couleur selon le statut - TOUTES LES DESCENTES EN JAUNE
 function getDescenteColor(descente) {
-if (!descente.date) return '#6b7280'; // Gris si pas de date
-const aujourdHui = new Date();
-const dateDescente = new Date(descente.date);
-if (isNaN(dateDescente.getTime())) return '#6b7280'; // Gris si date invalide
-if (dateDescente > aujourdHui) {
-return '#4e73df'; // Planifié - bleu
-            } else if (dateDescente.toDateString() === aujourdHui.toDateString()) {
-return '#f6c23e'; // En cours - jaune
-            } else {
-return '#1cc88a'; // Terminé - vert
-            }
-        }
+    // Retourne toujours la couleur jaune pour toutes les descentes
+    return '#f6c23e'; // Jaune pour toutes les descentes
+}
+
 // Fonction pour formater les tableaux JSON
 function formatArrayField(field) {
 if (!field) return 'Non spécifié';
@@ -526,6 +785,7 @@ return field;
             }
 return field;
         }
+
 // Fonction pour ajouter les descentes à la carte
 function addDescentesToMap(descentes) {
 // Nettoyer les layers existants
@@ -533,6 +793,7 @@ markers.clearLayers();
 descentesLayers = {};
 let coordsValides = 0;
 let interventions = 0;
+
 // Ajouter les descentes
 descentes.forEach(descente => {
 // Vérification robuste des coordonnées
@@ -550,15 +811,20 @@ return;
                 }
 coordsValides++;
 if (descente.action && descente.action !== '[]' && descente.action !== 'null') interventions++;
+
 const markerColor = getDescenteColor(descente);
+
 // Créer un marqueur personnalisé
 const marker = L.marker(coords, {
 icon: L.divIcon({
-html: `<div class="descente-marker" style="border-color: ${markerColor}; color: ${markerColor}; width: 35px; height: 35px;">D</div>`,
+html: `<div class="descente-marker" style="border-color: ${markerColor}; color: ${markerColor}; width: 35px; height: 35px; background-color: ${markerColor}20;">
+                    <i class="fas fa-map-marker-alt" style="color: ${markerColor}; font-size: 14px;"></i>
+                </div>`,
 className: 'descente-marker-container',
 iconSize: [35, 35]
                     })
                 });
+
 // Popup d'information
 const popupContent = `
                     <div style="font-family: 'Inter', sans-serif; max-width: 350px;">
@@ -582,12 +848,15 @@ ${descente.num_pv ? `<p><strong>Num. PV:</strong> ${descente.num_pv}</p>` : ''}
                     </div>
                 `;
 marker.bindPopup(popupContent);
+
 // Stocker la référence
 descentesLayers[descente.id] = marker;
 markers.addLayer(marker);
             });
+
 // Ajouter le groupe de marqueurs à la carte
 map.addLayer(markers);
+
 // Ajuster la vue si des marqueurs sont présents
 if (coordsValides > 0) {
 const group = new L.featureGroup(Object.values(descentesLayers));
@@ -599,14 +868,17 @@ console.warn('⚠️ Aucun marqueur valide à afficher');
 map.setView([-18.766947, 46.869107], 6);
             }
         }
+
 // Fonction pour afficher les détails complets
 function showDetail(descenteId) {
 const descente = descentesData.find(d => d.id == descenteId);
 if (!descente) return;
+
 const markerColor = getDescenteColor(descente);
 const x = parseFloat(descente.x_laborde);
 const y = parseFloat(descente.y_laborde);
 const coords = labordeToWGS84(x, y);
+
 const detailContent = `
                 <div class="detail-section">
                     <h4 style="color: ${markerColor};">Informations Générales</h4>
@@ -716,6 +988,7 @@ const detailContent = `
 document.getElementById('detail-content').innerHTML = detailContent;
 document.getElementById('descente-detail').classList.add('active');
         }
+
 // Fonction pour changer le style de carte
 function changeMapStyle(style) {
 mapStyles[currentMapStyle].remove();
@@ -724,19 +997,192 @@ currentMapStyle = style;
 document.getElementById('view-oms').classList.toggle('active', style === 'OMS');
 document.getElementById('view-satellite').classList.toggle('active', style === 'Satellite');
         }
-// Fonction de recherche
-function filterDescentes(searchTerm) {
-const filtered = descentesData.filter(descente =>
-                (descente.ref_om && descente.ref_om.toLowerCase().includes(searchTerm)) ||
-                (descente.ref_pv && descente.ref_pv.toLowerCase().includes(searchTerm)) ||
-                (descente.num_pv && descente.num_pv.toLowerCase().includes(searchTerm)) ||
-                (descente.adresse && descente.adresse.toLowerCase().includes(searchTerm)) ||
-                (descente.comm && descente.comm.toLowerCase().includes(searchTerm)) ||
-                (descente.dist && descente.dist.toLowerCase().includes(searchTerm))
-            );
-addDescentesToMap(filtered);
+
+// FONCTION POUR RECHERCHER ET AFFICHER UN POINT PAR COORDONNÉES
+function searchByCoordinates() {
+    const resultDiv = document.getElementById('coord-result');
+    
+    let coords, x, y, lat, lon;
+
+    if (currentCoordType === 'laborde') {
+        // Recherche par Laborde
+        x = document.getElementById('coord-x').value;
+        y = document.getElementById('coord-y').value;
+        
+        if (!x || !y || isNaN(x) || isNaN(y)) {
+            resultDiv.className = 'coord-result error';
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Veuillez entrer des coordonnées Laborde valides';
+            return;
         }
-// Écouteurs d'événements
+
+        // Convertir les coordonnées Laborde en WGS84
+        coords = labordeToWGS84(parseFloat(x), parseFloat(y));
+        
+        if (!coords) {
+            resultDiv.className = 'coord-result error';
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Conversion des coordonnées Laborde échouée';
+            return;
+        }
+
+        lat = coords[0];
+        lon = coords[1];
+
+    } else {
+        // Recherche par Lat/Lon
+        lat = parseFloat(document.getElementById('coord-lat').value);
+        lon = parseFloat(document.getElementById('coord-lon').value);
+        
+        if (!lat || !lon || isNaN(lat) || isNaN(lon)) {
+            resultDiv.className = 'coord-result error';
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Veuillez entrer des coordonnées WGS84 valides';
+            return;
+        }
+
+        // Validation des limites Madagascar
+        if (lat < -25.6 || lat > -12.0 || lon < 43.0 || lon > 50.5) {
+            resultDiv.className = 'coord-result error';
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Coordonnées hors des limites de Madagascar';
+            return;
+        }
+
+        coords = [lat, lon];
+        
+        // Convertir WGS84 vers Laborde
+        const labordeCoords = wgs84ToLaborde(lat, lon);
+        if (labordeCoords) {
+            x = labordeCoords.x;
+            y = labordeCoords.y;
+        }
+    }
+
+    // Supprimer le marqueur précédent s'il existe
+    if (coordMarker) {
+        map.removeLayer(coordMarker);
+    }
+
+    // Créer un marqueur spécial pour la recherche
+    coordMarker = L.marker(coords, {
+        icon: L.divIcon({
+            html: `<div class="descente-marker" style="border-color: #dc2626; color: #dc2626; width: 40px; height: 40px; background-color: rgba(255,255,255,0.9);">
+                    <i class="fas fa-crosshairs"></i>
+                   </div>`,
+            className: 'coord-marker-container',
+            iconSize: [40, 40]
+        })
+    }).addTo(map);
+
+    // Popup d'information
+    let popupContent = `
+        <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
+            <h3 style="color: #dc2626; margin-bottom: 0.5rem; border-bottom: 2px solid #dc2626; padding-bottom: 0.5rem;">
+                <i class="fas fa-crosshairs"></i> Point Recherché
+            </h3>
+            <div style="font-size: 0.9rem; color: #666;">
+    `;
+
+    if (currentCoordType === 'laborde') {
+        popupContent += `
+                <p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>
+                <p><strong>Coordonnées WGS84:</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}</p>
+        `;
+    } else {
+        popupContent += `
+                <p><strong>Coordonnées WGS84:</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}</p>
+                ${x && y ? `<p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>` : ''}
+        `;
+    }
+
+    popupContent += `
+                <p><em><small>Recherche manuelle par coordonnées</small></em></p>
+            </div>
+        </div>
+    `;
+    
+    coordMarker.bindPopup(popupContent).openPopup();
+
+    // Centrer la carte sur le point
+    map.setView(coords, 15);
+
+    // Afficher le résultat
+    resultDiv.className = 'coord-result success';
+    let resultHTML = `<i class="fas fa-check-circle"></i> Point trouvé et affiché sur la carte<br>`;
+    
+    if (currentCoordType === 'laborde') {
+        resultHTML += `<small>WGS84: ${lat.toFixed(6)}, ${lon.toFixed(6)}</small>`;
+    } else {
+        resultHTML += `<small>WGS84: ${lat.toFixed(6)}, ${lon.toFixed(6)}</small>`;
+        if (x && y) {
+            resultHTML += `<br><small>Laborde: X=${x}, Y=${y}</small>`;
+        }
+    }
+
+    resultDiv.innerHTML = resultHTML;
+
+    // Rechercher les descentes proches de ce point
+    findNearbyDescentes(coords, x, y);
+}
+
+// FONCTION POUR TROUVER LES DESCENTES PROCHEs
+function findNearbyDescentes(coordsWGS84, xLaborde, yLaborde) {
+    const tolerance = 100; // Tolérance en mètres (Laborde)
+    let nearbyDescentes = [];
+
+    descentesData.forEach(descente => {
+        const descX = parseFloat(descente.x_laborde);
+        const descY = parseFloat(descente.y_laborde);
+        
+        if (!isNaN(descX) && !isNaN(descY)) {
+            // Calcul de la distance euclidienne simple (approximative)
+            const distance = Math.sqrt(Math.pow(descX - xLaborde, 2) + Math.pow(descY - yLaborde, 2));
+            
+            if (distance <= tolerance) {
+                nearbyDescentes.push({
+                    descente: descente,
+                    distance: distance
+                });
+            }
+        }
+    });
+
+    // Trier par distance
+    nearbyDescentes.sort((a, b) => a.distance - b.distance);
+
+    // Afficher les résultats
+    const resultDiv = document.getElementById('coord-result');
+    if (nearbyDescentes.length > 0) {
+        resultDiv.innerHTML += `<br><strong>Descentes proches (${nearbyDescentes.length}):</strong><br>`;
+        nearbyDescentes.slice(0, 3).forEach(item => {
+            resultDiv.innerHTML += `• ${item.descente.ref_om || 'Sans réf.'} (${Math.round(item.distance)}m)<br>`;
+        });
+        if (nearbyDescentes.length > 3) {
+            resultDiv.innerHTML += `<small>... et ${nearbyDescentes.length - 3} autres</small>`;
+        }
+    } else {
+        resultDiv.innerHTML += `<br><small>Aucune descente trouvée à proximité</small>`;
+    }
+}
+
+// FONCTION POUR CHANGER LE TYPE DE COORDONNÉES
+function changeCoordType(type) {
+    currentCoordType = type;
+    
+    // Mettre à jour les boutons
+    document.querySelectorAll('.coord-type-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.type === type);
+    });
+    
+    // Afficher/masquer les champs appropriés
+    document.getElementById('laborde-fields').style.display = type === 'laborde' ? 'block' : 'none';
+    document.getElementById('latlon-fields').style.display = type === 'latlon' ? 'block' : 'none';
+    
+    // Effacer les résultats précédents
+    document.getElementById('coord-result').className = 'coord-result';
+    document.getElementById('coord-result').innerHTML = '';
+}
+
+// ÉCOUTEURS D'ÉVÉNEMENTS
+
+// Événements existants
 document.getElementById('zoom-in').addEventListener('click', () => map.zoomIn());
 document.getElementById('zoom-out').addEventListener('click', () => map.zoomOut());
 document.getElementById('reset-map').addEventListener('click', () => {
@@ -758,15 +1204,81 @@ document.getElementById('descente-detail').classList.remove('active');
         });
 document.getElementById('view-oms').addEventListener('click', () => changeMapStyle('OMS'));
 document.getElementById('view-satellite').addEventListener('click', () => changeMapStyle('Satellite'));
-// Recherche en temps réel
-document.querySelector('.search-input').addEventListener('input', function(e) {
-const searchTerm = e.target.value.toLowerCase().trim();
-if (searchTerm.length === 0) {
-addDescentesToMap(descentesData);
-            } else {
-filterDescentes(searchTerm);
-            }
-        });
+
+// NOUVEAUX ÉVÉNEMENTS POUR LE MODAL DE RECHERCHE
+document.getElementById('toggle-search-modal').addEventListener('click', function() {
+    const modal = document.getElementById('search-modal');
+    modal.classList.toggle('active');
+});
+
+document.getElementById('close-search-modal').addEventListener('click', function() {
+    document.getElementById('search-modal').classList.remove('active');
+});
+
+// Sélecteur de type de coordonnées
+document.querySelectorAll('.coord-type-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        changeCoordType(this.dataset.type);
+    });
+});
+
+document.getElementById('clear-coord-search').addEventListener('click', function() {
+    // Effacer tous les champs
+    document.getElementById('coord-x').value = '';
+    document.getElementById('coord-y').value = '';
+    document.getElementById('coord-lat').value = '';
+    document.getElementById('coord-lon').value = '';
+    document.getElementById('coord-result').className = 'coord-result';
+    document.getElementById('coord-result').innerHTML = '';
+    
+    // Supprimer le marqueur de recherche
+    if (coordMarker) {
+        map.removeLayer(coordMarker);
+        coordMarker = null;
+    }
+});
+
+document.getElementById('search-by-coord').addEventListener('click', function() {
+    searchByCoordinates();
+});
+
+// Recherche par Entrée
+document.getElementById('coord-x').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('search-by-coord').click();
+    }
+});
+
+document.getElementById('coord-y').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('search-by-coord').click();
+    }
+});
+
+document.getElementById('coord-lat').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('search-by-coord').click();
+    }
+});
+
+document.getElementById('coord-lon').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('search-by-coord').click();
+    }
+});
+
+// Fermer le modal en cliquant à l'extérieur
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('search-modal');
+    const toggleBtn = document.getElementById('toggle-search-modal');
+    
+    if (modal.classList.contains('active') && 
+        !modal.contains(e.target) && 
+        !toggleBtn.contains(e.target)) {
+        modal.classList.remove('active');
+    }
+});
+
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('loading').style.display = 'block';
