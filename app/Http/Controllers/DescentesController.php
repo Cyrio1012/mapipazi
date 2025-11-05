@@ -165,5 +165,8 @@ class DescentesController extends Controller
                 ->paginate(10);
         // dd($rdvEnAttente,$rdvFait,$rdvRate);
         return view('descentes.rdv', compact('rdvEnAttente','rdvFait','rdvRate'));;
-    }    
+    }  
+    public function archive()  {
+        return view ('descentes.archive');
+    }
 }

@@ -203,6 +203,7 @@
      <a class="nav-link {{ request()->routeIs('descente.rdv') ? 'active' : '' }}" href="{{ route('descente.rdv') }}"><i class="bi bi-building"></i> <span>RDV</span></a>
       <a class="nav-link {{ request()->routeIs('cartographie.*') ? 'active' : '' }}" href="{{ route('cartographie.index') }}"><i class="bi bi-map"></i> <span>Carte Descente</span></a>
       <a class="nav-link {{ request()->routeIs('matros.*') ? 'active' : '' }}" href="{{ route('matros.index') }}"><i class="bi bi-file-earmark-text"></i> <span>Materielle roulante</span></a>
+      <a class="nav-link {{ request()->routeIs('archives.*') ? 'active' : '' }}" href="{{ route('archives.index') }}"><i class="bi bi-file-earmark-text"></i> <span>Archives</span></a>
 
       <hr>
     </nav>

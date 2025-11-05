@@ -10,8 +10,15 @@ use App\Http\Controllers\CartographieController;
 use App\Http\Controllers\DescenteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MatroController;
+use App\Models\Descentes;
+use App\Http\Controllers\ArchivesController;
 Route::middleware(['auth'])->group(function () {
 
+
+
+
+
+    Route::resource('archives', ArchivesController::class);
 
     Route::resource('descentes', DescentesController::class);
     Route::get('/', [DescentesController::class, 'dashboard'])->name('dashboard');
