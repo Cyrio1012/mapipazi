@@ -64,7 +64,7 @@
 
             <div class="col-md-3">
                 <label class="form-label">Qualité personnes</label>
-                <input type="number" name="qte_pers_venue" class="form-control" value="{{ old('qte_pers_venue') }}">
+                <input type="text" name="qte_pers_venue" class="form-control" value="{{ old('qte_pers_venue') }}">
             </div>
             <div class="col-md-3">
                 <label class="form-label">Contact</label>

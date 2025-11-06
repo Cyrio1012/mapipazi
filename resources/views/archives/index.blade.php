@@ -1,155 +1,132 @@
 @extends('layouts.app')
 @section('content')
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Archives</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .table-hover tbody tr:hover {
-            background-color: rgba(0, 123, 255, 0.075);
-        }
-        .badge-status {
-            font-size: 0.75em;
-        }
-        .search-box {
-            max-width: 300px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid py-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="mb-0">
-                                <i class="fas fa-archive"></i> Liste des Archives
-                            </h4>
-                            <span class="badge bg-light text-dark">
-                                Total: {{ $archives->total() }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <!-- Barre de recherche et filtres -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <form action="{{ route('archives.index') }}" method="GET">
-                                    <div class="input-group">
-                                        <input type="text" name="search" class="form-control" 
-                                               placeholder="Rechercher..." value="{{ request('search') }}">
-                                        <button class="btn btn-outline-primary" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-6 text-end">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" 
-                                            data-bs-toggle="dropdown">
-                                        Trier par
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'date_arriv_desc']) }}">Date arrivée (récent)</a></li>
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'date_arriv_asc']) }}">Date arrivée (ancien)</a></li>
-                                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'ref_arriv']) }}">Référence</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tableau des archives -->
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Réf. Arrivée</th>
-                                        <th>Date Arrivée</th>
-                                        <th>Service</th>
-                                        <th>Action</th>
-                                        <th>Adresse</th>
-                                        <th>Commune</th>
-                                        <th>Propriétaire</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($archives as $archive)
-                                        <tr>
-                                            <td>{{ $archive->id }}</td>
-                                            <td>
-                                                <strong>{{ $archive->ref_arriv ?? 'N/A' }}</strong>
-                                            </td>
-                                            <td>
-                                                @if($archive->date_arriv)
-                                                    {{ $archive->date_arriv->format('d/m/Y') }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td>{{ $archive->sce_envoyeur ?? '-' }}</td>
-                                            <td>
-                                                <span class="badge bg-info text-dark">{{ $archive->action ?? '-' }}</span>
-                                            </td>
-                                            <td>
-                                                <small>{{ Str::limit($archive->adresse, 30) ?? '-' }}</small>
-                                            </td>
-                                            <td>{{ $archive->commune ?? '-' }}</td>
-                                            <td>{{ Str::limit($archive->proprio, 20) ?? '-' }}</td>
-                                            <td>
-                                                <a href="{{ route('archives.show', $archive->id) }}" 
-                                                   class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i> Voir
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="9" class="text-center text-muted py-4">
-                                                <i class="fas fa-inbox fa-2x mb-2"></i>
-                                                <br>
-                                                Aucune archive trouvée
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination -->
-                        @if($archives->hasPages())
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <nav aria-label="Pagination">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="text-muted mb-0">
-                                                Affichage de {{ $archives->firstItem() }} à {{ $archives->lastItem() }} 
-                                                sur {{ $archives->total() }} archives
-                                            </p>
-                                        </div>
-                                        <ul class="pagination mb-0">
-                                            {{ $archives->links() }}
-                                        </ul>
-                                    </div>
-                                </nav>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                </div>
+<div class="container-fluid py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="fas fa-archive"></i> Liste des Archives</h4>
+            <span class="badge bg-light text-dark">Total: {{ $archives->count() }}</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="archivesTable" class="table table-striped table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Réf. Arrivée</th>
+                            <th>Date Arrivée</th>
+                            <th>Service</th>
+                            <th>Action</th>
+                            <th>Adresse</th>
+                            <th>Commune</th>
+                            <th>Propriétaire</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($archives as $archive)
+                        <tr>
+                            <td>{{ $archive->id }}</td>
+                            <td>{{ $archive->ref_arriv ?? 'N/A' }}</td>
+                            <td>{{ $archive->date_arriv ? $archive->date_arriv->format('d/m/Y') : '-' }}</td>
+                            <td>{{ $archive->sce_envoyeur ?? '-' }}</td>
+                            <td><span class="badge bg-info text-dark">{{ $archive->action ?? '-' }}</span></td>
+                            <td>{{ Str::limit($archive->adresse, 30) ?? '-' }}</td>
+                            <td>{{ $archive->commune ?? '-' }}</td>
+                            <td>{{ Str::limit($archive->proprio, 20) ?? '-' }}</td>
+                            <td>
+                                <a href="{{ route('archives.show', $archive->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
-</body>
-</html>  
+<!-- Scripts DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#archivesTable').DataTable({
+        language: {
+            "emptyTable": "Aucune archive trouvée",
+            "info": "Affichage des lignes _START_ à _END_ sur _TOTAL_ archives",
+            "infoEmpty": "Affichage de 0 à 0 sur 0 archives",
+            "infoFiltered": "(filtrées depuis _MAX_ archives au total)",
+            "infoThousands": " ",
+            "lengthMenu": "Afficher _MENU_ archives",
+            "loadingRecords": "Chargement...",
+            "processing": "Traitement...",
+            "search": "Rechercher :",
+            "zeroRecords": "Aucune archive correspondante trouvée",
+            "paginate": {
+                "first": "Première",
+                "last": "Dernière",
+                "next": "Suivante",
+                "previous": "Précédente"
+            },
+            "aria": {
+                "sortAscending": ": tri croissant",
+                "sortDescending": ": tri décroissant"
+            }
+        },
+        dom: '<"row"<"col-md-6"B><"col-md-6"f>>rtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: '<i class="fas fa-copy"></i> Copier',
+                className: 'btn btn-sm btn-outline-secondary',
+                exportOptions: {
+                    columns: ':not(:last-child)'
+                }
+            },
+            {
+                extend: 'excel',
+                text: '<i class="fas fa-file-excel"></i> Excel',
+                className: 'btn btn-sm btn-outline-success',
+                exportOptions: {
+                    columns: ':not(:last-child)'
+                }
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fas fa-file-pdf"></i> PDF',
+                className: 'btn btn-sm btn-outline-danger',
+                exportOptions: {
+                    columns: ':not(:last-child)'
+                }
+            },
+            {
+                extend: 'print',
+                text: '<i class="fas fa-print"></i> Imprimer',
+                className: 'btn btn-sm btn-outline-info',
+                exportOptions: {
+                    columns: ':not(:last-child)'
+                }
+            }
+        ],
+        responsive: true,
+        pageLength: 50,
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tous"]],
+        order: [[0, 'asc']],
+        stateSave: true
+    });
+});
+</script>
 @endsection
