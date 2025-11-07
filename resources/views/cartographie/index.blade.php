@@ -89,7 +89,7 @@ transform: translateY(-1px);
 .main-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - var(--topbar-height));detail-section /* Utilise la variable CSS du layout */
+    height: calc(100vh - var(--topbar-height)); /* Utilise la variable CSS du layout */
     width: 100%;
 }
 
@@ -170,7 +170,7 @@ color: white;
 
 .detail-header {
 display: flex;
-justify-content: space-between;
+justify-content: between;
 align-items: center;
 margin-bottom: 1rem;
 padding-bottom: 0.5rem;
@@ -578,7 +578,7 @@ transform: scale(1.1);
 
 <div class="main-container">
     <div class="map-container">
-        <div style="width:2020px;" id="map"></div>
+        <div style="" id="map"></div>
     </div>
 </div>
 
@@ -757,7 +757,7 @@ const mapStyles = {
     attribution: '&copy; OpenStreetMap contributors',
     maxZoom: 19
   }),
-  'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+  'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
     attribution: 'Imagery © Google',
     maxZoom: 22
   })
@@ -829,7 +829,7 @@ function filterInvalidCoordinates(data, type = 'descente') {
     });
 }
 
-// FONCTION DE CONVERSION PRÉCISE LABORDE -> WGS84
+// FONCTION DE CONVERSION PRÉCISE LABORDE -> WGS84 - CORRIGÉE
 function labordeToWGS84(x, y) {
     if (!x || !y || x == 0 || y == 0 || isNaN(x) || isNaN(y)) {
         console.log('Coordonnées Laborde invalides:', x, y);
@@ -838,6 +838,7 @@ function labordeToWGS84(x, y) {
     
     // AJOUT: Validation des plages avant conversion
     if (!validateLabordeCoordinates(x, y)) {
+        console.log('Coordonnées hors des plages valides pour Madagascar');
         return null;
     }
     
@@ -848,24 +849,41 @@ function labordeToWGS84(x, y) {
             return null;
         }
         
-        // Conversion précise avec proj4
+        // Conversion précise avec proj4 - CORRECTION DE L'ORDRE DES COORDONNÉES
         const fromProj = "EPSG:8441";
         const toProj = "EPSG:4326"; // WGS84
-        const result = proj4(fromProj, toProj, [x, y]);
+        
+        console.log(`🔄 Tentative de conversion: Laborde(${x}, ${y})`);
+        
+        const result = proj4(fromProj, toProj, [parseFloat(x), parseFloat(y)]);
+        
+        if (!result || result.length < 2) {
+            console.error('❌ Résultat de conversion invalide');
+            return null;
+        }
+        
         const lon = result[0];
         const lat = result[1];
         
-        console.log(`📍 Conversion PROJ4: Laborde(${x}, ${y}) -> WGS84(${lat.toFixed(6)}, ${lon.toFixed(6)})`);
+        console.log(`📍 Conversion PROJ4 réussie: Laborde(${x}, ${y}) -> WGS84(${lat.toFixed(6)}, ${lon.toFixed(6)})`);
         
         // Validation des coordonnées résultantes (limites de Madagascar)
         if (lat < -25.6 || lat > -12.0 || lon < 43.0 || lon > 50.5) {
             console.warn('Coordonnées hors des limites de Madagascar:', lat, lon);
-            return null;
+            // On retourne quand même les coordonnées pour debug
+            return [lat, lon];
         }
         
         return [lat, lon];
     } catch (error) {
         console.error('❌ Erreur de conversion Laborde->WGS84:', error);
+        console.log('Détails de l\'erreur:', {
+            x: x, 
+            y: y, 
+            typeX: typeof x, 
+            typeY: typeof y,
+            errorMessage: error.message
+        });
         return null;
     }
 }
@@ -952,6 +970,11 @@ description: "Terrain 1 - Référence"
 laborde: { x: 517767, y: 801659 },
 wgs84: { lat: -18.882273, lon: 47.545627 },
 description: "Terrain 2 - À vérifier"
+                },
+                {
+laborde: { x: 519303, y: 794462 },
+wgs84: { lat: -18.939, lon: 47.527 },
+description: "Point de test - 519303,794462"
                 }
             ];
 pointsTest.forEach((point, index) => {
@@ -976,6 +999,8 @@ console.log('⚠️ Précision acceptable');
                     } else {
 console.log('❌ Précision insuffisante');
                     }
+                } else {
+console.log('❌ CONVERSION ÉCHOUÉE');
                 }
             });
         }
@@ -1443,7 +1468,7 @@ document.getElementById('view-oms').classList.toggle('active', style === 'OSM');
 document.getElementById('view-satellite').classList.toggle('active', style === 'Satellite');
         }
 
-// FONCTION POUR RECHERCHER ET AFFICHER UN POINT PAR COORDONNÉES
+// FONCTION POUR RECHERCHER ET AFFICHER UN POINT PAR COORDONNÉES - CORRIGÉE
 function searchByCoordinates() {
     const resultDiv = document.getElementById('coord-result');
     
@@ -1451,8 +1476,10 @@ function searchByCoordinates() {
 
     if (currentCoordType === 'laborde') {
         // Recherche par Laborde
-        x = document.getElementById('coord-x').value;
-        y = document.getElementById('coord-y').value;
+        x = parseFloat(document.getElementById('coord-x').value);
+        y = parseFloat(document.getElementById('coord-y').value);
+        
+        console.log(`🔍 Recherche avec coordonnées Laborde: X=${x}, Y=${y}`);
         
         if (!x || !y || isNaN(x) || isNaN(y)) {
             resultDiv.className = 'coord-result error';
@@ -1460,12 +1487,19 @@ function searchByCoordinates() {
             return;
         }
 
+        // Validation des plages
+        if (!validateLabordeCoordinates(x, y)) {
+            resultDiv.className = 'coord-result error';
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Coordonnées hors des plages valides pour Madagascar (X: 400000-600000, Y: 800000-1000000)';
+            return;
+        }
+
         // Convertir les coordonnées Laborde en WGS84
-        coords = labordeToWGS84(parseFloat(x), parseFloat(y));
+        coords = labordeToWGS84(x, y);
         
         if (!coords) {
             resultDiv.className = 'coord-result error';
-            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Conversion des coordonnées Laborde échouée';
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Conversion des coordonnées Laborde échouée. Vérifiez les valeurs.';
             return;
         }
 
