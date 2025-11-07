@@ -35,6 +35,9 @@ align-items: center;
 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 z-index: 1000;
         }
+.leaflet-top {
+display: none !important;
+}
 .title-container {
 display: flex;
 align-items: center;
@@ -86,7 +89,7 @@ transform: translateY(-1px);
 .main-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - var(--topbar-height)); /* Utilise la variable CSS du layout */
+    height: calc(100vh - var(--topbar-height));detail-section /* Utilise la variable CSS du layout */
     width: 100%;
 }
 
@@ -147,10 +150,10 @@ color: white;
 /* MODAL DÉTAIL DÉPLACÉ VERS LA GAUCHE */
 .descente-detail {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    top: 0;
+    right: 0;
     width: 400px;
-    max-height: calc(100vh - 2rem);
+    max-height: 100vh;
     background-color: white;
     border-radius: 8px;
     padding: 1.5rem;
@@ -575,7 +578,7 @@ transform: scale(1.1);
 
 <div class="main-container">
     <div class="map-container">
-        <div id="map"></div>
+        <div style="width:2020px;" id="map"></div>
     </div>
 </div>
 
@@ -652,7 +655,7 @@ transform: scale(1.1);
 
 <!-- Contrôles de type de carte -->
 <div class="map-type-controls">
-<button class="map-btn active" id="view-oms" title="Vue OMS">
+<button class="map-btn active" id="view-oms" title="Vue OSM">
 <i class="fas fa-layer-group"></i>
 </button>
 <button class="map-btn" id="view-satellite" title="Vue Satellite">
@@ -713,11 +716,7 @@ transform: scale(1.1);
         </div>
     </div>
 </div>
-<!-- Ajout pour les archives -->
-<div class="legend-item">
-    <div class="legend-color" style="background-color: #3b82f6;"></div>
-    <span class="legend-label">Archives</span>
-</div>
+
 </div>
 
 <!-- DÉTAILS DÉPLACÉS VERS LA GAUCHE -->
@@ -744,9 +743,6 @@ Sélectionnez un point pour voir les détails
 // Données dynamiques depuis le contrôleur
 const descentesData = @json($descentes ?? []);
 const archivesData = @json($archives ?? []);
-console.log('=== CHARGEMENT DES DONNÉES ===');
-console.log('Nombre total de descentes:', descentesData.length);
-console.log('Nombre total d\'archives:', archivesData.length);
 
 // Variables globales
 let coordMarker = null;
@@ -757,7 +753,7 @@ const map = L.map('map').setView([-18.766947, 46.869107], 6);
 
 // Définitions des styles de carte
 const mapStyles = {
-  'OMS': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  'OSM': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
     maxZoom: 19
   }),
@@ -767,10 +763,9 @@ const mapStyles = {
   })
 };
 
-
-// Style de carte initial (OMS)
-mapStyles['OMS'].addTo(map);
-let currentMapStyle = 'OMS';
+// Style de carte initial (OSM)
+mapStyles['OSM'].addTo(map);
+let currentMapStyle = 'OSM';
 
 // Groupe pour les marqueurs (sans clustering)
 const markers = L.featureGroup();
@@ -874,6 +869,7 @@ function labordeToWGS84(x, y) {
         return null;
     }
 }
+
 // FONCTION POUR RÉDUIRE/DÉVELOPPER LA LÉGENDE
 function toggleLegend() {
     const legendContainer = document.getElementById('legend-container');
@@ -1007,6 +1003,100 @@ return field;
 return field;
         }
 
+// FONCTION POUR FORMATER LA DATE EN jj/mm/aaaa
+function formatDate(dateString) {
+    if (!dateString || dateString === 'Non spécifié' || dateString === 'null') {
+        return 'Non spécifié';
+    }
+    
+    try {
+        // Nettoyer la chaîne
+        const cleanString = dateString.toString().trim();
+        
+        // Si c'est déjà au format français jj/mm/aaaa
+        if (cleanString.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            return cleanString;
+        }
+        
+        // Si c'est au format Y-m-d (MySQL)
+        if (cleanString.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
+            const parts = cleanString.split('-');
+            const day = String(parts[2]).padStart(2, '0');
+            const month = String(parts[1]).padStart(2, '0');
+            const year = parts[0];
+            return `${day}/${month}/${year}`;
+        }
+        
+        // Si c'est un format ISO avec timezone (2025-11-07T00:00:00.000000Z)
+        if (cleanString.match(/^\d{4}-\d{2}-\d{2}T/)) {
+            const date = new Date(cleanString);
+            if (!isNaN(date.getTime())) {
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+        }
+        
+        // Essayer avec Date object pour d'autres formats
+        const date = new Date(cleanString);
+        if (!isNaN(date.getTime())) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        // Retourner la valeur originale si aucun format reconnu
+        return cleanString;
+    } catch (error) {
+        console.log('Erreur format date:', error, dateString);
+        return dateString;
+    }
+}
+
+// FONCTION POUR FORMATER L'HEURE EN HH:MM
+function formatTime(timeString) {
+    if (!timeString || timeString === 'Non spécifié' || timeString === 'null') {
+        return 'Non spécifié';
+    }
+    
+    try {
+        // Nettoyer la chaîne
+        const cleanString = timeString.toString().trim();
+        
+        // Si c'est déjà au format H:m
+        if (cleanString.match(/^\d{1,2}:\d{2}$/)) {
+            const parts = cleanString.split(':');
+            const hours = String(parseInt(parts[0])).padStart(2, '0');
+            const minutes = String(parseInt(parts[1])).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+        
+        // Si c'est un format avec secondes H:m:s
+        if (cleanString.match(/^\d{1,2}:\d{2}:\d{2}$/)) {
+            const parts = cleanString.split(':');
+            const hours = String(parseInt(parts[0])).padStart(2, '0');
+            const minutes = String(parseInt(parts[1])).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+        
+        // Si c'est un timestamp ou format ISO
+        const date = new Date(cleanString);
+        if (!isNaN(date.getTime())) {
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+        
+        // Retourner la valeur originale si aucun format reconnu
+        return cleanString;
+    } catch (error) {
+        console.log('Erreur format heure:', error, timeString);
+        return timeString;
+    }
+}
+
 // Fonction pour ajouter les descentes à la carte
 function addDescentesToMap(descentes) {
 let coordsValides = 0;
@@ -1043,22 +1133,20 @@ iconSize: [35, 35]
                     })
                 });
 
-// Popup d'information
+// Popup d'information AVEC DATE FORMATÉE
 const popupContent = `
                     <div style="font-family: 'Inter', sans-serif; max-width: 350px;">
                         <h3 style="color: ${markerColor}; margin-bottom: 0.5rem; border-bottom: 2px solid ${markerColor}; padding-bottom: 0.5rem;">
 ${descente.ref_om ? 'OM: ' + descente.ref_om : 'Descente #' + descente.id}
                         </h3>
                         <div style="font-size: 0.9rem; color: #666;">
-                            <p><strong>Date:</strong> ${descente.date || 'Non spécifié'}</p>
-                            <p><strong>Heure:</strong> ${descente.heure || 'Non spécifié'}</p>
+                            <p><strong>Date:</strong> ${formatDate(descente.date) || 'Non spécifié'}</p>
+                            <p><strong>Heure:</strong> ${formatTime(descente.heure) || 'Non spécifié'}</p>
 ${descente.ref_pv ? `<p><strong>Réf. PV:</strong> ${descente.ref_pv}</p>` : ''}
 ${descente.num_pv ? `<p><strong>Num. PV:</strong> ${descente.num_pv}</p>` : ''}
                             <p><strong>Adresse:</strong> ${descente.adresse || 'Non spécifié'}</p>
                             <p><strong>Commune:</strong> ${descente.comm || 'Non spécifié'}</p>
-                            <p><strong>Coordonnées WGS84:</strong><br>Lat: ${coords[0].toFixed(6)}<br>Lon: ${coords[1].toFixed(6)}</p>
                             <p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>
-                            <p><em><small>Conversion: EPSG:8441 → WGS84</small></em></p>
                         </div>
                         <button style="width: 100%; padding: 0.5rem; background-color: ${markerColor}; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem;" onclick="showDescenteDetail('${descente.id}')">
                             Voir Détails Complets
@@ -1117,7 +1205,7 @@ function addArchivesToMap(archives) {
             })
         });
 
-        // Popup d'information pour les archives (corrigé)
+        // Popup d'information pour les archives (corrigé) AVEC DATE FORMATÉE
         const popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 350px;">
                 <h3 style="color: #3b82f6; margin-bottom: 0.5rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.5rem;">
@@ -1125,7 +1213,7 @@ function addArchivesToMap(archives) {
                 </h3>
                 <div style="font-size: 0.9rem; color: #666;">
                     <p><strong>Réf. Arrivée:</strong> ${archive.ref_arriv || 'N/A'}</p>
-                    <p><strong>Date Arrivée:</strong> ${archive.date_arriv ? new Date(archive.date_arriv).toLocaleDateString('fr-FR') : 'Non spécifié'}</p>
+                    <p><strong>Date Arrivée:</strong> ${formatDate(archive.date_arriv) || 'Non spécifié'}</p>
                     <p><strong>Service:</strong> ${archive.sce_envoyeur || 'Non spécifié'}</p>
                     <p><strong>Action:</strong> ${archive.action || 'Non spécifié'}</p>
                     <p><strong>Adresse:</strong> ${archive.adresse || 'Non spécifié'}</p>
@@ -1150,7 +1238,7 @@ function addArchivesToMap(archives) {
     console.log(`✅ ${archivesValides} archives affichées sur la carte (points bleus)`);
 }
 
-// Fonction pour afficher les détails complets d'une descente
+// Fonction pour afficher les détails complets d'une descente AVEC DATES FORMATÉES
 function showDescenteDetail(descenteId) {
 const descente = descentesData.find(d => d.id == descenteId);
 if (!descente) return;
@@ -1166,11 +1254,11 @@ const detailContent = `
                     <div class="detail-grid">
                         <div class="detail-item">
                             <span class="detail-label">Date</span>
-                            <span class="detail-value">${descente.date || 'Non spécifié'}</span>
+                            <span class="detail-value">${formatDate(descente.date) || 'Non spécifié'}</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Heure</span>
-                            <span class="detail-value">${descente.heure || 'Non spécifié'}</span>
+                            <span class="detail-value">${formatTime(descente.heure) || 'Non spécifié'}</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Réf. OM</span>
@@ -1270,7 +1358,7 @@ document.getElementById('detail-content').innerHTML = detailContent;
 document.getElementById('descente-detail').classList.add('active');
         }
 
-// FONCTION POUR AFFICHER LES DÉTAILS COMPLETS D'UNE ARCHIVE (CORRIGÉE)
+// FONCTION POUR AFFICHER LES DÉTAILS COMPLETS D'UNE ARCHIVE (CORRIGÉE) AVEC DATE FORMATÉE
 function showArchiveDetail(archiveId) {
     const archive = archivesData.find(a => a.id == archiveId);
     if (!archive) return;
@@ -1290,7 +1378,7 @@ function showArchiveDetail(archiveId) {
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Date Arrivée</span>
-                    <span class="detail-value">${archive.date_arriv ? new Date(archive.date_arriv).toLocaleDateString('fr-FR') : 'Non spécifié'}</span>
+                    <span class="detail-value">${formatDate(archive.date_arriv) || 'Non spécifié'}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Service</span>
@@ -1351,7 +1439,7 @@ function changeMapStyle(style) {
 mapStyles[currentMapStyle].remove();
 mapStyles[style].addTo(map);
 currentMapStyle = style;
-document.getElementById('view-oms').classList.toggle('active', style === 'OMS');
+document.getElementById('view-oms').classList.toggle('active', style === 'OSM');
 document.getElementById('view-satellite').classList.toggle('active', style === 'Satellite');
         }
 
@@ -1673,7 +1761,7 @@ alert('La géolocalisation n\'est pas supportée par votre navigateur.');
 document.getElementById('close-detail').addEventListener('click', function() {
 document.getElementById('descente-detail').classList.remove('active');
         });
-document.getElementById('view-oms').addEventListener('click', () => changeMapStyle('OMS'));
+document.getElementById('view-oms').addEventListener('click', () => changeMapStyle('OSM'));
 document.getElementById('view-satellite').addEventListener('click', () => changeMapStyle('Satellite'));
 
 // NOUVEAUX ÉVÉNEMENTS POUR LE MODAL DE RECHERCHE

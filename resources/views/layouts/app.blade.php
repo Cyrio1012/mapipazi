@@ -108,7 +108,7 @@
       margin-left: var(--sidebar-width);
       margin-top: var(--topbar-height);
       transition: margin-left var(--transition-speed);
-      padding: 2rem;
+      padding: 0rem;
     }
 
     .content.collapsed {

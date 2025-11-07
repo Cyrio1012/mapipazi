@@ -84,7 +84,7 @@ class CartographieController extends Controller
             Log::info("  Xv: " . ($archive['Xv'] ?? 'NULL'));
             Log::info("  Yv: " . ($archive['Yv'] ?? 'NULL'));
         }
-
+        
         return view('cartographie.index', compact('descentes', 'archives'));
     }
 
