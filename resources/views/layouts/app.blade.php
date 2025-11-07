@@ -132,11 +132,13 @@
   <!-- Topbar -->
    
   <!-- <div class="topbar"> -->
-    <!-- <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
+    <!-- 
     <h5 class="mb-0">@yield('title', 'Dashboard')</h5> -->
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top">
+  
   <div class="container-fluid">
+    <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
     <!-- Logo -->
     <a class="navbar-brand" href="{{ route('dashboard') }}">
       <img src="{{ asset('assets/img/logo30ans.png') }}" alt="Logo" height="30">
@@ -190,7 +192,6 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-header">
       <h5>APIPA</h5>
-      <small>Gestion des Remblais</small>
     </div>
 
     <nav class="nav flex-column mt-3">

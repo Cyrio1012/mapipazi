@@ -37,6 +37,37 @@ class Archives extends Model
         'date_transmDAF' => 'date',
         'date_coms' => 'date',
         'date_def' => 'date',
-      
+        // AJOUT: Cast pour les coordonnées maintenant en double precision
+        'Xv' => 'double',
+        'Yv' => 'double',
     ];
+
+    // Optionnel: Accessors pour s'assurer du type (recommandé)
+    public function getXvAttribute($value)
+    {
+        return $value !== null ? (float) $value : null;
+    }
+
+    public function getYvAttribute($value)
+    {
+        return $value !== null ? (float) $value : null;
+    }
+
+    // Scope pour les archives avec coordonnées valides
+    public function scopeWithValidCoordinates($query)
+    {
+        return $query->whereNotNull('Xv')
+                    ->whereNotNull('Yv')
+                    ->where('Xv', '!=', 0)
+                    ->where('Yv', '!=', 0);
+    }
+
+    // Scope pour les archives sans coordonnées
+    public function scopeWithoutCoordinates($query)
+    {
+        return $query->whereNull('Xv')
+                    ->orWhereNull('Yv')
+                    ->orWhere('Xv', 0)
+                    ->orWhere('Yv', 0);
+    }
 }

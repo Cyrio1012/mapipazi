@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Descente;
+use App\Models\Archives;
+use Illuminate\Support\Facades\Log;
 
 class CartographieController extends Controller
 {
@@ -34,28 +36,56 @@ class CartographieController extends Controller
                 'dist' => $descente->dist,
                 'comm' => $descente->comm,
                 'fkt' => $descente->fkt,
-                'x_laborde' => floatval($descente->x),
-                'y_laborde' => floatval($descente->y),
-            ];
-        });
-        $features = Descente::whereNotNull('geom')
-        ->get()
-        ->map(function ($item) {
-            return [
-                'type' => 'Feature',
-                'geometry' => json_decode($item->geom),
-                'properties' => [
-                    'ref_om' => $item->ref_om,
-                    'ref_pv' => $item->ref_pv,
-                    'num_pv' => $item->num_pv,
-                    'adresse' => $item->adresse,
-                    'contact' => $item->contact,
-                    'date' => $item->date,
-                ]
+                'x_laborde' => floatval($descente->x), // CORRECTION ICI
+                'y_laborde' => floatval($descente->y), // CORRECTION ICI
             ];
         });
 
-        return view('cartographie.index', compact('descentes'),['geojson' => $features]);
+        // Récupérer toutes les archives avec des coordonnées valides
+        $archives = Archives::whereNotNull('Xv')
+                           ->whereNotNull('Yv')
+                           ->where('Xv', '!=', 0)
+                           ->where('Yv', '!=', 0)
+                           ->get()
+                           ->map(function ($archive) {
+            return [
+                'id' => $archive->id,
+                'date_arriv' => $archive->date_arriv,
+                'ref_arriv' => $archive->ref_arriv,
+                'sce_envoyeur' => $archive->sce_envoyeur,
+                'action' => $archive->action,
+                'adresse' => $archive->adresse,
+                'contact' => $archive->contact,
+                'fkt' => $archive->fkt,
+                'commune' => $archive->commune,
+                'proprio' => $archive->proprio,
+                'Xv' => floatval($archive->Xv),
+                'Yv' => floatval($archive->Yv),
+            ];
+        });
+
+        // DEBUG: Vérifier les données
+        Log::info('=== DEBUG DESCENTES ===');
+        Log::info('Nombre total de descentes: ' . $descentes->count());
+        
+        foreach ($descentes as $index => $descente) {
+            Log::info("Descente #" . ($index + 1) . ":");
+            Log::info("  ID: " . $descente['id']);
+            Log::info("  x_laborde: " . ($descente['x_laborde'] ?? 'NULL'));
+            Log::info("  y_laborde: " . ($descente['y_laborde'] ?? 'NULL'));
+        }
+
+        Log::info('=== DEBUG ARCHIVES ===');
+        Log::info('Nombre total d\'archives: ' . $archives->count());
+        
+        foreach ($archives as $index => $archive) {
+            Log::info("Archive #" . ($index + 1) . ":");
+            Log::info("  ID: " . $archive['id']);
+            Log::info("  Xv: " . ($archive['Xv'] ?? 'NULL'));
+            Log::info("  Yv: " . ($archive['Yv'] ?? 'NULL'));
+        }
+
+        return view('cartographie.index', compact('descentes', 'archives'));
     }
 
     /**
@@ -90,6 +120,48 @@ class CartographieController extends Controller
                 'success' => true,
                 'data' => $descentes,
                 'count' => $descentes->count()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * API pour récupérer les archives en JSON
+     */
+    public function getArchivesJson()
+    {
+        try {
+            $archives = Archives::whereNotNull('Xv')
+                                ->whereNotNull('Yv')
+                                ->where('Xv', '!=', 0)
+                                ->where('Yv', '!=', 0)
+                                ->get()
+                                ->map(function ($archive) {
+                return [
+                    'id' => $archive->id,
+                    'coordinates' => [
+                        'x' => floatval($archive->Xv),
+                        'y' => floatval($archive->Yv)
+                    ],
+                    'properties' => [
+                        'ref_arriv' => $archive->ref_arriv,
+                        'date_arriv' => $archive->date_arriv,
+                        'sce_envoyeur' => $archive->sce_envoyeur,
+                        'adresse' => $archive->adresse,
+                        'commune' => $archive->commune
+                    ]
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $archives,
+                'count' => $archives->count()
             ]);
 
         } catch (\Exception $e) {
