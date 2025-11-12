@@ -36,31 +36,65 @@ class CartographieController extends Controller
                 'dist' => $descente->dist,
                 'comm' => $descente->comm,
                 'fkt' => $descente->fkt,
-                'x_laborde' => floatval($descente->x), // CORRECTION ICI
-                'y_laborde' => floatval($descente->y), // CORRECTION ICI
+                'x_laborde' => floatval($descente->x),
+                'y_laborde' => floatval($descente->y),
             ];
         });
 
-        // Récupérer toutes les archives avec des coordonnées valides
-        $archives = Archives::whereNotNull('Xv')
-                           ->whereNotNull('Yv')
-                           ->where('Xv', '!=', 0)
-                           ->where('Yv', '!=', 0)
+        // Récupérer toutes les archives avec des coordonnées valides (NOUVELLE STRUCTURE)
+        $archives = Archives::withValidCoordinates()
                            ->get()
                            ->map(function ($archive) {
             return [
                 'id' => $archive->id,
-                'date_arriv' => $archive->date_arriv,
-                'ref_arriv' => $archive->ref_arriv,
-                'sce_envoyeur' => $archive->sce_envoyeur,
-                'action' => $archive->action,
-                'adresse' => $archive->adresse,
-                'contact' => $archive->contact,
-                'fkt' => $archive->fkt,
-                'commune' => $archive->commune,
-                'proprio' => $archive->proprio,
-                'Xv' => floatval($archive->Xv),
-                'Yv' => floatval($archive->Yv),
+                'exoyear' => $archive->exoyear,
+                'arrivaldate' => $archive->arrivaldate,
+                'arrivalid' => $archive->arrivalid,
+                'sendersce' => $archive->sendersce,
+                'descentdate' => $archive->descentdate,
+                'reportid' => $archive->reportid,
+                'summondate' => $archive->summondate,
+                'actiontaken' => $archive->actiontaken,
+                'measures' => $archive->measures,
+                'findingof' => $archive->findingof,
+                'applicantname' => $archive->applicantname,
+                'applicantaddress' => $archive->applicantaddress,
+                'applicantcontact' => $archive->applicantcontact,
+                'locality' => $archive->locality,
+                'municipality' => $archive->municipality,
+                'property0wner' => $archive->property0wner,
+                'propertytitle' => $archive->propertytitle,
+                'propertyname' => $archive->propertyname,
+                'urbanplanningregulations' => $archive->urbanplanningregulations,
+                'upr' => $archive->upr,
+                'zoning' => $archive->zoning,
+                'surfacearea' => $archive->surfacearea,
+                'backfilledarea' => $archive->backfilledarea,
+                'xv' => floatval($archive->xv),
+                'yv' => floatval($archive->yv),
+                'minutesid' => $archive->minutesid,
+                'minutesdate' => $archive->minutesdate,
+                'partsupplied' => $archive->partsupplied,
+                'submissiondate' => $archive->submissiondate,
+                'destination' => $archive->destination,
+                'svr_fine' => $archive->svr_fine,
+                'svr_roalty' => $archive->svr_roalty,
+                'invoicingid' => $archive->invoicingid,
+                'invoicingdate' => $archive->invoicingdate,
+                'fineamount' => $archive->fineamount,
+                'roaltyamount' => $archive->roaltyamount,
+                'convention' => $archive->convention,
+                'payementmethod' => $archive->payementmethod,
+                'daftransmissiondate' => $archive->daftransmissiondate,
+                'ref_quitus' => $archive->ref_quitus,
+                'sit_r' => $archive->sit_r,
+                'sit_a' => $archive->sit_a,
+                'commissiondate' => $archive->commissiondate,
+                'commissionopinion' => $archive->commissionopinion,
+                'recommandationobs' => $archive->recommandationobs,
+                'opfinal' => $archive->opfinal,
+                'opiniondfdate' => $archive->opiniondfdate,
+                'category' => $archive->category,
             ];
         });
 
@@ -81,8 +115,9 @@ class CartographieController extends Controller
         foreach ($archives as $index => $archive) {
             Log::info("Archive #" . ($index + 1) . ":");
             Log::info("  ID: " . $archive['id']);
-            Log::info("  Xv: " . ($archive['Xv'] ?? 'NULL'));
-            Log::info("  Yv: " . ($archive['Yv'] ?? 'NULL'));
+            Log::info("  Municipality: " . $archive['municipality']);
+            Log::info("  xv: " . ($archive['xv'] ?? 'NULL'));
+            Log::info("  yv: " . ($archive['yv'] ?? 'NULL'));
         }
         
         return view('cartographie.index', compact('descentes', 'archives'));
@@ -131,29 +166,36 @@ class CartographieController extends Controller
     }
 
     /**
-     * API pour récupérer les archives en JSON
+     * API pour récupérer les archives en JSON (NOUVELLE STRUCTURE)
      */
     public function getArchivesJson()
     {
         try {
-            $archives = Archives::whereNotNull('Xv')
-                                ->whereNotNull('Yv')
-                                ->where('Xv', '!=', 0)
-                                ->where('Yv', '!=', 0)
+            $archives = Archives::withValidCoordinates()
                                 ->get()
                                 ->map(function ($archive) {
                 return [
                     'id' => $archive->id,
                     'coordinates' => [
-                        'x' => floatval($archive->Xv),
-                        'y' => floatval($archive->Yv)
+                        'x' => floatval($archive->xv),
+                        'y' => floatval($archive->yv)
                     ],
                     'properties' => [
-                        'ref_arriv' => $archive->ref_arriv,
-                        'date_arriv' => $archive->date_arriv,
-                        'sce_envoyeur' => $archive->sce_envoyeur,
-                        'adresse' => $archive->adresse,
-                        'commune' => $archive->commune
+                        'exoyear' => $archive->exoyear,
+                        'arrivalid' => $archive->arrivalid,
+                        'arrivaldate' => $archive->arrivaldate,
+                        'sendersce' => $archive->sendersce,
+                        'applicantname' => $archive->applicantname,
+                        'applicantaddress' => $archive->applicantaddress,
+                        'locality' => $archive->locality,
+                        'municipality' => $archive->municipality,
+                        'property0wner' => $archive->property0wner,
+                        'findingof' => $archive->findingof,
+                        'zoning' => $archive->zoning,
+                        'surfacearea' => $archive->surfacearea,
+                        'opfinal' => $archive->opfinal,
+                        'fineamount' => $archive->fineamount,
+                        'roaltyamount' => $archive->roaltyamount
                     ]
                 ];
             });
@@ -168,6 +210,249 @@ class CartographieController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * API pour récupérer les détails d'une archive spécifique (NOUVELLE STRUCTURE)
+     */
+    public function getArchiveDetails($id)
+    {
+        try {
+            $archive = Archives::findOrFail($id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $archive->id,
+                    'exoyear' => $archive->exoyear,
+                    'arrivaldate' => $archive->arrivaldate,
+                    'arrivalid' => $archive->arrivalid,
+                    'sendersce' => $archive->sendersce,
+                    'descentdate' => $archive->descentdate,
+                    'reportid' => $archive->reportid,
+                    'summondate' => $archive->summondate,
+                    'actiontaken' => $archive->actiontaken,
+                    'measures' => $archive->measures,
+                    'findingof' => $archive->findingof,
+                    'applicantname' => $archive->applicantname,
+                    'applicantaddress' => $archive->applicantaddress,
+                    'applicantcontact' => $archive->applicantcontact,
+                    'locality' => $archive->locality,
+                    'municipality' => $archive->municipality,
+                    'property0wner' => $archive->property0wner,
+                    'propertytitle' => $archive->propertytitle,
+                    'propertyname' => $archive->propertyname,
+                    'urbanplanningregulations' => $archive->urbanplanningregulations,
+                    'upr' => $archive->upr,
+                    'zoning' => $archive->zoning,
+                    'surfacearea' => $archive->surfacearea,
+                    'backfilledarea' => $archive->backfilledarea,
+                    'xv' => $archive->xv,
+                    'yv' => $archive->yv,
+                    'minutesid' => $archive->minutesid,
+                    'minutesdate' => $archive->minutesdate,
+                    'partsupplied' => $archive->partsupplied,
+                    'submissiondate' => $archive->submissiondate,
+                    'destination' => $archive->destination,
+                    'svr_fine' => $archive->svr_fine,
+                    'svr_roalty' => $archive->svr_roalty,
+                    'invoicingid' => $archive->invoicingid,
+                    'invoicingdate' => $archive->invoicingdate,
+                    'fineamount' => $archive->fineamount,
+                    'roaltyamount' => $archive->roaltyamount,
+                    'convention' => $archive->convention,
+                    'payementmethod' => $archive->payementmethod,
+                    'daftransmissiondate' => $archive->daftransmissiondate,
+                    'ref_quitus' => $archive->ref_quitus,
+                    'sit_r' => $archive->sit_r,
+                    'sit_a' => $archive->sit_a,
+                    'commissiondate' => $archive->commissiondate,
+                    'commissionopinion' => $archive->commissionopinion,
+                    'recommandationobs' => $archive->recommandationobs,
+                    'opfinal' => $archive->opfinal,
+                    'opiniondfdate' => $archive->opiniondfdate,
+                    'category' => $archive->category,
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Archive non trouvée: ' . $e->getMessage()
+            ], 404);
+        }
+    }
+
+    /**
+     * Recherche avancée dans les archives pour la cartographie (NOUVELLE STRUCTURE)
+     */
+    public function searchArchives(Request $request)
+    {
+        try {
+            $query = Archives::withValidCoordinates();
+
+            // Filtre par municipalité
+            if ($request->has('municipality') && $request->municipality) {
+                $query->where('municipality', 'ILIKE', '%' . $request->municipality . '%');
+            }
+
+            // Filtre par année d'exercice
+            if ($request->has('exoyear') && $request->exoyear) {
+                $query->where('exoyear', $request->exoyear);
+            }
+
+            // Filtre par nom du demandeur
+            if ($request->has('applicantname') && $request->applicantname) {
+                $query->where('applicantname', 'ILIKE', '%' . $request->applicantname . '%');
+            }
+
+            // Filtre par propriétaire
+            if ($request->has('property0wner') && $request->property0wner) {
+                $query->where('property0wner', 'ILIKE', '%' . $request->property0wner . '%');
+            }
+
+            // Filtre par avis définitif
+            if ($request->has('opfinal') && $request->opfinal) {
+                $query->where('opfinal', 'ILIKE', '%' . $request->opfinal . '%');
+            }
+
+            // Filtre par zonage
+            if ($request->has('zoning') && $request->zoning) {
+                $query->where('zoning', 'ILIKE', '%' . $request->zoning . '%');
+            }
+
+            // Filtre par localité
+            if ($request->has('locality') && $request->locality) {
+                $query->where('locality', 'ILIKE', '%' . $request->locality . '%');
+            }
+
+            $archives = $query->get()->map(function ($archive) {
+                return [
+                    'id' => $archive->id,
+                    'coordinates' => [
+                        'x' => floatval($archive->xv),
+                        'y' => floatval($archive->yv)
+                    ],
+                    'properties' => [
+                        'exoyear' => $archive->exoyear,
+                        'arrivalid' => $archive->arrivalid,
+                        'arrivaldate' => $archive->arrivaldate,
+                        'municipality' => $archive->municipality,
+                        'property0wner' => $archive->property0wner,
+                        'applicantname' => $archive->applicantname,
+                        'zoning' => $archive->zoning,
+                        'surfacearea' => $archive->surfacearea,
+                        'opfinal' => $archive->opfinal,
+                        'fineamount' => $archive->fineamount,
+                        'roaltyamount' => $archive->roaltyamount,
+                        'locality' => $archive->locality
+                    ]
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $archives,
+                'count' => $archives->count()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de recherche: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Récupérer les statistiques pour la cartographie
+     */
+    public function getMapStatistics()
+    {
+        try {
+            $totalArchives = Archives::withValidCoordinates()->count();
+            $totalDescentes = Descente::whereNotNull('x')
+                                    ->whereNotNull('y')
+                                    ->where('x', '!=', 0)
+                                    ->where('y', '!=', 0)
+                                    ->count();
+
+            // Statistiques par municipalité
+            $municipalityStats = Archives::withValidCoordinates()
+                ->select('municipality', \DB::raw('COUNT(*) as count'))
+                ->whereNotNull('municipality')
+                ->groupBy('municipality')
+                ->orderBy('count', 'desc')
+                ->get();
+
+            // Statistiques par année
+            $yearStats = Archives::withValidCoordinates()
+                ->select('exoyear', \DB::raw('COUNT(*) as count'))
+                ->whereNotNull('exoyear')
+                ->groupBy('exoyear')
+                ->orderBy('exoyear', 'desc')
+                ->get();
+
+            // Statistiques par type d'avis
+            $opinionStats = Archives::withValidCoordinates()
+                ->select('opfinal', \DB::raw('COUNT(*) as count'))
+                ->whereNotNull('opfinal')
+                ->groupBy('opfinal')
+                ->orderBy('count', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'total_archives' => $totalArchives,
+                    'total_descentes' => $totalDescentes,
+                    'municipality_stats' => $municipalityStats,
+                    'year_stats' => $yearStats,
+                    'opinion_stats' => $opinionStats
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors du chargement des statistiques: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Mettre à jour les coordonnées d'une archive
+     */
+    public function updateArchiveCoordinates(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'xv' => 'required|numeric',
+                'yv' => 'required|numeric'
+            ]);
+
+            $archive = Archives::findOrFail($id);
+            $archive->update([
+                'xv' => $request->xv,
+                'yv' => $request->yv
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Coordonnées mises à jour avec succès',
+                'data' => [
+                    'id' => $archive->id,
+                    'xv' => $archive->xv,
+                    'yv' => $archive->yv
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la mise à jour des coordonnées: ' . $e->getMessage()
             ], 500);
         }
     }

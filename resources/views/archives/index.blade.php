@@ -7,35 +7,123 @@
             <span class="badge bg-light text-dark">Total: {{ $archives->count() }}</span>
         </div>
         <div class="card-body">
+            
+            <!-- Statistiques et informations -->
+    
+
+            <!-- Barre de recherche et filtres -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher...">
+                        <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+                            <i class="fas fa-times"></i> Recherche
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="pageSize">
+                        <option value="10">10 par page</option>
+                        <option value="25" selected>25 par page</option>
+                        <option value="50">50 par page</option>
+                        <option value="100">100 par page</option>
+                        <option value="250">250 par page</option>
+                        <option value="500">500 par page</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-grid">
+                        <button class="btn btn-outline-primary" onclick="exportToExcel()">
+                            <i class="fas fa-download"></i> Exporter Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau des archives -->
             <div class="table-responsive">
-                <table id="archivesTable" class="table table-striped table-hover">
+                <table class="table table-striped table-hover table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th>#</th>
-                            <th>Réf. Arrivée</th>
-                            <th>Date Arrivée</th>
+                            <th width="60">#</th>
+                            <th width="120">Réf. Arrivée</th>
+                            <th width="100">Date Arrivée</th>
                             <th>Service</th>
                             <th>Action</th>
-                            <th>Adresse</th>
+                            <th>Demandeur</th>
                             <th>Commune</th>
                             <th>Propriétaire</th>
-                            <th>Actions</th>
+                            <th width="80" class="text-center">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="archiveTableBody">
                         @foreach($archives as $archive)
-                        <tr>
-                            <td>{{ $archive->id }}</td>
-                            <td>{{ $archive->ref_arriv ?? 'N/A' }}</td>
-                            <td>{{ $archive->date_arriv ? $archive->date_arriv->format('d/m/Y') : '-' }}</td>
-                            <td>{{ $archive->sce_envoyeur ?? '-' }}</td>
-                            <td><span class="badge bg-info text-dark">{{ $archive->action ?? '-' }}</span></td>
-                            <td>{{ Str::limit($archive->adresse, 30) ?? '-' }}</td>
-                            <td>{{ $archive->commune ?? '-' }}</td>
-                            <td>{{ Str::limit($archive->proprio, 20) ?? '-' }}</td>
+                        <tr class="archive-row">
+                            <td class="fw-bold">{{ $archive->id }}</td>
                             <td>
-                                <a href="{{ route('archives.show', $archive->id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> Voir
+                                <strong class="text-primary">{{ $archive->arrivalid ?? 'N/A' }}</strong>
+                                @if($archive->exoyear)
+                                    <br><small class="text-muted">Année: {{ $archive->exoyear }}</small>
+                                @endif
+                            </td>
+                            <td>
+                                @if($archive->arrivaldate)
+                                    <span class="badge bg-light text-dark">
+                                        {{ \Carbon\Carbon::parse($archive->arrivaldate)->format('d/m/Y') }}
+                                    </span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="text-truncate">{{ $archive->sendersce ?? '-' }}</span>
+                            </td>
+                            <td>
+                                @if($archive->actiontaken)
+                                    <span class="badge bg-info text-dark" title="{{ $archive->actiontaken }}">
+                                        {{ Str::limit($archive->actiontaken, 25) }}
+                                    </span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($archive->applicantname)
+                                    <div>
+                                        <strong>{{ Str::limit($archive->applicantname, 20) }}</strong>
+                                        @if($archive->applicantaddress)
+                                            <br><small class="text-muted">{{ Str::limit($archive->applicantaddress, 25) }}</small>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($archive->municipality)
+                                    <div>
+                                        <strong>{{ $archive->municipality }}</strong>
+                                        @if($archive->locality)
+                                            <br><small class="text-muted">{{ $archive->locality }}</small>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($archive->property0wner)
+                                    <span class="text-truncate">{{ Str::limit($archive->property0wner, 20) }}</span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ route('archives.show', $archive->id) }}" 
+                                   class="btn btn-sm btn-outline-primary" 
+                                   title="Voir les détails">
+                                    <i class="fas fa-eye"></i>+ Voir
                                 </a>
                             </td>
                         </tr>
@@ -43,90 +131,225 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted">
+                    Affichage de <span id="startRow">1</span> à <span id="endRow">{{ min(25, $archives->count()) }}</span> 
+                    sur <strong id="totalRows">{{ $archives->count() }}</strong> archives
+                </div>
+                <nav>
+                    <ul class="pagination mb-0" id="pagination">
+                        <!-- La pagination sera générée par JavaScript -->
+                    </ul>
+                </nav>
+            </div>
+
         </div>
     </div>
 </div>
 
-<!-- Scripts DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+<!-- Styles personnalisés -->
+<style>
+.archive-row:hover {
+    background-color: #f8f9fa !important;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.table th {
+    border-top: 2px solid #dee2e6;
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.pagination .page-link {
+    color: #0d6efd;
+}
+
+.pagination .page-link:hover {
+    color: #0a58ca;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    display: inline-block;
+}
+</style>
+
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
-$(document).ready(function () {
-    $('#archivesTable').DataTable({
-        language: {
-            "emptyTable": "Aucune archive trouvée",
-            "info": "Affichage des lignes _START_ à _END_ sur _TOTAL_ archives",
-            "infoEmpty": "Affichage de 0 à 0 sur 0 archives",
-            "infoFiltered": "(filtrées depuis _MAX_ archives au total)",
-            "infoThousands": " ",
-            "lengthMenu": "Afficher _MENU_ archives",
-            "loadingRecords": "Chargement...",
-            "processing": "Traitement...",
-            "search": "Rechercher :",
-            "zeroRecords": "Aucune archive correspondante trouvée",
-            "paginate": {
-                "first": "Première",
-                "last": "Dernière",
-                "next": "Suivante",
-                "previous": "Précédente"
-            },
-            "aria": {
-                "sortAscending": ": tri croissant",
-                "sortDescending": ": tri décroissant"
-            }
-        },
-        dom: '<"row"<"col-md-6"B><"col-md-6"f>>rtip',
-        buttons: [
-            {
-                extend: 'copy',
-                text: '<i class="fas fa-copy"></i> Copier',
-                className: 'btn btn-sm btn-outline-secondary',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            },
-            {
-                extend: 'excel',
-                text: '<i class="fas fa-file-excel"></i> Excel',
-                className: 'btn btn-sm btn-outline-success',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            },
-            {
-                extend: 'pdf',
-                text: '<i class="fas fa-file-pdf"></i> PDF',
-                className: 'btn btn-sm btn-outline-danger',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            },
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i> Imprimer',
-                className: 'btn btn-sm btn-outline-info',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            }
-        ],
-        responsive: true,
-        pageLength: 50,
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tous"]],
-        order: [[0, 'asc']],
-        stateSave: true
-    });
+class ArchiveTable {
+    constructor() {
+        this.currentPage = 1;
+        this.pageSize = 25;
+        this.allRows = document.querySelectorAll('.archive-row');
+        this.totalRows = this.allRows.length;
+        this.filteredRows = Array.from(this.allRows);
+        
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.updatePageSize();
+        this.renderPagination();
+        this.showPage(1);
+    }
+
+    setupEventListeners() {
+        // Recherche en temps réel
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            this.filterRows(e.target.value);
+        });
+
+        // Effacer la recherche
+        document.getElementById('clearSearch').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            this.filterRows('');
+        });
+
+        // Changer la taille de page
+        document.getElementById('pageSize').addEventListener('change', (e) => {
+            this.pageSize = parseInt(e.target.value);
+            this.currentPage = 1;
+            this.renderPagination();
+            this.showPage(1);
+        });
+    }
+
+    filterRows(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+        
+        if (term === '') {
+            this.filteredRows = Array.from(this.allRows);
+        } else {
+            this.filteredRows = Array.from(this.allRows).filter(row => {
+                const rowText = row.textContent.toLowerCase();
+                return rowText.includes(term);
+            });
+        }
+
+        this.currentPage = 1;
+        this.renderPagination();
+        this.showPage(1);
+        this.updateRowCount();
+    }
+
+    showPage(page) {
+        // Cacher toutes les lignes
+        this.allRows.forEach(row => row.style.display = 'none');
+        
+        // Afficher les lignes de la page courante
+        const start = (page - 1) * this.pageSize;
+        const end = start + this.pageSize;
+        
+        this.filteredRows.slice(start, end).forEach(row => {
+            row.style.display = '';
+        });
+
+        // Mettre à jour la pagination active
+        this.updatePaginationActive(page);
+        this.updateRowCount(start, end);
+    }
+
+    renderPagination() {
+        const totalPages = Math.ceil(this.filteredRows.length / this.pageSize);
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        // Bouton Précédent
+        const prevLi = this.createPaginationItem('Précédent', this.currentPage - 1, this.currentPage === 1);
+        pagination.appendChild(prevLi);
+
+        // Pages numérotées
+        for (let i = 1; i <= totalPages; i++) {
+            const li = this.createPaginationItem(i.toString(), i, false, i === this.currentPage);
+            pagination.appendChild(li);
+        }
+
+        // Bouton Suivant
+        const nextLi = this.createPaginationItem('Suivant', this.currentPage + 1, this.currentPage === totalPages);
+        pagination.appendChild(nextLi);
+    }
+
+    createPaginationItem(text, page, disabled = false, active = false) {
+        const li = document.createElement('li');
+        li.className = 'page-item';
+        
+        if (disabled) li.classList.add('disabled');
+        if (active) li.classList.add('active');
+
+        const a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = '#';
+        a.textContent = text;
+        
+        if (!disabled) {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.currentPage = page;
+                this.showPage(page);
+                this.renderPagination();
+            });
+        }
+
+        li.appendChild(a);
+        return li;
+    }
+
+    updatePaginationActive(page) {
+        document.querySelectorAll('.page-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        const items = document.querySelectorAll('.page-item');
+        items[page].classList.add('active'); // +1 car le premier est "Précédent"
+    }
+
+    updateRowCount(start = 0, end = 0) {
+        const total = this.filteredRows.length;
+        const displayStart = total > 0 ? start + 1 : 0;
+        const displayEnd = Math.min(end, total);
+
+        document.getElementById('startRow').textContent = displayStart;
+        document.getElementById('endRow').textContent = displayEnd;
+        document.getElementById('totalRows').textContent = total;
+    }
+
+    updatePageSize() {
+        document.getElementById('pageSize').value = this.pageSize;
+    }
+}
+
+// Export Excel
+function exportToExcel() {
+    const table = document.querySelector('table');
+    const workbook = XLSX.utils.table_to_book(table, {sheet: "Archives"});
+    XLSX.writeFile(workbook, `archives_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+// Initialisation quand la page est chargée
+document.addEventListener('DOMContentLoaded', function() {
+    new ArchiveTable();
+    
+    // Afficher un message de confirmation
+    console.log(`Tableau des archives initialisé avec ${document.querySelectorAll('.archive-row').length} lignes`);
 });
 </script>
 @endsection

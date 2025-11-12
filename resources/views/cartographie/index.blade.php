@@ -16,7 +16,7 @@ margin: 0;
 padding: 0;
 box-sizing: border-box;
 font-family: 'Inter', sans-serif;
-        }
+}
 body {
 background-color: #f5f7fa;
 color: #333;
@@ -24,72 +24,12 @@ height: 100vh;
 display: flex;
 flex-direction: column;
 margin:0 !important;
-        }
-header {
-background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-color: white;
-padding: 1rem 2rem;
-display: flex;
-justify-content: space-between;
-align-items: center;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-z-index: 1000;
-        }
-.leaflet-top {
-display: none !important;
 }
-.title-container {
-display: flex;
-align-items: center;
-        }
-.title-container i {
-font-size: 1.8rem;
-margin-right: 1rem;
-        }
-.title-group h1 {
-font-size: 1.5rem;
-font-weight: 700;
-        }
-.title-group p {
-font-size: 0.9rem;
-opacity: 0.9;
-margin-top: 0.2rem;
-        }
-.action-buttons {
-display: flex;
-gap: 1rem;
-        }
-.btn {
-padding: 0.6rem 1.2rem;
-border-radius: 8px;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.3s ease;
-border: none;
-display: flex;
-align-items: center;
-gap: 0.5rem;
-        }
-.btn-primary {
-background-color: white;
-color: #2563eb;
-        }
-.btn-primary:hover {
-background-color: #f0f4ff;
-transform: translateY(-1px);
-        }
-.btn-secondary {
-background-color: rgba(255, 255, 255, 0.2);
-color: white;
-        }
-.btn-secondary:hover {
-background-color: rgba(255, 255, 255, 0.3);
-transform: translateY(-1px);
-        }
+
 .main-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - var(--topbar-height)); /* Utilise la variable CSS du layout */
+    height: calc(100vh - var(--topbar-height));detail-section /* Utilise la variable CSS du layout */
     width: 100%;
 }
 
@@ -111,13 +51,13 @@ transform: translateY(-1px);
 }
 .map-controls {
 position: absolute;
-top: 4rem;
+top: 1rem;
 right: 1rem;
 z-index: 1000;
 display: flex;
 flex-direction: column;
 gap: 0.5rem;
-        }
+}
 .map-btn {
 width: 40px;
 height: 40px;
@@ -130,36 +70,35 @@ display: flex;
 align-items: center;
 justify-content: center;
 transition: all 0.2s;
-        }
+}
 .map-btn:hover {
 background-color: #f8fafc;
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-        }
+}
 .map-btn i {
 font-size: 1.2rem;
 color: #4b5563;
-        }
+}
 .map-btn.active {
 background-color: #2563eb;
 color: white;
-        }
+}
 .map-btn.active i {
 color: white;
-        }
+}
 
-/* MODAL DÉTAIL DÉPLACÉ VERS LA GAUCHE */
+/* MODAL DÉTAIL */
 .descente-detail {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 1rem;
+    right: 1rem;
     width: 400px;
-    max-height: 100vh;
+    max-height: calc(100vh - 2rem);
     background-color: white;
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      z-index: 1150;
-
+    z-index: 1150;
     overflow-y: auto;
     display: none;
 }
@@ -175,66 +114,60 @@ align-items: center;
 margin-bottom: 1rem;
 padding-bottom: 0.5rem;
 border-bottom: 2px solid #e5e7eb;
-        }
+}
 .detail-title {
 font-weight: 600;
 color: #1e3a8a;
 font-size: 1.2rem;
-        }
+}
 .close-detail {
 background: none;
 border: none;
 font-size: 1.5rem;
 cursor: pointer;
 color: #6b7280;
-        }
+}
 .detail-content {
 font-size: 0.9rem;
 color: #4b5563;
 line-height: 1.6;
-        }
+}
 .detail-section {
 margin-bottom: 1rem;
-
-        }
+}
 .detail-section h4 {
 color: #374151;
 margin-bottom: 0.5rem;
 font-size: 1rem;
-        }
+}
 .detail-grid {
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 gap: 0.8rem;
-        }
+}
 .detail-item {
 display: flex;
 flex-direction: column;
-        }
+}
 .detail-label {
 font-weight: 600;
 color: #6b7280;
 font-size: 0.8rem;
 margin-bottom: 0.2rem;
-        }
+}
 .detail-value {
 color: #374151;
 font-size: 0.9rem;
-        }
-
-/* SUPPRESSION DE LA RECHERCHE PRINCIPALE */
-.search-container {
-    display: none;
 }
 
-/* LÉGENDE AVEC BOUTON RÉDUCTIBLE */
+/* LÉGENDE */
 .legend-container {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
     background-color: white;
     border-radius: 8px;
-    padding: 0; /* Supprimer le padding principal */
+    padding: 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     max-width: 250px;
@@ -317,8 +250,8 @@ font-size: 0.9rem;
 }
 
 .legend-color {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     flex-shrink: 0;
     border: 2px solid white;
@@ -331,23 +264,15 @@ font-size: 0.9rem;
     font-weight: 500;
 }
 
-/* Animation fluide */
-.legend-content {
-    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.2s ease;
-}
-
-.legend-item {
-    transition: opacity 0.2s ease;
-}
 .map-type-controls {
 position: absolute;
-top: 4rem;
+top: 1rem;
 right: 4.5rem;
 z-index: 1000;
 display: flex;
 flex-direction: column;
 gap: 0.5rem;
-        }
+}
 .loading {
 position: absolute;
 top: 50%;
@@ -359,27 +284,24 @@ border-radius: 8px;
 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 z-index: 1000;
 display: none;
-        }
-.descente-marker {
-background: rgba(255, 255, 255, 0.95);
-border-radius: 50%;
-border: 3px solid;
-display: flex;
-align-items: center;
-justify-content: center;
-font-weight: bold;
-font-size: 12px;
-box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-transition: all 0.3s ease;
-        }
-.descente-marker:hover {
-transform: scale(1.1);
-        }
+}
 
-/* MODAL DE RECHERCHE AMÉLIORÉ */
+/* POINTS SIMPLES - TAILLE NORMALE */
+.simple-point {
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+.simple-point:hover {
+    transform: scale(1.5);
+}
+
+/* MODAL DE RECHERCHE */
 .search-modal {
     position: absolute;
-    top: 4rem;
+    top: 1rem;
     left: 1rem;
     z-index: 1000;
     width: 350px;
@@ -560,7 +482,6 @@ transform: scale(1.1);
     
     .search-modal {
         width: calc(100% - 2rem);
-        top: 5rem;
     }
     
     .legend-container {
@@ -569,20 +490,19 @@ transform: scale(1.1);
     
     .map-type-controls {
         right: 1rem;
-        top: 5rem;
     }
 }
 </style>
 </head>
-<body style="margin:0 !important;" >
+<body style="margin:0 !important;">
 
 <div class="main-container">
     <div class="map-container">
-        <div style="" id="map"></div>
+        <div style="width:2020px;" id="map"></div>
     </div>
 </div>
 
-<!-- MODAL DE RECHERCHE AMÉLIORÉ -->
+<!-- MODAL DE RECHERCHE -->
 <div class="search-modal" id="search-modal">
     <div class="search-modal-header">
         <h3 class="search-modal-title">
@@ -591,7 +511,6 @@ transform: scale(1.1);
         <button class="close-search-modal" id="close-search-modal">&times;</button>
     </div>
     <div class="search-modal-body">
-        <!-- Sélecteur de type de coordonnées -->
         <div class="coord-type-selector">
             <button class="coord-type-btn active" data-type="laborde">
                 <i class="fas fa-map-marked-alt"></i> Laborde
@@ -601,7 +520,6 @@ transform: scale(1.1);
             </button>
         </div>
 
-        <!-- Champs Laborde (visible par défaut) -->
         <div id="laborde-fields" class="coord-fields">
             <div class="coord-input-group">
                 <label for="coord-x">Coordonnée X (Laborde)</label>
@@ -615,7 +533,6 @@ transform: scale(1.1);
             </div>
         </div>
 
-        <!-- Champs Lat/Lon (caché par défaut) -->
         <div id="latlon-fields" class="coord-fields" style="display: none;">
             <div class="coord-input-group">
                 <label for="coord-lat">Latitude (WGS84)</label>
@@ -641,52 +558,35 @@ transform: scale(1.1);
     </div>
 </div>
 
-<!-- MODAL LISTE DES POINTS -->
-<div class="search-modal" id="list-modal" style="top: 8rem; width: 500px; max-height: 70vh;">
-    <div class="search-modal-header">
-        <h3 class="search-modal-title">
-            <i class="fas fa-list-ul"></i> Liste des Points et Coordonnées
-        </h3>
-        <button class="close-search-modal" id="close-list-modal">&times;</button>
-    </div>
-    <div class="search-modal-body" id="list-content" style="overflow-y: auto;">
-    </div>
-</div>
-
-<!-- Contrôles de type de carte -->
+<!-- CONTRÔLES -->
 <div class="map-type-controls">
-<button class="map-btn active" id="view-oms" title="Vue OSM">
-<i class="fas fa-layer-group"></i>
-</button>
-<button class="map-btn" id="view-satellite" title="Vue Satellite">
-<i class="fas fa-satellite"></i>
-</button>
-<!-- Bouton pour recherche coordonnées -->
-<button class="map-btn" id="toggle-search-modal" title="Recherche par Coordonnées">
-    <i class="fas fa-crosshairs"></i>
-</button>
+    <button class="map-btn active" id="view-oms" title="Vue OSM">
+        <i class="fas fa-layer-group"></i>
+    </button>
+    <button class="map-btn" id="view-satellite" title="Vue Satellite">
+        <i class="fas fa-satellite"></i>
+    </button>
+    <button class="map-btn" id="toggle-search-modal" title="Recherche par Coordonnées">
+        <i class="fas fa-crosshairs"></i>
+    </button>
 </div>
 
-<!-- Contrôles de la carte -->
 <div class="map-controls">
-<button class="map-btn" id="zoom-in" title="Zoom In">
-<i class="fas fa-plus"></i>
-</button>
-<button class="map-btn" id="zoom-out" title="Zoom Out">
-<i class="fas fa-minus"></i>
-</button>
-<button class="map-btn" id="reset-map" title="Vue d'ensemble">
-<i class="fas fa-globe-americas"></i>
-</button>
-<button class="map-btn" id="locate-me" title="Me Localiser">
-<i class="fas fa-location-arrow"></i>
-</button>
-<button class="map-btn" id="list-points" title="Liste des Points">
-<i class="fas fa-list-ul"></i>
-</button>
+    <button class="map-btn" id="zoom-in" title="Zoom In">
+        <i class="fas fa-plus"></i>
+    </button>
+    <button class="map-btn" id="zoom-out" title="Zoom Out">
+        <i class="fas fa-minus"></i>
+    </button>
+    <button class="map-btn" id="reset-map" title="Vue d'ensemble">
+        <i class="fas fa-globe-americas"></i>
+    </button>
+    <button class="map-btn" id="locate-me" title="Me Localiser">
+        <i class="fas fa-location-arrow"></i>
+    </button>
 </div>
 
-<!-- LÉGENDE RÉDUCTIBLE -->
+<!-- LÉGENDE -->
 <div class="legend-container" id="legend-container">
     <div class="legend-header" id="legend-toggle">
         <h3 class="legend-title">
@@ -698,18 +598,9 @@ transform: scale(1.1);
     </div>
     <div class="legend-content" id="legend-content">
         <div class="legend-item">
-            <div class="legend-color" style="background-color: #4e73df;"></div>
-            <span class="legend-label">Descente Planifiée</span>
-        </div>
-        <div class="legend-item">
             <div class="legend-color" style="background-color: #f6c23e;"></div>
-            <span class="legend-label">Descente en Cours</span>
+            <span class="legend-label">Descentes</span>
         </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background-color: #1cc88a;"></div>
-            <span class="legend-label">Descente Terminée</span>
-        </div>
-        <!-- Ajout pour les archives -->
         <div class="legend-item">
             <div class="legend-color" style="background-color: #3b82f6;"></div>
             <span class="legend-label">Archives</span>
@@ -717,24 +608,20 @@ transform: scale(1.1);
     </div>
 </div>
 
-</div>
-
-<!-- DÉTAILS DÉPLACÉS VERS LA GAUCHE -->
+<!-- DÉTAILS -->
 <div class="descente-detail" id="descente-detail">
-<div class="detail-header">
-<h3 class="detail-title">Détails</h3>
-<button class="close-detail" id="close-detail">&times;</button>
-</div>
-<div class="detail-content" id="detail-content">
-Sélectionnez un point pour voir les détails
-</div>
+    <div class="detail-header">
+        <h3 class="detail-title">Détails</h3>
+        <button class="close-detail" id="close-detail">&times;</button>
+    </div>
+    <div class="detail-content" id="detail-content">
+        Sélectionnez un point pour voir les détails
+    </div>
 </div>
 
-<!-- Loading -->
+<!-- LOADING -->
 <div class="loading" id="loading">
-<i class="fas fa-spinner fa-spin"></i> Chargement des données...
-</div>
-</div>
+    <i class="fas fa-spinner fa-spin"></i> Chargement des données...
 </div>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -751,56 +638,47 @@ let currentCoordType = 'laborde';
 // Initialiser la carte centrée sur Madagascar
 const map = L.map('map').setView([-18.766947, 46.869107], 6);
 
-// Définitions des styles de carte
+// Styles de carte
 const mapStyles = {
   'OSM': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
     maxZoom: 19
   }),
-  'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+  'Satellite': L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     attribution: 'Imagery © Google',
     maxZoom: 22
   })
 };
 
-// Style de carte initial (OSM)
 mapStyles['OSM'].addTo(map);
 let currentMapStyle = 'OSM';
 
-// Groupe pour les marqueurs (sans clustering)
+// Groupe pour les marqueurs
 const markers = L.featureGroup();
 let descentesLayers = {};
 
-// CONFIGURATION PROJ4 - SYSTÈME LABORDE MADAGASCAR (EPSG:8441)
+// Configuration PROJ4
 try {
-// Définition projection EPSG:8441 (Laborde Madagascar)
-proj4.defs(
-"EPSG:8441",
-"+proj=omerc +lat_0=-18.9 +lonc=46.43722916666667 +alpha=18.9 +k=0.9995 +x_0=400000 +y_0=800000 +ellps=intl +towgs84=-189,-242,-91,0,0,0,0 +units=m +no_defs"
-            );
-console.log("✅ Projection EPSG:8441 (Laborde Madagascar) configurée avec succès");
-        } catch (e) {
-console.error("❌ Erreur configuration EPSG:8441:", e);
-        }
+    proj4.defs(
+        "EPSG:8441",
+        "+proj=omerc +lat_0=-18.9 +lonc=46.43722916666667 +alpha=18.9 +k=0.9995 +x_0=400000 +y_0=800000 +ellps=intl +towgs84=-189,-242,-91,0,0,0,0 +units=m +no_defs"
+    );
+    console.log("✅ Projection EPSG:8441 configurée");
+} catch (e) {
+    console.error("❌ Erreur configuration EPSG:8441:", e);
+}
 
-// FONCTION DE VALIDATION DES COORDONNÉES LABORDE
+// Fonctions utilitaires
 function validateLabordeCoordinates(x, y) {
-    // Plages valides pour Madagascar en système Laborde
-    const MIN_X = 400000;
-    const MAX_X = 600000;
-    const MIN_Y = 800000;
-    const MAX_Y = 1000000;
+    const MIN_X = 400000, MAX_X = 600000;
+    const MIN_Y = 800000, MAX_Y = 1000000;
     
     if (x < MIN_X || x > MAX_X || y < MIN_Y || y > MAX_Y) {
-        console.warn(`❌ Coordonnées Laborde hors limites: X=${x}, Y=${y}`);
-        console.warn(`   Plages attendues: X[${MIN_X}-${MAX_X}], Y[${MIN_Y}-${MAX_Y}]`);
         return false;
     }
-    
     return true;
 }
 
-// FONCTION POUR FILTRER LES COORDONNÉES INVALIDES
 function filterInvalidCoordinates(data, type = 'descente') {
     return data.filter(item => {
         let x, y;
@@ -809,81 +687,52 @@ function filterInvalidCoordinates(data, type = 'descente') {
             x = parseFloat(item.x_laborde);
             y = parseFloat(item.y_laborde);
         } else {
-            // CORRECTION: Pour les archives, utiliser Xv et Yv
-            x = parseFloat(item.Xv);
-            y = parseFloat(item.Yv);
+            x = parseFloat(item.xv);
+            y = parseFloat(item.yv);
         }
         
         if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
-            console.log(`❌ Suppression - Coordonnées invalides: ${type} ${item.id}`, x, y);
             return false;
         }
         
-        // Validation des plages Laborde
-        if (!validateLabordeCoordinates(x, y)) {
-            console.log(`❌ Suppression - Coordonnées hors limites: ${type} ${item.id}`, x, y);
-            return false;
-        }
-        
-        return true;
+        return validateLabordeCoordinates(x, y);
     });
 }
 
-// FONCTION DE CONVERSION PRÉCISE LABORDE -> WGS84 - CORRIGÉE
+// FONCTION DE CONVERSION PRÉCISE LABORDE -> WGS84
 function labordeToWGS84(x, y) {
     if (!x || !y || x == 0 || y == 0 || isNaN(x) || isNaN(y)) {
-        console.log('Coordonnées Laborde invalides:', x, y);
         return null;
     }
     
-    // AJOUT: Validation des plages avant conversion
     if (!validateLabordeCoordinates(x, y)) {
         console.log('Coordonnées hors des plages valides pour Madagascar');
         return null;
     }
     
     try {
-        // Vérifier que la projection est définie
         if (!proj4.defs("EPSG:8441")) {
-            console.error("Projection EPSG:8441 non définie");
             return null;
         }
         
-        // Conversion précise avec proj4 - CORRECTION DE L'ORDRE DES COORDONNÉES
+        // Conversion précise avec proj4
         const fromProj = "EPSG:8441";
         const toProj = "EPSG:4326"; // WGS84
-        
-        console.log(`🔄 Tentative de conversion: Laborde(${x}, ${y})`);
-        
-        const result = proj4(fromProj, toProj, [parseFloat(x), parseFloat(y)]);
-        
-        if (!result || result.length < 2) {
-            console.error('❌ Résultat de conversion invalide');
-            return null;
-        }
-        
+        const result = proj4(fromProj, toProj, [x, y]);
         const lon = result[0];
         const lat = result[1];
         
-        console.log(`📍 Conversion PROJ4 réussie: Laborde(${x}, ${y}) -> WGS84(${lat.toFixed(6)}, ${lon.toFixed(6)})`);
+        console.log(`📍 Conversion PROJ4: Laborde(${x}, ${y}) -> WGS84(${lat.toFixed(6)}, ${lon.toFixed(6)})`);
         
         // Validation des coordonnées résultantes (limites de Madagascar)
         if (lat < -25.6 || lat > -12.0 || lon < 43.0 || lon > 50.5) {
             console.warn('Coordonnées hors des limites de Madagascar:', lat, lon);
-            // On retourne quand même les coordonnées pour debug
-            return [lat, lon];
+            return null;
         }
         
         return [lat, lon];
     } catch (error) {
         console.error('❌ Erreur de conversion Laborde->WGS84:', error);
-        console.log('Détails de l\'erreur:', {
-            x: x, 
-            y: y, 
-            typeX: typeof x, 
-            typeY: typeof y,
-            errorMessage: error.message
-        });
         return null;
     }
 }
@@ -970,11 +819,6 @@ description: "Terrain 1 - Référence"
 laborde: { x: 517767, y: 801659 },
 wgs84: { lat: -18.882273, lon: 47.545627 },
 description: "Terrain 2 - À vérifier"
-                },
-                {
-laborde: { x: 519303, y: 794462 },
-wgs84: { lat: -18.939, lon: 47.527 },
-description: "Point de test - 519303,794462"
                 }
             ];
 pointsTest.forEach((point, index) => {
@@ -999,8 +843,6 @@ console.log('⚠️ Précision acceptable');
                     } else {
 console.log('❌ Précision insuffisante');
                     }
-                } else {
-console.log('❌ CONVERSION ÉCHOUÉE');
                 }
             });
         }
@@ -1035,15 +877,12 @@ function formatDate(dateString) {
     }
     
     try {
-        // Nettoyer la chaîne
         const cleanString = dateString.toString().trim();
         
-        // Si c'est déjà au format français jj/mm/aaaa
         if (cleanString.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
             return cleanString;
         }
         
-        // Si c'est au format Y-m-d (MySQL)
         if (cleanString.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
             const parts = cleanString.split('-');
             const day = String(parts[2]).padStart(2, '0');
@@ -1052,7 +891,6 @@ function formatDate(dateString) {
             return `${day}/${month}/${year}`;
         }
         
-        // Si c'est un format ISO avec timezone (2025-11-07T00:00:00.000000Z)
         if (cleanString.match(/^\d{4}-\d{2}-\d{2}T/)) {
             const date = new Date(cleanString);
             if (!isNaN(date.getTime())) {
@@ -1063,7 +901,6 @@ function formatDate(dateString) {
             }
         }
         
-        // Essayer avec Date object pour d'autres formats
         const date = new Date(cleanString);
         if (!isNaN(date.getTime())) {
             const day = String(date.getDate()).padStart(2, '0');
@@ -1072,384 +909,191 @@ function formatDate(dateString) {
             return `${day}/${month}/${year}`;
         }
         
-        // Retourner la valeur originale si aucun format reconnu
         return cleanString;
     } catch (error) {
-        console.log('Erreur format date:', error, dateString);
         return dateString;
     }
 }
 
-// FONCTION POUR FORMATER L'HEURE EN HH:MM
-function formatTime(timeString) {
-    if (!timeString || timeString === 'Non spécifié' || timeString === 'null') {
-        return 'Non spécifié';
-    }
-    
-    try {
-        // Nettoyer la chaîne
-        const cleanString = timeString.toString().trim();
-        
-        // Si c'est déjà au format H:m
-        if (cleanString.match(/^\d{1,2}:\d{2}$/)) {
-            const parts = cleanString.split(':');
-            const hours = String(parseInt(parts[0])).padStart(2, '0');
-            const minutes = String(parseInt(parts[1])).padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
-        
-        // Si c'est un format avec secondes H:m:s
-        if (cleanString.match(/^\d{1,2}:\d{2}:\d{2}$/)) {
-            const parts = cleanString.split(':');
-            const hours = String(parseInt(parts[0])).padStart(2, '0');
-            const minutes = String(parseInt(parts[1])).padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
-        
-        // Si c'est un timestamp ou format ISO
-        const date = new Date(cleanString);
-        if (!isNaN(date.getTime())) {
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            return `${hours}:${minutes}`;
-        }
-        
-        // Retourner la valeur originale si aucun format reconnu
-        return cleanString;
-    } catch (error) {
-        console.log('Erreur format heure:', error, timeString);
-        return timeString;
-    }
+function getValueOrNotSpecified(value) {
+    return value && value !== 'null' && value !== '' && value !== 'N/A' ? value : 'Non spécifié';
 }
 
-// Fonction pour ajouter les descentes à la carte
+// Fonctions pour ajouter les points à la carte
 function addDescentesToMap(descentes) {
-let coordsValides = 0;
-let interventions = 0;
+    let coordsValides = 0;
 
-// Ajouter les descentes
-descentes.forEach(descente => {
-// Vérification robuste des coordonnées
-const x = parseFloat(descente.x_laborde);
-const y = parseFloat(descente.y_laborde);
-if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
-console.log(`❌ Coordonnées invalides pour la descente ${descente.id}:`, x, y);
-return;
-                }
-// Convertir les coordonnées Laborde en WGS84 avec PROJ4
-const coords = labordeToWGS84(x, y);
-if (!coords) {
-console.log(`❌ Conversion échouée pour la descente ${descente.id}`);
-return;
-                }
-coordsValides++;
-if (descente.action && descente.action !== '[]' && descente.action !== 'null') interventions++;
-
-const markerColor = getDescenteColor(descente);
-
-// Créer un marqueur personnalisé
-const marker = L.marker(coords, {
-icon: L.divIcon({
-html: `<div class="descente-marker" style="border-color: ${markerColor}; color: ${markerColor}; width: 35px; height: 35px; background-color: ${markerColor}20;">
-                    <i class="fas fa-map-marker-alt" style="color: ${markerColor}; font-size: 14px;"></i>
-                </div>`,
-className: 'descente-marker-container',
-iconSize: [35, 35]
-                    })
-                });
-
-// Popup d'information AVEC DATE FORMATÉE
-const popupContent = `
-                    <div style="font-family: 'Inter', sans-serif; max-width: 350px;">
-                        <h3 style="color: ${markerColor}; margin-bottom: 0.5rem; border-bottom: 2px solid ${markerColor}; padding-bottom: 0.5rem;">
-${descente.ref_om ? 'OM: ' + descente.ref_om : 'Descente #' + descente.id}
-                        </h3>
-                        <div style="font-size: 0.9rem; color: #666;">
-                            <p><strong>Date:</strong> ${formatDate(descente.date) || 'Non spécifié'}</p>
-                            <p><strong>Heure:</strong> ${formatTime(descente.heure) || 'Non spécifié'}</p>
-${descente.ref_pv ? `<p><strong>Réf. PV:</strong> ${descente.ref_pv}</p>` : ''}
-${descente.num_pv ? `<p><strong>Num. PV:</strong> ${descente.num_pv}</p>` : ''}
-                            <p><strong>Adresse:</strong> ${descente.adresse || 'Non spécifié'}</p>
-                            <p><strong>Commune:</strong> ${descente.comm || 'Non spécifié'}</p>
-                            <p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>
-                        </div>
-                        <button style="width: 100%; padding: 0.5rem; background-color: ${markerColor}; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem;" onclick="showDescenteDetail('${descente.id}')">
-                            Voir Détails Complets
-                        </button>
-                    </div>
-                `;
-marker.bindPopup(popupContent);
-
-// Stocker la référence
-descentesLayers[`descente_${descente.id}`] = marker;
-markers.addLayer(marker);
-            });
-
-console.log(`✅ ${coordsValides} descentes affichées sur la carte avec conversion PROJ4`);
-        }
-
-// FONCTION POUR AJOUTER LES ARCHIVES À LA CARTE (CORRIGÉE)
-function addArchivesToMap(archives) {
-    let archivesValides = 0;
-    
-    archives.forEach(archive => {
-        // CORRECTION: Utiliser Xv et Yv au lieu de x_laborde et y_laborde
-        const x = parseFloat(archive.Xv);
-        const y = parseFloat(archive.Yv);
-        
-        console.log(`📁 Archive ${archive.id}: Xv=${x}, Yv=${y}`);
-        
+    descentes.forEach(descente => {
+        const x = parseFloat(descente.x_laborde);
+        const y = parseFloat(descente.y_laborde);
         if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
-            console.log(`❌ Coordonnées invalides pour l'archive ${archive.id}:`, x, y);
             return;
         }
-        
-        // Validation des plages Laborde
-        if (!validateLabordeCoordinates(x, y)) {
-            console.log(`❌ Coordonnées hors limites pour l'archive ${archive.id}`);
-            return;
-        }
-        
-        // Convertir les coordonnées Laborde en WGS84 avec PROJ4
+
         const coords = labordeToWGS84(x, y);
         if (!coords) {
-            console.log(`❌ Conversion échouée pour l'archive ${archive.id}`);
             return;
         }
-        
-        archivesValides++;
-        
-        // Créer un marqueur bleu pour les archives
+
+        coordsValides++;
+
+        // Créer un point simple jaune pour les descentes
         const marker = L.marker(coords, {
             icon: L.divIcon({
-                html: `<div class="descente-marker" style="border-color: #3b82f6; color: #3b82f6; width: 35px; height: 35px; background-color: #3b82f620;">
-                    <i class="fas fa-archive" style="color: #3b82f6; font-size: 14px;"></i>
-                </div>`,
-                className: 'archive-marker-container',
-                iconSize: [35, 35]
+                html: `<div class="simple-point" style="background-color: #f6c23e; border: 2px solid #d4a417;"></div>`,
+                className: 'simple-point-container',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
             })
         });
 
-        // Popup d'information pour les archives (corrigé) AVEC DATE FORMATÉE
         const popupContent = `
-            <div style="font-family: 'Inter', sans-serif; max-width: 350px;">
-                <h3 style="color: #3b82f6; margin-bottom: 0.5rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.5rem;">
-                    <i class="fas fa-archive"></i> Archive #${archive.id}
+            <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
+                <h3 style="color: #f6c23e; margin-bottom: 0.5rem; border-bottom: 2px solid #f6c23e; padding-bottom: 0.5rem;">
+                    Descente #${descente.id}
                 </h3>
-                <div style="font-size: 0.9rem; color: #666;">
-                    <p><strong>Réf. Arrivée:</strong> ${archive.ref_arriv || 'N/A'}</p>
-                    <p><strong>Date Arrivée:</strong> ${formatDate(archive.date_arriv) || 'Non spécifié'}</p>
-                    <p><strong>Service:</strong> ${archive.sce_envoyeur || 'Non spécifié'}</p>
-                    <p><strong>Action:</strong> ${archive.action || 'Non spécifié'}</p>
-                    <p><strong>Adresse:</strong> ${archive.adresse || 'Non spécifié'}</p>
-                    <p><strong>Commune:</strong> ${archive.commune || 'Non spécifié'}</p>
-                    <p><strong>Propriétaire:</strong> ${archive.proprio || 'Non spécifié'}</p>
-                    <p><strong>Coordonnées WGS84:</strong><br>Lat: ${coords[0].toFixed(6)}<br>Lon: ${coords[1].toFixed(6)}</p>
-                    <p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>
-                    <p><em><small>Conversion: EPSG:8441 → WGS84</small></em></p>
+                <div style="font-size: 0.85rem; color: #666;">
+                    <p><strong>Réf. OM:</strong> ${getValueOrNotSpecified(descente.ref_om)}</p>
+                    <p><strong>Date:</strong> ${formatDate(descente.date)}</p>
+                    <p><strong>Adresse:</strong> ${getValueOrNotSpecified(descente.adresse)}</p>
+                    <p><strong>Commune:</strong> ${getValueOrNotSpecified(descente.comm)}</p>
+                    <p><strong>Constat:</strong> ${getValueOrNotSpecified(descente.constat)}</p>
                 </div>
-                <button style="width: 100%; padding: 0.5rem; background-color: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem;" onclick="showArchiveDetail('${archive.id}')">
+                <button style="width: 100%; padding: 0.4rem; background-color: #f6c23e; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showDescenteDetail('${descente.id}')">
                     Voir Détails Complets
                 </button>
             </div>
         `;
         marker.bindPopup(popupContent);
 
-        // Stocker la référence avec un préfixe pour différencier des descentes
+        descentesLayers[`descente_${descente.id}`] = marker;
+        markers.addLayer(marker);
+    });
+
+    console.log(`✅ ${coordsValides} descentes affichées`);
+}
+
+function addArchivesToMap(archives) {
+    let archivesValides = 0;
+    
+    archives.forEach(archive => {
+        const x = parseFloat(archive.xv);
+        const y = parseFloat(archive.yv);
+        
+        if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
+            return;
+        }
+        
+        if (!validateLabordeCoordinates(x, y)) {
+            return;
+        }
+        
+        const coords = labordeToWGS84(x, y);
+        if (!coords) {
+            return;
+        }
+        
+        archivesValides++;
+        
+        // Créer un point simple bleu pour les archives
+        const marker = L.marker(coords, {
+            icon: L.divIcon({
+                html: `<div class="simple-point" style="background-color: #3b82f6; border: 2px solid #1d4ed8;"></div>`,
+                className: 'simple-point-container',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6]
+            })
+        });
+
+        const popupContent = `
+            <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
+                <h3 style="color: #3b82f6; margin-bottom: 0.5rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.5rem;">
+                    Archive #${archive.id}
+                </h3>
+                <div style="font-size: 0.85rem; color: #666;">
+                    <p><strong>Réf. Arrivée:</strong> ${getValueOrNotSpecified(archive.arrivalid)}</p>
+                    <p><strong>Date Arrivée:</strong> ${formatDate(archive.arrivaldate)}</p>
+                    <p><strong>Service:</strong> ${getValueOrNotSpecified(archive.sendersce)}</p>
+                    <p><strong>Demandeur:</strong> ${getValueOrNotSpecified(archive.applicantname)}</p>
+                    <p><strong>Commune:</strong> ${getValueOrNotSpecified(archive.municipality)}</p>
+                    <p><strong>Propriétaire:</strong> ${getValueOrNotSpecified(archive.property0wner)}</p>
+                </div>
+                <button style="width: 100%; padding: 0.4rem; background-color: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showArchiveDetail('${archive.id}')">
+                    Voir Détails Complets
+                </button>
+            </div>
+        `;
+        marker.bindPopup(popupContent);
+
         descentesLayers[`archive_${archive.id}`] = marker;
         markers.addLayer(marker);
     });
 
-    console.log(`✅ ${archivesValides} archives affichées sur la carte (points bleus)`);
+    console.log(`✅ ${archivesValides} archives affichées`);
 }
 
-// Fonction pour afficher les détails complets d'une descente AVEC DATES FORMATÉES
+// Fonctions pour afficher les détails
 function showDescenteDetail(descenteId) {
-const descente = descentesData.find(d => d.id == descenteId);
-if (!descente) return;
-
-const markerColor = getDescenteColor(descente);
-const x = parseFloat(descente.x_laborde);
-const y = parseFloat(descente.y_laborde);
-const coords = labordeToWGS84(x, y);
-
-const detailContent = `
-                <div class="detail-section">
-                    <h4 style="color: ${markerColor};">Informations Générales</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Date</span>
-                            <span class="detail-value">${formatDate(descente.date) || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Heure</span>
-                            <span class="detail-value">${formatTime(descente.heure) || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Réf. OM</span>
-                            <span class="detail-value">${descente.ref_om || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Réf. PV</span>
-                            <span class="detail-value">${descente.ref_pv || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Réf. Rapport</span>
-                            <span class="detail-value">${descente.ref_rapport || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Numéro PV</span>
-                            <span class="detail-value">${descente.num_pv || 'Non spécifié'}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="detail-section">
-                    <h4 style="color: ${markerColor};">Équipe et Actions</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Équipe</span>
-                            <span class="detail-value">${formatArrayField(descente.equipe)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Action</span>
-                            <span class="detail-value">${formatArrayField(descente.action)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Constat</span>
-                            <span class="detail-value">${formatArrayField(descente.constat)}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="detail-section">
-                    <h4 style="color: ${markerColor};">Personnes et Localisation</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">Personnes verbalisées</span>
-                            <span class="detail-value">${descente.pers_verb || '0'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Quantité personnes</span>
-                            <span class="detail-value">${descente.qte_pers || '0'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Adresse</span>
-                            <span class="detail-value">${descente.adresse || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Contact</span>
-                            <span class="detail-value">${descente.contact || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">District</span>
-                            <span class="detail-value">${descente.dist || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Commune</span>
-                            <span class="detail-value">${descente.comm || 'Non spécifié'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Fokontany</span>
-                            <span class="detail-value">${descente.fkt || 'Non spécifié'}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="detail-section">
-                    <h4 style="color: ${markerColor};">Coordonnées</h4>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <span class="detail-label">X Laborde</span>
-                            <span class="detail-value">${descente.x_laborde}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Y Laborde</span>
-                            <span class="detail-value">${descente.y_laborde}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Latitude WGS84</span>
-                            <span class="detail-value">${coords ? coords[0].toFixed(6) : 'N/A'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Longitude WGS84</span>
-                            <span class="detail-value">${coords ? coords[1].toFixed(6) : 'N/A'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Système</span>
-                            <span class="detail-value">EPSG:8441 → WGS84 (PROJ4)</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-document.getElementById('detail-content').innerHTML = detailContent;
-document.getElementById('descente-detail').classList.add('active');
-        }
-
-// FONCTION POUR AFFICHER LES DÉTAILS COMPLETS D'UNE ARCHIVE (CORRIGÉE) AVEC DATE FORMATÉE
-function showArchiveDetail(archiveId) {
-    const archive = archivesData.find(a => a.id == archiveId);
-    if (!archive) return;
-
-    // CORRECTION: Utiliser Xv et Yv
-    const x = parseFloat(archive.Xv);
-    const y = parseFloat(archive.Yv);
-    const coords = labordeToWGS84(x, y);
+    const descente = descentesData.find(d => d.id == descenteId);
+    if (!descente) return;
 
     const detailContent = `
         <div class="detail-section">
-            <h4 style="color: #3b82f6;"><i class="fas fa-archive"></i> Informations Archive</h4>
+            <h4 style="color: #f6c23e;">Informations Générales</h4>
             <div class="detail-grid">
                 <div class="detail-item">
-                    <span class="detail-label">Réf. Arrivée</span>
-                    <span class="detail-value">${archive.ref_arriv || 'Non spécifié'}</span>
+                    <span class="detail-label">Réf. OM</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.ref_om)}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Date Arrivée</span>
-                    <span class="detail-value">${formatDate(archive.date_arriv) || 'Non spécifié'}</span>
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">${formatDate(descente.date)}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Service</span>
-                    <span class="detail-value">${archive.sce_envoyeur || 'Non spécifié'}</span>
+                    <span class="detail-label">Heure</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.heure)}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Action</span>
-                    <span class="detail-value">${archive.action || 'Non spécifié'}</span>
+                    <span class="detail-label">Réf. PV</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.ref_pv)}</span>
                 </div>
             </div>
         </div>
         <div class="detail-section">
-            <h4 style="color: #3b82f6;">Localisation</h4>
+            <h4 style="color: #f6c23e;">Localisation</h4>
             <div class="detail-grid">
                 <div class="detail-item">
                     <span class="detail-label">Adresse</span>
-                    <span class="detail-value">${archive.adresse || 'Non spécifié'}</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.adresse)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Commune</span>
-                    <span class="detail-value">${archive.commune || 'Non spécifié'}</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.comm)}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Propriétaire</span>
-                    <span class="detail-value">${archive.proprio || 'Non spécifié'}</span>
+                    <span class="detail-label">District</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.dist)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Fokontany</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.fkt)}</span>
                 </div>
             </div>
         </div>
         <div class="detail-section">
-            <h4 style="color: #3b82f6;">Coordonnées</h4>
+            <h4 style="color: #f6c23e;">Actions</h4>
             <div class="detail-grid">
                 <div class="detail-item">
-                    <span class="detail-label">X Laborde (Xv)</span>
-                    <span class="detail-value">${archive.Xv || 'N/A'}</span>
+                    <span class="detail-label">Action</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.action)}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Y Laborde (Yv)</span>
-                    <span class="detail-value">${archive.Yv || 'N/A'}</span>
+                    <span class="detail-label">Constat</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.constat)}</span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-label">Latitude WGS84</span>
-                    <span class="detail-value">${coords ? coords[0].toFixed(6) : 'N/A'}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Longitude WGS84</span>
-                    <span class="detail-value">${coords ? coords[1].toFixed(6) : 'N/A'}</span>
+                    <span class="detail-label">Personnes verbalisées</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.pers_verb)}</span>
                 </div>
             </div>
         </div>
@@ -1459,16 +1103,101 @@ function showArchiveDetail(archiveId) {
     document.getElementById('descente-detail').classList.add('active');
 }
 
-// Fonction pour changer le style de carte
-function changeMapStyle(style) {
-mapStyles[currentMapStyle].remove();
-mapStyles[style].addTo(map);
-currentMapStyle = style;
-document.getElementById('view-oms').classList.toggle('active', style === 'OSM');
-document.getElementById('view-satellite').classList.toggle('active', style === 'Satellite');
-        }
+function showArchiveDetail(archiveId) {
+    const archive = archivesData.find(a => a.id == archiveId);
+    if (!archive) return;
 
-// FONCTION POUR RECHERCHER ET AFFICHER UN POINT PAR COORDONNÉES - CORRIGÉE
+    const detailContent = `
+        <div class="detail-section">
+            <h4 style="color: #3b82f6;">Informations Archive</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Réf. Arrivée</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.arrivalid)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date Arrivée</span>
+                    <span class="detail-value">${formatDate(archive.arrivaldate)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Service</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.sendersce)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Année exercice</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.exoyear)}</span>
+                </div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <h4 style="color: #3b82f6;">Localisation</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Demandeur</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.applicantname)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Commune</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.municipality)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Localité</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.locality)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Propriétaire</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.property0wner)}</span>
+                </div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <h4 style="color: #3b82f6;">Informations techniques</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Surface (m²)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.surfacearea)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Zone</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.zoning)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Constat</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.findingof)}</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('detail-content').innerHTML = detailContent;
+    document.getElementById('descente-detail').classList.add('active');
+}
+
+// Gestion de la légende
+function toggleLegend() {
+    const legendContainer = document.getElementById('legend-container');
+    legendContainer.classList.toggle('collapsed');
+    localStorage.setItem('legendCollapsed', legendContainer.classList.contains('collapsed'));
+}
+
+function restoreLegendState() {
+    const legendContainer = document.getElementById('legend-container');
+    const isCollapsed = localStorage.getItem('legendCollapsed') === 'true';
+    if (isCollapsed) {
+        legendContainer.classList.add('collapsed');
+    }
+}
+
+// Fonctions pour les contrôles de carte
+function changeMapStyle(style) {
+    mapStyles[currentMapStyle].remove();
+    mapStyles[style].addTo(map);
+    currentMapStyle = style;
+    document.getElementById('view-oms').classList.toggle('active', style === 'OSM');
+    document.getElementById('view-satellite').classList.toggle('active', style === 'Satellite');
+}
+
+// FONCTION POUR RECHERCHER ET AFFICHER UN POINT PAR COORDONNÉES
 function searchByCoordinates() {
     const resultDiv = document.getElementById('coord-result');
     
@@ -1476,10 +1205,8 @@ function searchByCoordinates() {
 
     if (currentCoordType === 'laborde') {
         // Recherche par Laborde
-        x = parseFloat(document.getElementById('coord-x').value);
-        y = parseFloat(document.getElementById('coord-y').value);
-        
-        console.log(`🔍 Recherche avec coordonnées Laborde: X=${x}, Y=${y}`);
+        x = document.getElementById('coord-x').value;
+        y = document.getElementById('coord-y').value;
         
         if (!x || !y || isNaN(x) || isNaN(y)) {
             resultDiv.className = 'coord-result error';
@@ -1495,7 +1222,7 @@ function searchByCoordinates() {
         }
 
         // Convertir les coordonnées Laborde en WGS84
-        coords = labordeToWGS84(x, y);
+        coords = labordeToWGS84(parseFloat(x), parseFloat(y));
         
         if (!coords) {
             resultDiv.className = 'coord-result error';
@@ -1507,7 +1234,6 @@ function searchByCoordinates() {
         lon = coords[1];
 
     } else {
-        // Recherche par Lat/Lon
         lat = parseFloat(document.getElementById('coord-lat').value);
         lon = parseFloat(document.getElementById('coord-lon').value);
         
@@ -1517,7 +1243,6 @@ function searchByCoordinates() {
             return;
         }
 
-        // Validation des limites Madagascar
         if (lat < -25.6 || lat > -12.0 || lon < 43.0 || lon > 50.5) {
             resultDiv.className = 'coord-result error';
             resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Coordonnées hors des limites de Madagascar';
@@ -1525,415 +1250,145 @@ function searchByCoordinates() {
         }
 
         coords = [lat, lon];
-        
-        // Convertir WGS84 vers Laborde
-        const labordeCoords = wgs84ToLaborde(lat, lon);
-        if (labordeCoords) {
-            x = labordeCoords.x;
-            y = labordeCoords.y;
-        }
     }
 
-    // Supprimer le marqueur précédent s'il existe
     if (coordMarker) {
         map.removeLayer(coordMarker);
     }
 
-    // Créer un marqueur spécial pour la recherche
     coordMarker = L.marker(coords, {
         icon: L.divIcon({
-            html: `<div class="descente-marker" style="border-color: #dc2626; color: #dc2626; width: 40px; height: 40px; background-color: rgba(255,255,255,0.9);">
-                    <i class="fas fa-crosshairs"></i>
-                   </div>`,
-            className: 'coord-marker-container',
-            iconSize: [40, 40]
+            html: `<div class="simple-point" style="background-color: #dc2626; border: 2px solid #b91c1c;"></div>`,
+            className: 'simple-point-container',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
         })
     }).addTo(map);
 
-    // Popup d'information
-    let popupContent = `
+    const popupContent = `
         <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
             <h3 style="color: #dc2626; margin-bottom: 0.5rem; border-bottom: 2px solid #dc2626; padding-bottom: 0.5rem;">
                 <i class="fas fa-crosshairs"></i> Point Recherché
             </h3>
             <div style="font-size: 0.9rem; color: #666;">
-    `;
-
-    if (currentCoordType === 'laborde') {
-        popupContent += `
-                <p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>
-                <p><strong>Coordonnées WGS84:</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}</p>
-        `;
-    } else {
-        popupContent += `
                 <p><strong>Coordonnées WGS84:</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}</p>
                 ${x && y ? `<p><strong>Coordonnées Laborde:</strong><br>X: ${x}<br>Y: ${y}</p>` : ''}
-        `;
-    }
-
-    popupContent += `
-                <p><em><small>Recherche manuelle par coordonnées</small></em></p>
             </div>
         </div>
     `;
     
     coordMarker.bindPopup(popupContent).openPopup();
-
-    // Centrer la carte sur le point
     map.setView(coords, 15);
 
-    // Afficher le résultat
     resultDiv.className = 'coord-result success';
-    let resultHTML = `<i class="fas fa-check-circle"></i> Point trouvé et affiché sur la carte<br>`;
-    
-    if (currentCoordType === 'laborde') {
-        resultHTML += `<small>WGS84: ${lat.toFixed(6)}, ${lon.toFixed(6)}</small>`;
-    } else {
-        resultHTML += `<small>WGS84: ${lat.toFixed(6)}, ${lon.toFixed(6)}</small>`;
-        if (x && y) {
-            resultHTML += `<br><small>Laborde: X=${x}, Y=${y}</small>`;
-        }
-    }
-
-    resultDiv.innerHTML = resultHTML;
-
-    // Rechercher les points proches de ce point
-    findNearbyPoints(coords, x, y);
+    resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> Point trouvé et affiché sur la carte<br>
+                          <small>WGS84: ${lat.toFixed(6)}, ${lon.toFixed(6)}</small>`;
 }
 
-// FONCTION POUR TROUVER LES POINTS PROCHEs (DESCENTES ET ARCHIVES) - CORRIGÉE
-function findNearbyPoints(coordsWGS84, xLaborde, yLaborde) {
-    const tolerance = 100; // Tolérance en mètres (Laborde)
-    let nearbyPoints = [];
-
-    // Rechercher dans les descentes
-    descentesData.forEach(descente => {
-        const descX = parseFloat(descente.x_laborde);
-        const descY = parseFloat(descente.y_laborde);
-        
-        if (!isNaN(descX) && !isNaN(descY)) {
-            const distance = Math.sqrt(Math.pow(descX - xLaborde, 2) + Math.pow(descY - yLaborde, 2));
-            
-            if (distance <= tolerance) {
-                nearbyPoints.push({
-                    type: 'descente',
-                    data: descente,
-                    distance: distance
-                });
-            }
-        }
-    });
-
-    // Rechercher dans les archives - CORRIGÉ
-    archivesData.forEach(archive => {
-        const archX = parseFloat(archive.Xv);  // CORRECTION: Xv au lieu de x_laborde
-        const archY = parseFloat(archive.Yv);  // CORRECTION: Yv au lieu de y_laborde
-        
-        if (!isNaN(archX) && !isNaN(archY)) {
-            const distance = Math.sqrt(Math.pow(archX - xLaborde, 2) + Math.pow(archY - yLaborde, 2));
-            
-            if (distance <= tolerance) {
-                nearbyPoints.push({
-                    type: 'archive',
-                    data: archive,
-                    distance: distance
-                });
-            }
-        }
-    });
-
-    // Trier par distance
-    nearbyPoints.sort((a, b) => a.distance - b.distance);
-
-    // Afficher les résultats
-    const resultDiv = document.getElementById('coord-result');
-    if (nearbyPoints.length > 0) {
-        resultDiv.innerHTML += `<br><strong>Points proches (${nearbyPoints.length}):</strong><br>`;
-        nearbyPoints.slice(0, 3).forEach(item => {
-            const label = item.type === 'descente' 
-                ? `Descente: ${item.data.ref_om || 'Sans réf.'}`
-                : `Archive: ${item.data.ref_arriv || 'Sans réf.'}`;
-            resultDiv.innerHTML += `• ${label} (${Math.round(item.distance)}m)<br>`;
-        });
-        if (nearbyPoints.length > 3) {
-            resultDiv.innerHTML += `<small>... et ${nearbyPoints.length - 3} autres</small>`;
-        }
-    } else {
-        resultDiv.innerHTML += `<br><small>Aucun point trouvé à proximité</small>`;
-    }
-}
-
-// FONCTION POUR CHANGER LE TYPE DE COORDONNÉES
 function changeCoordType(type) {
     currentCoordType = type;
     
-    // Mettre à jour les boutons
     document.querySelectorAll('.coord-type-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.type === type);
     });
     
-    // Afficher/masquer les champs appropriés
     document.getElementById('laborde-fields').style.display = type === 'laborde' ? 'block' : 'none';
     document.getElementById('latlon-fields').style.display = type === 'latlon' ? 'block' : 'none';
     
-    // Effacer les résultats précédents
     document.getElementById('coord-result').className = 'coord-result';
     document.getElementById('coord-result').innerHTML = '';
 }
 
-// FONCTION POUR AFFICHER LA LISTE DE TOUS LES POINTS AVEC DISTANCES
-function displayAllPoints() {
-    let points = [];
-
-    // Ajouter les descentes
-    descentesData.forEach(descente => {
-        const x = parseFloat(descente.x_laborde);
-        const y = parseFloat(descente.y_laborde);
-        const coords = labordeToWGS84(x, y);
-        if (coords) {
-            points.push({
-                type: 'Descente',
-                id: descente.id,
-                ref: descente.ref_om || descente.id,
-                x: x,
-                y: y,
-                lat: coords[0],
-                lon: coords[1]
-            });
-        }
-    });
-
-    // Ajouter les archives
-    archivesData.forEach(archive => {
-        const x = parseFloat(archive.Xv);
-        const y = parseFloat(archive.Yv);
-        const coords = labordeToWGS84(x, y);
-        if (coords) {
-            points.push({
-                type: 'Archive',
-                id: archive.id,
-                ref: archive.ref_arriv || archive.id,
-                x: x,
-                y: y,
-                lat: coords[0],
-                lon: coords[1]
-            });
-        }
-    });
-
-    // Trier par Y Laborde descendant (direction approximative du boulevard)
-    points.sort((a, b) => b.y - a.y);
-
-    // Construire le tableau HTML
-    let html = `
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-            <thead>
-                <tr style="background: #f8f9fa; text-align: left;">
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">Type</th>
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">Réf.</th>
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">X Laborde</th>
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">Y Laborde</th>
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">Lat WGS84</th>
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">Lon WGS84</th>
-                    <th style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">Distance au préc. (m)</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    let prevX = null;
-    let prevY = null;
-
-    points.forEach(p => {
-        let distance = '-';
-        if (prevX !== null && prevY !== null) {
-            const dx = p.x - prevX;
-            const dy = p.y - prevY;
-            distance = Math.sqrt(dx * dx + dy * dy).toFixed(0);
-        }
-
-        html += `
-            <tr>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${p.type}</td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${p.ref}</td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${p.x.toFixed(0)}</td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${p.y.toFixed(0)}</td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${p.lat.toFixed(6)}</td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${p.lon.toFixed(6)}</td>
-                <td style="padding: 0.5rem; border-bottom: 1px solid #e5e7eb;">${distance}</td>
-            </tr>
-        `;
-
-        prevX = p.x;
-        prevY = p.y;
-    });
-
-    html += '</tbody></table>';
-
-    document.getElementById('list-content').innerHTML = html;
-}
-
-// ÉCOUTEURS D'ÉVÉNEMENTS
-
-// Événements existants
-document.getElementById('zoom-in').addEventListener('click', () => map.zoomIn());
-document.getElementById('zoom-out').addEventListener('click', () => map.zoomOut());
-document.getElementById('reset-map').addEventListener('click', () => {
-map.setView([-18.766947, 46.869107], 6);
-        });
-document.getElementById('locate-me').addEventListener('click', function() {
-if ('geolocation' in navigator) {
-navigator.geolocation.getCurrentPosition(function(position) {
-map.setView([position.coords.latitude, position.coords.longitude], 10);
-                }, function() {
-alert('Impossible de déterminer votre position.');
-                });
-            } else {
-alert('La géolocalisation n\'est pas supportée par votre navigateur.');
-            }
-        });
-document.getElementById('close-detail').addEventListener('click', function() {
-document.getElementById('descente-detail').classList.remove('active');
-        });
-document.getElementById('view-oms').addEventListener('click', () => changeMapStyle('OSM'));
-document.getElementById('view-satellite').addEventListener('click', () => changeMapStyle('Satellite'));
-
-// NOUVEAUX ÉVÉNEMENTS POUR LE MODAL DE RECHERCHE
-document.getElementById('toggle-search-modal').addEventListener('click', function() {
-    const modal = document.getElementById('search-modal');
-    modal.classList.toggle('active');
-});
-
-document.getElementById('close-search-modal').addEventListener('click', function() {
-    document.getElementById('search-modal').classList.remove('active');
-});
-
-// Sélecteur de type de coordonnées
-document.querySelectorAll('.coord-type-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        changeCoordType(this.dataset.type);
-    });
-});
-
-document.getElementById('clear-coord-search').addEventListener('click', function() {
-    // Effacer tous les champs
-    document.getElementById('coord-x').value = '';
-    document.getElementById('coord-y').value = '';
-    document.getElementById('coord-lat').value = '';
-    document.getElementById('coord-lon').value = '';
-    document.getElementById('coord-result').className = 'coord-result';
-    document.getElementById('coord-result').innerHTML = '';
-    
-    // Supprimer le marqueur de recherche
-    if (coordMarker) {
-        map.removeLayer(coordMarker);
-        coordMarker = null;
-    }
-});
-
-document.getElementById('search-by-coord').addEventListener('click', function() {
-    searchByCoordinates();
-});
-
-// Recherche par Entrée
-document.getElementById('coord-x').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        document.getElementById('search-by-coord').click();
-    }
-});
-
-document.getElementById('coord-y').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        document.getElementById('search-by-coord').click();
-    }
-});
-
-document.getElementById('coord-lat').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        document.getElementById('search-by-coord').click();
-    }
-});
-
-document.getElementById('coord-lon').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        document.getElementById('search-by-coord').click();
-    }
-});
-
-// Événements pour la liste des points
-document.getElementById('list-points').addEventListener('click', function() {
-    const modal = document.getElementById('list-modal');
-    modal.classList.toggle('active');
-    if (modal.classList.contains('active')) {
-        displayAllPoints();
-    }
-});
-
-document.getElementById('close-list-modal').addEventListener('click', function() {
-    document.getElementById('list-modal').classList.remove('active');
-});
-
-// Fermer les modals en cliquant à l'extérieur
-document.addEventListener('click', function(e) {
-    const searchModal = document.getElementById('search-modal');
-    const searchToggle = document.getElementById('toggle-search-modal');
-    if (searchModal.classList.contains('active') && 
-        !searchModal.contains(e.target) && 
-        !searchToggle.contains(e.target)) {
-        searchModal.classList.remove('active');
-    }
-
-    const listModal = document.getElementById('list-modal');
-    const listToggle = document.getElementById('list-points');
-    if (listModal.classList.contains('active') && 
-        !listModal.contains(e.target) && 
-        !listToggle.contains(e.target)) {
-        listModal.classList.remove('active');
-    }
-});
-
-// Initialisation
+// Événements
 document.addEventListener('DOMContentLoaded', function() {
+    // Légende
+    const legendToggle = document.getElementById('legend-toggle');
+    const legendArrow = document.getElementById('legend-arrow');
+    
+    if (legendToggle) legendToggle.addEventListener('click', toggleLegend);
+    if (legendArrow) legendArrow.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleLegend();
+    });
+    
+    restoreLegendState();
+
+    // Contrôles de carte
+    document.getElementById('zoom-in').addEventListener('click', () => map.zoomIn());
+    document.getElementById('zoom-out').addEventListener('click', () => map.zoomOut());
+    document.getElementById('reset-map').addEventListener('click', () => {
+        map.setView([-18.766947, 46.869107], 6);
+    });
+    document.getElementById('locate-me').addEventListener('click', function() {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                map.setView([position.coords.latitude, position.coords.longitude], 10);
+            }, function() {
+                alert('Impossible de déterminer votre position.');
+            });
+        } else {
+            alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+        }
+    });
+    document.getElementById('close-detail').addEventListener('click', function() {
+        document.getElementById('descente-detail').classList.remove('active');
+    });
+    document.getElementById('view-oms').addEventListener('click', () => changeMapStyle('OSM'));
+    document.getElementById('view-satellite').addEventListener('click', () => changeMapStyle('Satellite'));
+
+    // Recherche
+    document.getElementById('toggle-search-modal').addEventListener('click', function() {
+        const modal = document.getElementById('search-modal');
+        modal.classList.toggle('active');
+    });
+    document.getElementById('close-search-modal').addEventListener('click', function() {
+        document.getElementById('search-modal').classList.remove('active');
+    });
+    document.querySelectorAll('.coord-type-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            changeCoordType(this.dataset.type);
+        });
+    });
+    document.getElementById('clear-coord-search').addEventListener('click', function() {
+        document.getElementById('coord-x').value = '';
+        document.getElementById('coord-y').value = '';
+        document.getElementById('coord-lat').value = '';
+        document.getElementById('coord-lon').value = '';
+        document.getElementById('coord-result').className = 'coord-result';
+        document.getElementById('coord-result').innerHTML = '';
+        
+        if (coordMarker) {
+            map.removeLayer(coordMarker);
+            coordMarker = null;
+        }
+    });
+    document.getElementById('search-by-coord').addEventListener('click', searchByCoordinates);
+
+    // Chargement des données
     document.getElementById('loading').style.display = 'block';
     
     setTimeout(() => {
-        let hasData = false;
-        
-        // Ajouter le groupe de marqueurs à la carte
         map.addLayer(markers);
         
-        // FILTRER LES DONNÉES AVANT AFFICHAGE
         const validDescentes = filterInvalidCoordinates(descentesData, 'descente');
         const validArchives = filterInvalidCoordinates(archivesData, 'archive');
         
-        console.log(`📊 Données après filtrage: ${validDescentes.length}/${descentesData.length} descentes valides, ${validArchives.length}/${archivesData.length} archives valides`);
+        console.log(`📊 Données après filtrage: ${validDescentes.length} descentes, ${validArchives.length} archives`);
         
         if (validDescentes.length > 0) {
-            // Tester la conversion d'abord
-            testConversion();
-            // Puis afficher les descentes valides
             addDescentesToMap(validDescentes);
-            hasData = true;
         }
         
         if (validArchives.length > 0) {
             addArchivesToMap(validArchives);
-            hasData = true;
         }
         
-        // Ajuster la vue si des marqueurs sont présents
         if (markers.getLayers().length > 0) {
             map.fitBounds(markers.getBounds().pad(0.1));
-            console.log(`✅ ${markers.getLayers().length} marqueurs affichés sur la carte`);
+            console.log(`✅ ${markers.getLayers().length} points affichés`);
         } else {
-            console.warn('⚠️ Aucun marqueur valide à afficher');
-            // Recentrer sur Madagascar
             map.setView([-18.766947, 46.869107], 6);
-        }
-        
-        if (!hasData) {
-            console.error('Aucune donnée disponible');
-            alert('Aucune donnée à afficher');
+            console.warn('⚠️ Aucun point valide à afficher');
         }
         
         document.getElementById('loading').style.display = 'none';
