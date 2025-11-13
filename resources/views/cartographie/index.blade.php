@@ -29,7 +29,7 @@ margin:0 !important;
 .main-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - var(--topbar-height));detail-section /* Utilise la variable CSS du layout */
+    height: calc(100vh - var(--topbar-height));
     width: 100%;
 }
 
@@ -170,7 +170,7 @@ font-size: 0.9rem;
     padding: 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    max-width: 250px;
+    max-width: 280px;
     transition: all 0.3s ease;
     overflow: hidden;
 }
@@ -223,7 +223,7 @@ font-size: 0.9rem;
 .legend-content {
     padding: 1rem;
     transition: all 0.3s ease;
-    max-height: 300px;
+    max-height: 400px;
     overflow: hidden;
 }
 
@@ -258,6 +258,13 @@ font-size: 0.9rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
+.legend-circle {
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
 .legend-label {
     font-size: 0.9rem;
     color: #4b5563;
@@ -286,23 +293,23 @@ z-index: 1000;
 display: none;
 }
 
-/* POINTS SIMPLES - TAILLE NORMALE */
+/* POINTS SIMPLES - TAILLE RÉDUITE POUR MIEUX SÉPARER */
 .simple-point {
     border-radius: 50%;
-    width: 12px;
-    height: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
 }
 .simple-point:hover {
-    transform: scale(1.5);
+    transform: scale(1.8);
 }
 
 /* MODAL DE RECHERCHE */
 .search-modal {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    top: 4rem;
+    left: 16rem;
     z-index: 1000;
     width: 350px;
     background: white;
@@ -498,7 +505,7 @@ display: none;
 
 <div class="main-container">
     <div class="map-container">
-        <div style="width:2020px;" id="map"></div>
+        <div id="map"></div>
     </div>
 </div>
 
@@ -599,7 +606,11 @@ display: none;
     <div class="legend-content" id="legend-content">
         <div class="legend-item">
             <div class="legend-color" style="background-color: #f6c23e;"></div>
-            <span class="legend-label">Descentes</span>
+            <span class="legend-label">Descentes (sans FT)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #10b981;"></div>
+            <span class="legend-label">FT établis</span>
         </div>
         <div class="legend-item">
             <div class="legend-color" style="background-color: #3b82f6;"></div>
@@ -630,6 +641,18 @@ display: none;
 // Données dynamiques depuis le contrôleur
 const descentesData = @json($descentes ?? []);
 const archivesData = @json($archives ?? []);
+
+// DEBUG: Afficher les données reçues
+console.log('📊 DONNÉES DESCENTES:', descentesData);
+console.log('📊 DONNÉES ARCHIVES:', archivesData);
+console.log('📊 NOMBRE DESCENTES:', descentesData.length);
+console.log('📊 NOMBRE ARCHIVES:', archivesData.length);
+
+// Afficher les premières descentes pour inspection
+if (descentesData.length > 0) {
+    console.log('🔍 PREMIÈRE DESCENTE:', descentesData[0]);
+    console.log('🔍 CHAMPS DESCENTE:', Object.keys(descentesData[0]));
+}
 
 // Variables globales
 let coordMarker = null;
@@ -668,50 +691,76 @@ try {
     console.error("❌ Erreur configuration EPSG:8441:", e);
 }
 
-// Fonctions utilitaires
+// FONCTION AMÉLIORÉE POUR VALIDER LES COORDONNÉES LABORDE
 function validateLabordeCoordinates(x, y) {
-    const MIN_X = 400000, MAX_X = 600000;
-    const MIN_Y = 800000, MAX_Y = 1000000;
+    const MIN_X = 400000, MAX_X = 1000000;
+    const MIN_Y = 400000, MAX_Y = 1000000;
     
     if (x < MIN_X || x > MAX_X || y < MIN_Y || y > MAX_Y) {
+        console.log(`❌ Coordonnées hors plage: X=${x}, Y=${y}`);
         return false;
     }
     return true;
 }
 
+// FONCTION AMÉLIORÉE POUR FILTRER LES COORDONNÉES NULLES
 function filterInvalidCoordinates(data, type = 'descente') {
-    return data.filter(item => {
+    console.log(`🔍 Filtrage des ${type}s - Données initiales: ${data.length}`);
+    
+    const filteredData = data.filter(item => {
         let x, y;
         
         if (type === 'descente') {
+            // Vérifier la structure des données de descente
+            console.log('🔍 Structure descente:', item);
+            
             x = parseFloat(item.x_laborde);
             y = parseFloat(item.y_laborde);
+            
+            console.log(`🔍 Descente ${item.id}: x_laborde=${item.x_laborde}, y_laborde=${item.y_laborde}`);
+            console.log(`🔍 Descente ${item.id}: x_parsed=${x}, y_parsed=${y}`);
         } else {
             x = parseFloat(item.xv);
             y = parseFloat(item.yv);
         }
         
-        if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
+        // Vérification stricte des valeurs nulles, vides ou invalides
+        if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y) || 
+            x === null || y === null || x === undefined || y === undefined) {
+            console.log(`❌ Point ${type} ${item.id} filtré - Coordonnées invalides:`, {x, y});
             return false;
         }
         
-        return validateLabordeCoordinates(x, y);
+        // Validation des plages Laborde
+        if (!validateLabordeCoordinates(x, y)) {
+            console.log(`❌ Point ${type} ${item.id} filtré - Hors plage Laborde:`, {x, y});
+            return false;
+        }
+        
+        return true;
     });
+    
+    console.log(`✅ ${type}s après filtrage: ${filteredData.length} valides sur ${data.length}`);
+    return filteredData;
 }
 
 // FONCTION DE CONVERSION PRÉCISE LABORDE -> WGS84
 function labordeToWGS84(x, y) {
+    console.log(`🔄 Conversion Laborde->WGS84: X=${x}, Y=${y}`);
+    
     if (!x || !y || x == 0 || y == 0 || isNaN(x) || isNaN(y)) {
+        console.log('❌ Coordonnées Laborde invalides pour conversion');
         return null;
     }
     
     if (!validateLabordeCoordinates(x, y)) {
-        console.log('Coordonnées hors des plages valides pour Madagascar');
+        console.log('❌ Coordonnées hors des plages valides pour Madagascar');
         return null;
     }
     
     try {
         if (!proj4.defs("EPSG:8441")) {
+            console.error("❌ Projection EPSG:8441 non définie");
             return null;
         }
         
@@ -722,11 +771,11 @@ function labordeToWGS84(x, y) {
         const lon = result[0];
         const lat = result[1];
         
-        console.log(`📍 Conversion PROJ4: Laborde(${x}, ${y}) -> WGS84(${lat.toFixed(6)}, ${lon.toFixed(6)})`);
+        console.log(`📍 Conversion PROJ4 réussie: Laborde(${x}, ${y}) -> WGS84(${lat.toFixed(6)}, ${lon.toFixed(6)})`);
         
         // Validation des coordonnées résultantes (limites de Madagascar)
         if (lat < -25.6 || lat > -12.0 || lon < 43.0 || lon > 50.5) {
-            console.warn('Coordonnées hors des limites de Madagascar:', lat, lon);
+            console.warn('⚠️ Coordonnées hors des limites de Madagascar:', lat, lon);
             return null;
         }
         
@@ -737,48 +786,86 @@ function labordeToWGS84(x, y) {
     }
 }
 
-// FONCTION POUR RÉDUIRE/DÉVELOPPER LA LÉGENDE
-function toggleLegend() {
-    const legendContainer = document.getElementById('legend-container');
-    const legendContent = document.getElementById('legend-content');
-    const legendArrow = document.getElementById('legend-arrow');
+// FONCTION POUR VÉRIFIER SI LA SURFACE EST SPÉCIFIÉE
+function isSurfaceSpecified(backfilledArea) {
+    if (!backfilledArea || backfilledArea === 'null' || backfilledArea === '' || 
+        backfilledArea === 'N/A' || backfilledArea === 'Non spécifié') {
+        return false;
+    }
     
-    legendContainer.classList.toggle('collapsed');
-    
-    // Sauvegarder l'état dans le localStorage
-    const isCollapsed = legendContainer.classList.contains('collapsed');
-    localStorage.setItem('legendCollapsed', isCollapsed);
+    const surface = parseFloat(backfilledArea);
+    return !isNaN(surface) && surface > 0;
 }
 
-// RESTAURER L'ÉTAT DE LA LÉGENDE
-function restoreLegendState() {
-    const legendContainer = document.getElementById('legend-container');
-    const isCollapsed = localStorage.getItem('legendCollapsed') === 'true';
-    
-    if (isCollapsed) {
-        legendContainer.classList.add('collapsed');
+// FONCTION POUR CALCULER LE RAYON BASÉ SUR LA SURFACE REMBLAYÉE
+function calculateRadiusFromBackfilledArea(backfilledArea) {
+    // Vérifier d'abord si la surface est spécifiée
+    if (!isSurfaceSpecified(backfilledArea)) {
+        return null; // Retourner null pour indiquer un point simple
     }
+    
+    // Convertir en nombre
+    const surface = parseFloat(backfilledArea);
+    
+    // Facteur d'échelle réduit pour mieux séparer les points
+    const scaleFactor = 0.2;
+    
+    // Calculer le rayon proportionnel à la racine carrée de la surface
+    let radius = Math.sqrt(surface) * scaleFactor;
+    
+    // Limiter la taille minimale et maximale
+    const minRadius = 50;   // Rayon minimum en mètres
+    const maxRadius = 1500; // Rayon maximum réduit en mètres
+    
+    return Math.max(minRadius, Math.min(maxRadius, radius));
 }
 
-// ÉVÉNEMENTS POUR LA LÉGENDE
-document.addEventListener('DOMContentLoaded', function() {
-    const legendToggle = document.getElementById('legend-toggle');
-    const legendArrow = document.getElementById('legend-arrow');
-    
-    if (legendToggle) {
-        legendToggle.addEventListener('click', toggleLegend);
+// FONCTION POUR OBTENIR LA CLASSE DE SURFACE
+function getSurfaceClass(backfilledArea) {
+    if (!isSurfaceSpecified(backfilledArea)) {
+        return 'Non spécifiée';
     }
     
-    if (legendArrow) {
-        legendArrow.addEventListener('click', function(e) {
-            e.stopPropagation(); // Empêche le déclenchement double
-            toggleLegend();
-        });
+    const surface = parseFloat(backfilledArea);
+    if (surface <= 500) return 'Très petite (≤ 500 m²)';
+    if (surface <= 2000) return 'Petite (500-2 000 m²)';
+    if (surface <= 5000) return 'Moyenne (2 000-5 000 m²)';
+    return 'Grande (> 5 000 m²)';
+}
+
+// FONCTION POUR FORMATER LES SURFACES
+function formatSurface(surface) {
+    if (!isSurfaceSpecified(surface)) {
+        return 'Non spécifié';
     }
     
-    // Restaurer l'état au chargement
-    restoreLegendState();
-});
+    // Si c'est déjà formaté (contient "m²"), retourner tel quel
+    if (typeof surface === 'string' && surface.includes('m²')) {
+        return surface;
+    }
+    
+    // Si c'est un nombre, formater avec unité
+    const num = parseFloat(surface);
+    if (!isNaN(num)) {
+        return `${num.toLocaleString('fr-FR')} m²`;
+    }
+    
+    return surface;
+}
+
+// FONCTION POUR FORMATER LES COORDONNÉES
+function formatCoordinates(coord) {
+    if (!coord || coord === 'null' || coord === '' || coord === 'N/A') {
+        return 'Non spécifié';
+    }
+    
+    const num = parseFloat(coord);
+    if (!isNaN(num)) {
+        return num.toLocaleString('fr-FR');
+    }
+    
+    return coord;
+}
 
 // FONCTION DE CONVERSION WGS84 -> LABORDE
 function wgs84ToLaborde(lat, lon) {
@@ -804,71 +891,6 @@ function wgs84ToLaborde(lat, lon) {
         return null;
     }
 }
-
-// Fonction pour tester la conversion avec vos points connus
-function testConversion() {
-console.log('🧪 TEST DE CONVERSION AVEC PROJ4');
-// Vos deux points connus
-const pointsTest = [
-                {
-laborde: { x: 516531, y: 802042 },
-wgs84: { lat: -18.879439, lon: 47.543402 },
-description: "Terrain 1 - Référence"
-                },
-                {
-laborde: { x: 517767, y: 801659 },
-wgs84: { lat: -18.882273, lon: 47.545627 },
-description: "Terrain 2 - À vérifier"
-                }
-            ];
-pointsTest.forEach((point, index) => {
-console.log(`\n--- ${point.description} ---`);
-console.log('📌 Coordonnées Laborde:', point.laborde.x, point.laborde.y);
-console.log('🎯 Position attendue WGS84:', point.wgs84.lat, point.wgs84.lon);
-const result = labordeToWGS84(point.laborde.x, point.laborde.y);
-console.log('🔄 Position calculée WGS84:', result);
-if (result) {
-const ecartLat = Math.abs(result[0] - point.wgs84.lat);
-const ecartLon = Math.abs(result[1] - point.wgs84.lon);
-console.log(`📏 Écart: Lat=${ecartLat.toFixed(6)}°, Lon=${ecartLon.toFixed(6)}°`);
-// Conversion en mètres (approximative)
-const ecartMetresLat = ecartLat * 111320; // 1° latitude ≈ 111.32 km
-const ecartMetresLon = ecartLon * 111320 * Math.cos(point.wgs84.lat * Math.PI / 180);
-const distanceMetres = Math.sqrt(ecartMetresLat*ecartMetresLat + ecartMetresLon*ecartMetresLon);
-console.log(`📐 Distance approximative: ${distanceMetres.toFixed(0)} mètres`);
-if (distanceMetres < 50) {
-console.log('✅ PRÉCISION EXCELLENTE');
-                    } else if (distanceMetres < 200) {
-console.log('⚠️ Précision acceptable');
-                    } else {
-console.log('❌ Précision insuffisante');
-                    }
-                }
-            });
-        }
-
-// Fonction pour déterminer la couleur selon le statut - TOUTES LES DESCENTES EN JAUNE
-function getDescenteColor(descente) {
-    // Retourne toujours la couleur jaune pour toutes les descentes
-    return '#f6c23e'; // Jaune pour toutes les descentes
-}
-
-// Fonction pour formater les tableaux JSON
-function formatArrayField(field) {
-if (!field) return 'Non spécifié';
-if (Array.isArray(field)) {
-return field.join(', ');
-            }
-if (typeof field === 'string') {
-try {
-const parsed = JSON.parse(field);
-return Array.isArray(parsed) ? parsed.join(', ') : field;
-                } catch {
-return field;
-                }
-            }
-return field;
-        }
 
 // FONCTION POUR FORMATER LA DATE EN jj/mm/aaaa
 function formatDate(dateString) {
@@ -915,51 +937,100 @@ function formatDate(dateString) {
     }
 }
 
-function getValueOrNotSpecified(value) {
-    return value && value !== 'null' && value !== '' && value !== 'N/A' ? value : 'Non spécifié';
+function getValueOrNotSpecified(value, isSurface = false, isCoordinate = false) {
+    if (!value || value === 'null' || value === '' || value === 'N/A' || value === 'Non spécifié') {
+        return 'Non spécifié';
+    }
+    
+    // Si c'est une surface, appliquer le formatage
+    if (isSurface) {
+        return formatSurface(value);
+    }
+    
+    // Si c'est une coordonnée, appliquer le formatage
+    if (isCoordinate) {
+        return formatCoordinates(value);
+    }
+    
+    return value;
 }
 
-// Fonctions pour ajouter les points à la carte
+// FONCTION AMÉLIORÉE POUR AJOUTER LES DESCENTES
 function addDescentesToMap(descentes) {
     let coordsValides = 0;
+    let coordsInvalides = 0;
+    let descentesAvecFT = 0;
+    let descentesSansFT = 0;
 
-    descentes.forEach(descente => {
+    console.log(`🗺️ Début ajout des ${descentes.length} descentes à la carte`);
+
+    descentes.forEach((descente, index) => {
         const x = parseFloat(descente.x_laborde);
         const y = parseFloat(descente.y_laborde);
+        
+        console.log(`🔍 Traitement descente ${index + 1}/${descentes.length}: ID=${descente.id}, X=${x}, Y=${y}, FT_ID=${descente.ft_id}`);
+
         if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
+            console.log(`❌ Descente ${descente.id} ignorée - Coordonnées invalides`);
+            coordsInvalides++;
             return;
         }
 
         const coords = labordeToWGS84(x, y);
         if (!coords) {
+            console.log(`❌ Descente ${descente.id} ignorée - Conversion échouée`);
+            coordsInvalides++;
             return;
         }
 
         coordsValides++;
+        
+        // DÉTERMINER LA COULEUR SELON FT_ID
+        let pointColor, borderColor, pointType;
+        
+        if (descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié') {
+            // FT établi - POINT VERT
+            pointColor = '#10b981';
+            borderColor = '#059669';
+            pointType = 'FT établi';
+            descentesAvecFT++;
+        } else {
+           // Pas de FT - POINT ROUGE
+            pointColor   = '#ff0000';
+            borderColor  = '#cc0000';
+            pointType    = 'Descente';
+            descentesSansFT++;
 
-        // Créer un point simple jaune pour les descentes
+        }
+        
+        console.log(`✅ Descente ${descente.id} ajoutée: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)} - Type: ${pointType}`);
+
+        // Créer un point simple avec la couleur appropriée
         const marker = L.marker(coords, {
             icon: L.divIcon({
-                html: `<div class="simple-point" style="background-color: #f6c23e; border: 2px solid #d4a417;"></div>`,
+                html: `<div class="simple-point" style="background-color: ${pointColor}; border: 2px solid ${borderColor};"></div>`,
                 className: 'simple-point-container',
-                iconSize: [12, 12],
+                iconSize: [10, 10],
                 iconAnchor: [6, 6]
             })
         });
 
         const popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
-                <h3 style="color: #f6c23e; margin-bottom: 0.5rem; border-bottom: 2px solid #f6c23e; padding-bottom: 0.5rem;">
-                    Descente #${descente.id}
+                <h3 style="color: ${pointColor}; margin-bottom: 0.5rem; border-bottom: 2px solid ${pointColor}; padding-bottom: 0.5rem;">
+                    ${pointType} #${descente.id}
                 </h3>
                 <div style="font-size: 0.85rem; color: #666;">
                     <p><strong>Réf. OM:</strong> ${getValueOrNotSpecified(descente.ref_om)}</p>
+                    <p><strong>FT ID:</strong> ${getValueOrNotSpecified(descente.ft_id)}</p>
                     <p><strong>Date:</strong> ${formatDate(descente.date)}</p>
                     <p><strong>Adresse:</strong> ${getValueOrNotSpecified(descente.adresse)}</p>
                     <p><strong>Commune:</strong> ${getValueOrNotSpecified(descente.comm)}</p>
                     <p><strong>Constat:</strong> ${getValueOrNotSpecified(descente.constat)}</p>
+                    <p><strong>Coordonnées Laborde:</strong> X=${x}, Y=${y}</p>
+                    <p><strong>Coordonnées WGS84:</strong> ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}</p>
                 </div>
-                <button style="width: 100%; padding: 0.4rem; background-color: #f6c23e; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showDescenteDetail('${descente.id}')">
+                <button style="width: 100%; padding: 0.4rem; background-color: ${pointColor}; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showDescenteDetail('${descente.id}')">
                     Voir Détails Complets
                 </button>
             </div>
@@ -970,12 +1041,18 @@ function addDescentesToMap(descentes) {
         markers.addLayer(marker);
     });
 
-    console.log(`✅ ${coordsValides} descentes affichées`);
+    console.log(`📊 RÉSULTAT DESCENTES: ${coordsValides} valides, ${coordsInvalides} invalides`);
+    console.log(`📊 RÉPARTITION FT: ${descentesAvecFT} avec FT, ${descentesSansFT} sans FT`);
 }
 
+// FONCTION POUR AJOUTER LES ARCHIVES
 function addArchivesToMap(archives) {
     let archivesValides = 0;
+    let archivesAvecSurface = 0;
+    let archivesSansSurface = 0;
     
+    console.log(`🗺️ Début ajout des ${archives.length} archives à la carte`);
+
     archives.forEach(archive => {
         const x = parseFloat(archive.xv);
         const y = parseFloat(archive.yv);
@@ -995,15 +1072,35 @@ function addArchivesToMap(archives) {
         
         archivesValides++;
         
-        // Créer un point simple bleu pour les archives
-        const marker = L.marker(coords, {
-            icon: L.divIcon({
-                html: `<div class="simple-point" style="background-color: #3b82f6; border: 2px solid #1d4ed8;"></div>`,
-                className: 'simple-point-container',
-                iconSize: [12, 12],
-                iconAnchor: [6, 6]
-            })
-        });
+        // Vérifier si la surface est spécifiée
+        const surfaceSpecifiee = isSurfaceSpecified(archive.backfilledarea);
+        const surfaceClass = getSurfaceClass(archive.backfilledarea);
+        
+        let layer;
+        
+        if (!surfaceSpecifiee) {
+            // Surface non spécifiée - POINT SIMPLE BLEU
+            archivesSansSurface++;
+            layer = L.marker(coords, {
+                icon: L.divIcon({
+                    html: `<div class="simple-point" style="background-color: #3b82f6; border: 2px solid #1d4ed8;"></div>`,
+                    className: 'simple-point-container',
+                    iconSize: [8, 8],
+                    iconAnchor: [4, 4]
+                })
+            });
+        } else {
+            // Surface spécifiée - CERCLE PROPORTIONNEL
+            archivesAvecSurface++;
+            const radius = calculateRadiusFromBackfilledArea(archive.backfilledarea);
+            layer = L.circle(coords, {
+                radius: radius,
+                color: '#3b82f6',
+                fillColor: '#3b82f6',
+                fillOpacity: 0.3,
+                weight: 2
+            });
+        }
 
         const popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
@@ -1017,19 +1114,23 @@ function addArchivesToMap(archives) {
                     <p><strong>Demandeur:</strong> ${getValueOrNotSpecified(archive.applicantname)}</p>
                     <p><strong>Commune:</strong> ${getValueOrNotSpecified(archive.municipality)}</p>
                     <p><strong>Propriétaire:</strong> ${getValueOrNotSpecified(archive.property0wner)}</p>
+                    <p><strong>Surface totale:</strong> ${getValueOrNotSpecified(archive.surfacearea, true)}</p>
+                    <p><strong>Surface remblayée:</strong> ${getValueOrNotSpecified(archive.backfilledarea, true)}</p>
+                    <p><strong>Catégorie surface:</strong> ${surfaceClass}</p>
+                    ${surfaceSpecifiee ? `<p><strong>Type d'affichage:</strong> Cercle proportionnel (${Math.round(layer.options.radius)} m)</p>` : '<p><strong>Type d\'affichage:</strong> Point simple (surface non spécifiée)</p>'}
                 </div>
                 <button style="width: 100%; padding: 0.4rem; background-color: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showArchiveDetail('${archive.id}')">
                     Voir Détails Complets
                 </button>
             </div>
         `;
-        marker.bindPopup(popupContent);
+        layer.bindPopup(popupContent);
 
-        descentesLayers[`archive_${archive.id}`] = marker;
-        markers.addLayer(marker);
+        descentesLayers[`archive_${archive.id}`] = layer;
+        markers.addLayer(layer);
     });
 
-    console.log(`✅ ${archivesValides} archives affichées`);
+    console.log(`✅ ${archivesValides} archives affichées (${archivesAvecSurface} avec surface, ${archivesSansSurface} sans surface)`);
 }
 
 // Fonctions pour afficher les détails
@@ -1037,13 +1138,22 @@ function showDescenteDetail(descenteId) {
     const descente = descentesData.find(d => d.id == descenteId);
     if (!descente) return;
 
+    // Déterminer le type et la couleur
+    const hasFT = descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié';
+    const typeColor = hasFT ? '#10b981' : '#f6c23e';
+    const typeLabel = hasFT ? 'FT établi' : 'Descente';
+
     const detailContent = `
         <div class="detail-section">
-            <h4 style="color: #f6c23e;">Informations Générales</h4>
+            <h4 style="color: ${typeColor};">${typeLabel} #${descente.id}</h4>
             <div class="detail-grid">
                 <div class="detail-item">
                     <span class="detail-label">Réf. OM</span>
                     <span class="detail-value">${getValueOrNotSpecified(descente.ref_om)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">FT ID</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.ft_id)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Date</span>
@@ -1060,7 +1170,7 @@ function showDescenteDetail(descenteId) {
             </div>
         </div>
         <div class="detail-section">
-            <h4 style="color: #f6c23e;">Localisation</h4>
+            <h4 style="color: ${typeColor};">Localisation</h4>
             <div class="detail-grid">
                 <div class="detail-item">
                     <span class="detail-label">Adresse</span>
@@ -1081,7 +1191,20 @@ function showDescenteDetail(descenteId) {
             </div>
         </div>
         <div class="detail-section">
-            <h4 style="color: #f6c23e;">Actions</h4>
+            <h4 style="color: ${typeColor};">Coordonnées</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Coordonnée X (Laborde)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.x_laborde, false, true)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Coordonnée Y (Laborde)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.y_laborde, false, true)}</span>
+                </div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <h4 style="color: ${typeColor};">Actions</h4>
             <div class="detail-grid">
                 <div class="detail-item">
                     <span class="detail-label">Action</span>
@@ -1106,6 +1229,9 @@ function showDescenteDetail(descenteId) {
 function showArchiveDetail(archiveId) {
     const archive = archivesData.find(a => a.id == archiveId);
     if (!archive) return;
+
+    const surfaceClass = getSurfaceClass(archive.backfilledarea);
+    const surfaceSpecifiee = isSurfaceSpecified(archive.backfilledarea);
 
     const detailContent = `
         <div class="detail-section">
@@ -1151,11 +1277,36 @@ function showArchiveDetail(archiveId) {
             </div>
         </div>
         <div class="detail-section">
+            <h4 style="color: #3b82f6;">Coordonnées</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Coordonnée X (Laborde)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.xv, false, true)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Coordonnée Y (Laborde)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.yv, false, true)}</span>
+                </div>
+            </div>
+        </div>
+        <div class="detail-section">
             <h4 style="color: #3b82f6;">Informations techniques</h4>
             <div class="detail-grid">
                 <div class="detail-item">
-                    <span class="detail-label">Surface (m²)</span>
-                    <span class="detail-value">${getValueOrNotSpecified(archive.surfacearea)}</span>
+                    <span class="detail-label">Surface totale (m²)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.surfacearea, true)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Surface remblayée (m²)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(archive.backfilledarea, true)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Catégorie surface</span>
+                    <span class="detail-value">${surfaceClass}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Type d'affichage</span>
+                    <span class="detail-value">${surfaceSpecifiee ? 'Cercle proportionnel' : 'Point simple (surface non spécifiée)'}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Zone</span>
@@ -1260,8 +1411,8 @@ function searchByCoordinates() {
         icon: L.divIcon({
             html: `<div class="simple-point" style="background-color: #dc2626; border: 2px solid #b91c1c;"></div>`,
             className: 'simple-point-container',
-            iconSize: [16, 16],
-            iconAnchor: [8, 8]
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
         })
     }).addTo(map);
 
@@ -1299,9 +1450,11 @@ function changeCoordType(type) {
     document.getElementById('coord-result').innerHTML = '';
 }
 
-// Événements
+// CHARGEMENT DES DONNÉES AVEC DÉBOGAGE AMÉLIORÉ
 document.addEventListener('DOMContentLoaded', function() {
-    // Légende
+    console.log('🚀 Début du chargement des données...');
+    
+    // Événements pour la légende
     const legendToggle = document.getElementById('legend-toggle');
     const legendArrow = document.getElementById('legend-arrow');
     
@@ -1364,34 +1517,60 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.getElementById('search-by-coord').addEventListener('click', searchByCoordinates);
 
-    // Chargement des données
+    // Afficher le loading
     document.getElementById('loading').style.display = 'block';
     
     setTimeout(() => {
-        map.addLayer(markers);
-        
-        const validDescentes = filterInvalidCoordinates(descentesData, 'descente');
-        const validArchives = filterInvalidCoordinates(archivesData, 'archive');
-        
-        console.log(`📊 Données après filtrage: ${validDescentes.length} descentes, ${validArchives.length} archives`);
-        
-        if (validDescentes.length > 0) {
-            addDescentesToMap(validDescentes);
+        try {
+            // Ajouter le groupe de marqueurs à la carte
+            map.addLayer(markers);
+            
+            console.log('🔍 FILTRAGE DES DONNÉES...');
+            
+            // Filtrer les données
+            const validDescentes = filterInvalidCoordinates(descentesData, 'descente');
+            const validArchives = filterInvalidCoordinates(archivesData, 'archive');
+            
+            console.log('📊 RÉSULTATS FILTRAGE:');
+            console.log(`- Descentes: ${validDescentes.length} valides sur ${descentesData.length}`);
+            console.log(`- Archives: ${validArchives.length} valides sur ${archivesData.length}`);
+            
+            // Ajouter les données à la carte
+            if (validDescentes.length > 0) {
+                console.log('🗺️ Ajout des descentes à la carte...');
+                addDescentesToMap(validDescentes);
+            } else {
+                console.warn('⚠️ AUCUNE DESCENTE VALIDE APRÈS FILTRAGE');
+                // Afficher un message à l'utilisateur
+                alert('Aucune descente avec des coordonnées valides n\'a été trouvée. Vérifiez les données dans la base.');
+            }
+            
+            if (validArchives.length > 0) {
+                console.log('🗺️ Ajout des archives à la carte...');
+                addArchivesToMap(validArchives);
+            } else {
+                console.warn('⚠️ AUCUNE ARCHIVE VALIDE APRÈS FILTRAGE');
+            }
+            
+            // Ajuster la vue de la carte
+            if (markers.getLayers().length > 0) {
+                console.log('🎯 Ajustement de la vue de la carte...');
+                map.fitBounds(markers.getBounds().pad(0.1));
+                console.log(`✅ ${markers.getLayers().length} points affichés sur la carte`);
+            } else {
+                console.warn('⚠️ AUCUN POINT VALIDE À AFFICHER');
+                map.setView([-18.766947, 46.869107], 6);
+                alert('Aucun point valide à afficher sur la carte. Vérifiez les coordonnées dans la base de données.');
+            }
+            
+        } catch (error) {
+            console.error('❌ ERREUR CRITIQUE:', error);
+            alert('Une erreur est survenue lors du chargement de la carte: ' + error.message);
+        } finally {
+            // Cacher le loading
+            document.getElementById('loading').style.display = 'none';
+            console.log('🏁 Chargement des données terminé');
         }
-        
-        if (validArchives.length > 0) {
-            addArchivesToMap(validArchives);
-        }
-        
-        if (markers.getLayers().length > 0) {
-            map.fitBounds(markers.getBounds().pad(0.1));
-            console.log(`✅ ${markers.getLayers().length} points affichés`);
-        } else {
-            map.setView([-18.766947, 46.869107], 6);
-            console.warn('⚠️ Aucun point valide à afficher');
-        }
-        
-        document.getElementById('loading').style.display = 'none';
     }, 500);
 });
 </script>
