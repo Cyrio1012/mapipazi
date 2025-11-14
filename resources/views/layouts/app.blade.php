@@ -6,10 +6,11 @@
   <title>APIPA - @yield('title', 'Dashboard')</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/assets/img/fav.png">
   <style>
     :root {
       --sidebar-width: 250px;
-      --sidebar-collapsed-width: 80px;
+      --sidebar-collapsed-width: 60px;
       --topbar-height: 56px;
       --transition-speed: 0.3s;
       --primary-color: #0060a0ff;

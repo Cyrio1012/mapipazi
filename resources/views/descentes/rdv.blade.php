@@ -137,6 +137,7 @@
               <th class="border-0">adresy</th>
               <th class="border-0">Lah.tarobia</th>
               <th class="border-0 pe-4">Fotoana nifanomezina</th>
+              <th class="border-0 pe-4">Fepetramanaraka</th>
             </tr>
           </thead>
           <tbody>
@@ -154,6 +155,42 @@
                     {{ $rdv->date?->format('d/m/Y') }} a {{ $rdv->heure?->format('H:i') }}
                   </span>
                 </td>
+                <td class="text-muted">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Fiantsoana manaraka
+                  </button>
+                </td>
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+
+                        <form action="{{ route('descente.rdvmaj', $rdv )}}" method="post">
+                          @csrf
+                          <div class="mb-3">
+                            <label for="date_rdv_ft" class="form-label">Date du RDV</label>
+                            <input type="date" class="form-control" id="date_rdv_ft" name="date_rdv_ft" required>
+                          </div>
+                          <div class="mb-3">
+                            <label for="heure_rdv_ft" class="form-label">Heure du RDV</label>
+                            <input type="time" class="form-control" id="heure_rdv_ft" name="heure_rdv_ft" required>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Enregistrer le RDV</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Understood</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </tr>
             @empty
               <tr>
@@ -174,6 +211,10 @@
     @endif
   </div>
 </div>
+
+
+
+
 
 <style>
 .card {

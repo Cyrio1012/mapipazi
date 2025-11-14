@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('descentes/{descente}/create-ft', [FtController::class, 'createFromDescente'])->name('fts.create.from.descente');
     Route::get('/descentes/{descente}/fts/create', [FtController::class, 'createFromDescente'])->name('fts.create.from.descente');
     Route::get('/rdv', [DescentesController::class, 'rdv'])->name('descente.rdv');
+    Route::post('/rdv/{id}', [DescentesController::class, 'comparution'])->name('descente.rdvmaj');
     
     Route::get('/fts/{id}/export-pdf', [FtController::class, 'exportPdf'])->name('fts.export.pdf');
     

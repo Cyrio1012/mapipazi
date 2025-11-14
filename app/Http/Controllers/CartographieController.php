@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Descente;
 use App\Models\Archives;
+use App\Models\ap;
 use Illuminate\Support\Facades\Log;
 
 class CartographieController extends Controller
@@ -20,6 +21,8 @@ class CartographieController extends Controller
                             ->map(function ($descente) {
             return [
                 'id' => $descente->id,
+                'ap' => ap::where('id_descent', $descente->id)->first(),
+                'sup_remblais' => ap::where('id_descent', $descente->id)->value('sup_remblais'),
                 'date' => $descente->date,
                 'heure' => $descente->heure,
                 'ref_om' => $descente->ref_om,

@@ -10,7 +10,7 @@ class Descentes extends Model
         'date', 'heure', 'ref_om', 'ref_pv', 'ref_rapport', 'num_pv',
         'equipe', 'action', 'constat', 'pers_verb', 'qte_pers',
         'adresse', 'contact', 'dist', 'comm', 'fkt',
-        'x', 'y','geom', 'date_rdv_ft', 'heure_rdv_ft', 'pieces_a_fournir'
+        'x', 'y','geom', 'date_rdv_ft', 'heure_rdv_ft', 'pieces_a_fournir','comparution'
     ];
 
     protected $casts = [

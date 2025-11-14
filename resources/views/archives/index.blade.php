@@ -50,7 +50,6 @@
                             <th width="120">Réf. Arrivée</th>
                             <th width="100">Date Arrivée</th>
                             <th>Service</th>
-                            <th>Action</th>
                             <th>Demandeur</th>
                             <th>Commune</th>
                             <th>Propriétaire</th>
@@ -88,18 +87,7 @@
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
-                            <td>
-                                @if($archive->applicantname)
-                                    <div>
-                                        <strong>{{ Str::limit($archive->applicantname, 20) }}</strong>
-                                        @if($archive->applicantaddress)
-                                            <br><small class="text-muted">{{ Str::limit($archive->applicantaddress, 25) }}</small>
-                                        @endif
-                                    </div>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
+                            
                             <td>
                                 @if($archive->municipality)
                                     <div>

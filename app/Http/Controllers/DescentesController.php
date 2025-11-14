@@ -169,4 +169,13 @@ class DescentesController extends Controller
     public function archive()  {
         return view ('descentes.archive');
     }
+    public function comparution(Request $request,$descente){
+        $validated = $request->validate([
+            'date_rdv_ft' => 'nullable|date',
+            'heure_rdv_ft' => 'nullable|date_format:H:i',
+        ]);
+
+        $descente->update($validated);
+        return view ('descentes.rdv');
+    }
 }

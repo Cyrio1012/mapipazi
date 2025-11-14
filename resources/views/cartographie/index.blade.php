@@ -51,7 +51,7 @@ margin:0 !important;
 }
 .map-controls {
 position: absolute;
-top: 1rem;
+top: 4rem;
 right: 1rem;
 z-index: 1000;
 display: flex;
@@ -273,7 +273,7 @@ font-size: 0.9rem;
 
 .map-type-controls {
 position: absolute;
-top: 1rem;
+top: 4rem;
 right: 4.5rem;
 z-index: 1000;
 display: flex;
@@ -605,7 +605,7 @@ display: none;
     </div>
     <div class="legend-content" id="legend-content">
         <div class="legend-item">
-            <div class="legend-color" style="background-color: #f6c23e;"></div>
+            <div class="legend-color" style="background-color: #cc0000xœ;"></div>
             <span class="legend-label">Descentes (sans FT)</span>
         </div>
         <div class="legend-item">
@@ -989,11 +989,20 @@ function addDescentesToMap(descentes) {
         let pointColor, borderColor, pointType;
         
         if (descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié') {
-            // FT établi - POINT VERT
-            pointColor = '#10b981';
-            borderColor = '#059669';
-            pointType = 'FT établi';
-            descentesAvecFT++;
+            if(descente.ap){
+                pointColor = '#ffee00ff';
+                borderColor = '#f5f111ff';
+                pointType = 'AP établi';
+                descentesAvecFT++;
+            }
+            else{
+                
+                // FT établi - POINT VERT
+                pointColor = '#10b981';
+                borderColor = '#059669';
+                pointType = 'FT établi';
+                descentesAvecFT++;
+            }
         } else {
            // Pas de FT - POINT ROUGE
             pointColor   = '#ff0000';
@@ -1022,6 +1031,7 @@ function addDescentesToMap(descentes) {
                 </h3>
                 <div style="font-size: 0.85rem; color: #666;">
                     <p><strong>Réf. OM:</strong> ${getValueOrNotSpecified(descente.ref_om)}</p>
+                    <p><strong>Sup:</strong> ${getValueOrNotSpecified(descente.sup_remblais)}</p>
                     <p><strong>FT ID:</strong> ${getValueOrNotSpecified(descente.ft_id)}</p>
                     <p><strong>Date:</strong> ${formatDate(descente.date)}</p>
                     <p><strong>Adresse:</strong> ${getValueOrNotSpecified(descente.adresse)}</p>

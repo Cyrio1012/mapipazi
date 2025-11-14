@@ -45,6 +45,8 @@ return new class extends Migration
 
             $table->json('pieces_a_fournir')->nullable(); // PIECES_A_FOURNIR
             $table->json('pieces_fournis')->nullable(); // PIECES_FOURNIS
+            $table->integer('comparution')->default(0); //
+
 
             $table->timestamps(); // created_at & updated_at
         });

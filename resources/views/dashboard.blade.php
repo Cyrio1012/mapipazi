@@ -23,7 +23,7 @@
         }
 
         .dashboard-container {
-            max-width: 1200px;
+            max-width: 90%;
             margin: 0 auto;
         }
 
@@ -384,13 +384,6 @@
             <h1>Tableau de Bord APIPA</h1>
             <div class="d-flex align-items-center gap-3">
                 <div class="date-display" id="currentDate"></div>
-                <div class="user-profile">
-                    <div class="avatar">AD</div>
-                    <div class="user-info">
-                        <div class="user-name">Admin User</div>
-                        <div class="user-role">Administrateur</div>
-                    </div>
-                </div>
             </div>
         </header>
 
