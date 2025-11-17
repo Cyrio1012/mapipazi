@@ -160,93 +160,41 @@ color: #374151;
 font-size: 0.9rem;
 }
 
-/* LÉGENDE */
+/* LÉGENDE - STYLE SIMPLIFIÉ SANS RÉDUCTION */
 .legend-container {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
     background-color: white;
     border-radius: 8px;
-    padding: 0;
+    padding: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     max-width: 280px;
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
-
-.legend-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e5e7eb;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.legend-header:hover {
-    background-color: #e9ecef;
 }
 
 .legend-title {
     font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 0;
+    margin-bottom: 0.8rem;
     color: #1e40af;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.legend-toggle {
-    background: none;
-    border: none;
-    font-size: 1rem;
-    color: #6b7280;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-}
-
-.legend-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: #374151;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .legend-content {
-    padding: 1rem;
-    transition: all 0.3s ease;
-    max-height: 400px;
-    overflow: hidden;
-}
-
-.legend-container.collapsed .legend-content {
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.legend-container.collapsed .legend-toggle i {
-    transform: rotate(180deg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    margin-bottom: 0.8rem;
-    transition: opacity 0.3s ease;
-}
-
-.legend-container.collapsed .legend-item {
-    opacity: 0;
 }
 
 .legend-color {
@@ -269,6 +217,120 @@ font-size: 0.9rem;
     font-size: 0.9rem;
     color: #4b5563;
     font-weight: 500;
+}
+
+/* CADRE FILTRE */
+.filter-container {
+    position: absolute;
+    bottom: 1rem;
+    left: 17rem;
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 280px;
+    min-width: 250px;
+}
+
+.filter-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: #1e40af;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.2rem;
+}
+
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.3rem 0;
+}
+
+.filter-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.filter-checkbox-label {
+    font-size: 0.85rem;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-color-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.filter-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+.filter-btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+}
+
+.filter-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
+.filter-btn-secondary {
+    background-color: #6b7280;
+    color: white;
+}
+
+.filter-btn-secondary:hover {
+    background-color: #4b5563;
 }
 
 .map-type-controls {
@@ -495,6 +557,11 @@ display: none;
         max-width: 200px;
     }
     
+    .filter-container {
+        max-width: 200px;
+        min-width: 180px;
+    }
+    
     .map-type-controls {
         right: 1rem;
     }
@@ -593,19 +660,70 @@ display: none;
     </button>
 </div>
 
-<!-- LÉGENDE -->
-<div class="legend-container" id="legend-container">
-    <div class="legend-header" id="legend-toggle">
-        <h3 class="legend-title">
-            <i class="fas fa-key"></i> Légende
-        </h3>
-        <button class="legend-toggle" id="legend-arrow">
-            <i class="fas fa-chevron-up"></i>
-        </button>
+<!-- CADRE FILTRE EN BAS À GAUCHE -->
+<div class="filter-container" id="filter-container">
+    <h3 class="filter-title">
+        <i class="fas fa-filter"></i> Filtres d'affichage
+    </h3>
+    <div class="filter-content">
+        <div class="filter-group">
+            <div class="filter-group-title">Types de points</div>
+            <label class="filter-checkbox">
+                <input type="checkbox" id="filter-descentes" checked>
+                <span class="filter-checkbox-label">
+                    <span class="filter-color-indicator" style="background-color: #f50b0bff;"></span>
+                    Descentes (sans FT)
+                </span>
+            </label>
+            <label class="filter-checkbox">
+                <input type="checkbox" id="filter-ft" checked>
+                <span class="filter-checkbox-label">
+                    <span class="filter-color-indicator" style="background-color: #10b981;"></span>
+                    FT établis
+                </span>
+            </label>
+            <label class="filter-checkbox">
+                <input type="checkbox" id="filter-ap" checked>
+                <span class="filter-checkbox-label">
+                    <span class="filter-color-indicator" style="background-color: #FF8C00;"></span>
+                    AP établis
+                </span>
+            </label>
+            <label class="filter-checkbox">
+                <input type="checkbox" id="filter-archives" checked>
+                <span class="filter-checkbox-label">
+                    <span class="filter-color-indicator" style="background-color: #3b82f6;"></span>
+                    Archives
+                </span>
+            </label>
+            <label class="filter-checkbox">
+                <input type="checkbox" id="filter-special" checked>
+                <span class="filter-checkbox-label">
+                    <span class="filter-color-indicator" style="background-color: #8B4513;"></span>
+                    Constructions spéciales
+                </span>
+            </label>
+        </div>
+        
+        <div class="filter-actions">
+            <button class="filter-btn filter-btn-secondary" id="reset-filters">
+                <i class="fas fa-undo"></i> Réinitialiser
+            </button>
+            <button class="filter-btn filter-btn-primary" id="apply-filters">
+                <i class="fas fa-check"></i> Appliquer
+            </button>
+        </div>
     </div>
-    <div class="legend-content" id="legend-content">
+</div>
+
+<!-- LÉGENDE - SIMPLIFIÉE ET TOUJOURS VISIBLE -->
+<div class="legend-container" id="legend-container">
+    <h3 class="legend-title">
+        <i class="fas fa-key"></i> Légende
+    </h3>
+    <div class="legend-content">
         <div class="legend-item">
-            <div class="legend-color" style="background-color: #cc0000xœ;"></div>
+            <div class="legend-color" style="background-color: #f50b0bff;"></div>
             <span class="legend-label">Descentes (sans FT)</span>
         </div>
         <div class="legend-item">
@@ -613,9 +731,17 @@ display: none;
             <span class="legend-label">FT établis</span>
         </div>
         <div class="legend-item">
+            <div class="legend-color" style="background-color: #FF8C00;"></div>
+            <span class="legend-label">AP établis</span>
+        </div>
+        <div class="legend-item">
             <div class="legend-color" style="background-color: #3b82f6;"></div>
             <span class="legend-label">Archives</span>
         </div>
+    <div class="legend-item">
+    <div class="legend-color" style="background-color: #8B4513;"></div>
+    <span class="legend-label">Construction sur zone de protection</span>
+</div>
     </div>
 </div>
 
@@ -657,6 +783,13 @@ if (descentesData.length > 0) {
 // Variables globales
 let coordMarker = null;
 let currentCoordType = 'laborde';
+let activeLayers = {
+    'descentes': true,
+    'ft': true,
+    'ap': true,
+    'archives': true,
+    'special': true
+};
 
 // Initialiser la carte centrée sur Madagascar
 const map = L.map('map').setView([-18.766947, 46.869107], 6);
@@ -676,8 +809,14 @@ const mapStyles = {
 mapStyles['OSM'].addTo(map);
 let currentMapStyle = 'OSM';
 
-// Groupe pour les marqueurs
+// Groupes pour les marqueurs
 const markers = L.featureGroup();
+const descenteMarkers = L.featureGroup();
+const ftMarkers = L.featureGroup();
+const apMarkers = L.featureGroup();
+const archiveMarkers = L.featureGroup();
+const specialMarkers = L.featureGroup();
+
 let descentesLayers = {};
 
 // Configuration PROJ4
@@ -787,31 +926,31 @@ function labordeToWGS84(x, y) {
 }
 
 // FONCTION POUR VÉRIFIER SI LA SURFACE EST SPÉCIFIÉE
-function isSurfaceSpecified(backfilledArea) {
-    if (!backfilledArea || backfilledArea === 'null' || backfilledArea === '' || 
-        backfilledArea === 'N/A' || backfilledArea === 'Non spécifié') {
+function isSurfaceSpecified(surface) {
+    if (!surface || surface === 'null' || surface === '' || 
+        surface === 'N/A' || surface === 'Non spécifié') {
         return false;
     }
     
-    const surface = parseFloat(backfilledArea);
-    return !isNaN(surface) && surface > 0;
+    const surfaceValue = parseFloat(surface);
+    return !isNaN(surfaceValue) && surfaceValue > 0;
 }
 
-// FONCTION POUR CALCULER LE RAYON BASÉ SUR LA SURFACE REMBLAYÉE
-function calculateRadiusFromBackfilledArea(backfilledArea) {
+// FONCTION POUR CALCULER LE RAYON BASÉ SUR LA SURFACE
+function calculateRadiusFromSurface(surface) {
     // Vérifier d'abord si la surface est spécifiée
-    if (!isSurfaceSpecified(backfilledArea)) {
+    if (!isSurfaceSpecified(surface)) {
         return null; // Retourner null pour indiquer un point simple
     }
     
     // Convertir en nombre
-    const surface = parseFloat(backfilledArea);
+    const surfaceValue = parseFloat(surface);
     
     // Facteur d'échelle réduit pour mieux séparer les points
     const scaleFactor = 0.2;
     
     // Calculer le rayon proportionnel à la racine carrée de la surface
-    let radius = Math.sqrt(surface) * scaleFactor;
+    let radius = Math.sqrt(surfaceValue) * scaleFactor;
     
     // Limiter la taille minimale et maximale
     const minRadius = 50;   // Rayon minimum en mètres
@@ -821,15 +960,15 @@ function calculateRadiusFromBackfilledArea(backfilledArea) {
 }
 
 // FONCTION POUR OBTENIR LA CLASSE DE SURFACE
-function getSurfaceClass(backfilledArea) {
-    if (!isSurfaceSpecified(backfilledArea)) {
+function getSurfaceClass(surface) {
+    if (!isSurfaceSpecified(surface)) {
         return 'Non spécifiée';
     }
     
-    const surface = parseFloat(backfilledArea);
-    if (surface <= 500) return 'Très petite (≤ 500 m²)';
-    if (surface <= 2000) return 'Petite (500-2 000 m²)';
-    if (surface <= 5000) return 'Moyenne (2 000-5 000 m²)';
+    const surfaceValue = parseFloat(surface);
+    if (surfaceValue <= 500) return 'Très petite (≤ 500 m²)';
+    if (surfaceValue <= 2000) return 'Petite (500-2 000 m²)';
+    if (surfaceValue <= 5000) return 'Moyenne (2 000-5 000 m²)';
     return 'Grande (> 5 000 m²)';
 }
 
@@ -955,12 +1094,71 @@ function getValueOrNotSpecified(value, isSurface = false, isCoordinate = false) 
     return value;
 }
 
+// FONCTION POUR APPLIQUER LES FILTRES
+function applyFilters() {
+    // Mettre à jour l'état des couches
+    activeLayers = {
+        'descentes': document.getElementById('filter-descentes').checked,
+        'ft': document.getElementById('filter-ft').checked,
+        'ap': document.getElementById('filter-ap').checked,
+        'archives': document.getElementById('filter-archives').checked,
+        'special': document.getElementById('filter-special').checked
+    };
+    
+    // Appliquer les filtres aux groupes de marqueurs
+    if (activeLayers.descentes) {
+        map.addLayer(descenteMarkers);
+    } else {
+        map.removeLayer(descenteMarkers);
+    }
+    
+    if (activeLayers.ft) {
+        map.addLayer(ftMarkers);
+    } else {
+        map.removeLayer(ftMarkers);
+    }
+    
+    if (activeLayers.ap) {
+        map.addLayer(apMarkers);
+    } else {
+        map.removeLayer(apMarkers);
+    }
+    
+    if (activeLayers.archives) {
+        map.addLayer(archiveMarkers);
+    } else {
+        map.removeLayer(archiveMarkers);
+    }
+    
+    if (activeLayers.special) {
+        map.addLayer(specialMarkers);
+    } else {
+        map.removeLayer(specialMarkers);
+    }
+    
+    console.log('✅ Filtres appliqués:', activeLayers);
+}
+
+// FONCTION POUR RÉINITIALISER LES FILTRES
+function resetFilters() {
+    document.getElementById('filter-descentes').checked = true;
+    document.getElementById('filter-ft').checked = true;
+    document.getElementById('filter-ap').checked = true;
+    document.getElementById('filter-archives').checked = true;
+    document.getElementById('filter-special').checked = true;
+    
+    applyFilters();
+}
+
 // FONCTION AMÉLIORÉE POUR AJOUTER LES DESCENTES
 function addDescentesToMap(descentes) {
     let coordsValides = 0;
     let coordsInvalides = 0;
     let descentesAvecFT = 0;
     let descentesSansFT = 0;
+    let descentesAvecAP = 0;
+    let descentesAvecSurface = 0;
+    let descentesSansSurface = 0;
 
     console.log(`🗺️ Début ajout des ${descentes.length} descentes à la carte`);
 
@@ -968,7 +1166,7 @@ function addDescentesToMap(descentes) {
         const x = parseFloat(descente.x_laborde);
         const y = parseFloat(descente.y_laborde);
         
-        console.log(`🔍 Traitement descente ${index + 1}/${descentes.length}: ID=${descente.id}, X=${x}, Y=${y}, FT_ID=${descente.ft_id}`);
+        console.log(`🔍 Traitement descente ${index + 1}/${descentes.length}: ID=${descente.id}, X=${x}, Y=${y}, FT_ID=${descente.ft_id}, AP=${descente.ap}, Surface=${descente.sup_remblais}`);
 
         if (!x || !y || x === 0 || y === 0 || isNaN(x) || isNaN(y)) {
             console.log(`❌ Descente ${descente.id} ignorée - Coordonnées invalides`);
@@ -985,44 +1183,75 @@ function addDescentesToMap(descentes) {
 
         coordsValides++;
         
-        // DÉTERMINER LA COULEUR SELON FT_ID
+        // DÉTERMINER LA COULEUR SELON FT_ID ET AP
         let pointColor, borderColor, pointType;
+        let surfaceSpecifiee = false;
+        let targetGroup = descenteMarkers; // Groupe par défaut
         
-        if (descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié') {
-            if(descente.ap){
-                pointColor = '#ffee00ff';
-                borderColor = '#f5f111ff';
-                pointType = 'AP établi';
-                descentesAvecFT++;
+        if (descente.ap) {
+            // AP établi - ORANGE FONCÉ POUR MEILLEURE VISIBILITÉ
+            pointColor = '#FF8C00'; // Orange foncé plus visible
+            borderColor = '#FF4500'; // Bordure orange-rouge
+            pointType = 'AP établi';
+            targetGroup = apMarkers;
+            descentesAvecAP++;
+            
+            // Vérifier si la surface est spécifiée pour les AP
+            surfaceSpecifiee = isSurfaceSpecified(descente.sup_remblais);
+            if (surfaceSpecifiee) {
+                descentesAvecSurface++;
+            } else {
+                descentesSansSurface++;
             }
-            else{
-                
-                // FT établi - POINT VERT
-                pointColor = '#10b981';
-                borderColor = '#059669';
-                pointType = 'FT établi';
-                descentesAvecFT++;
-            }
+        } else if (descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié') {
+            // FT établi - POINT VERT
+            pointColor = '#10b981';
+            borderColor = '#059669';
+            pointType = 'FT établi';
+            targetGroup = ftMarkers;
+            descentesAvecFT++;
         } else {
-           // Pas de FT - POINT ROUGE
-            pointColor   = '#ff0000';
+            // Pas de FT - POINT ROUGE
+            pointColor   = '#f50b0bff';
             borderColor  = '#cc0000';
             pointType    = 'Descente';
+            targetGroup = descenteMarkers;
             descentesSansFT++;
-
         }
         
-        console.log(`✅ Descente ${descente.id} ajoutée: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)} - Type: ${pointType}`);
+        console.log(`✅ Descente ${descente.id} ajoutée: ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)} - Type: ${pointType}, Surface: ${surfaceSpecifiee ? 'Oui' : 'Non'}`);
 
-        // Créer un point simple avec la couleur appropriée
-        const marker = L.marker(coords, {
-            icon: L.divIcon({
-                html: `<div class="simple-point" style="background-color: ${pointColor}; border: 2px solid ${borderColor};"></div>`,
-                className: 'simple-point-container',
-                iconSize: [10, 10],
-                iconAnchor: [6, 6]
-            })
-        });
+        let layer;
+        
+        // POUR TOUS LES AP AVEC SURFACE SPÉCIFIÉE, CRÉER UN CERCLE PROPORTIONNEL
+        // Y COMPRIS POUR LA SURFACE DE 658 M²
+        if (descente.ap && surfaceSpecifiee) {
+            const radius = calculateRadiusFromSurface(descente.sup_remblais);
+            const surfaceClass = getSurfaceClass(descente.sup_remblais);
+            
+            layer = L.circle(coords, {
+                radius: radius,
+                color: pointColor,
+                fillColor: pointColor,
+                fillOpacity: 0.5, // Opacité augmentée pour meilleure visibilité
+                weight: 3 // Épaisseur augmentée
+            });
+            
+            console.log(`📏 AP ${descente.id}: Surface ${descente.sup_remblais} m² -> Rayon ${Math.round(radius)} m`);
+        } else {
+            // Pour les autres cas (FT, descentes sans FT, AP sans surface), créer un point simple
+            layer = L.marker(coords, {
+                icon: L.divIcon({
+                    html: `<div class="simple-point" style="background-color: ${pointColor}; border: 2px solid ${borderColor};"></div>`,
+                    className: 'simple-point-container',
+                    iconSize: [12, 12], // Taille légèrement augmentée
+                    iconAnchor: [6, 6]
+                })
+            });
+        }
+
+        const surfaceClass = getSurfaceClass(descente.sup_remblais);
+        const surfaceSpecifieeForPopup = isSurfaceSpecified(descente.sup_remblais);
 
         const popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
@@ -1031,12 +1260,17 @@ function addDescentesToMap(descentes) {
                 </h3>
                 <div style="font-size: 0.85rem; color: #666;">
                     <p><strong>Réf. OM:</strong> ${getValueOrNotSpecified(descente.ref_om)}</p>
-                    <p><strong>Sup:</strong> ${getValueOrNotSpecified(descente.sup_remblais)}</p>
+                    <p><strong>Surface:</strong> ${getValueOrNotSpecified(descente.sup_remblais, true)}</p>
                     <p><strong>FT ID:</strong> ${getValueOrNotSpecified(descente.ft_id)}</p>
+                    <p><strong>AP:</strong> ${descente.ap ? 'Oui' : 'Non'}</p>
                     <p><strong>Date:</strong> ${formatDate(descente.date)}</p>
                     <p><strong>Adresse:</strong> ${getValueOrNotSpecified(descente.adresse)}</p>
                     <p><strong>Commune:</strong> ${getValueOrNotSpecified(descente.comm)}</p>
                     <p><strong>Constat:</strong> ${getValueOrNotSpecified(descente.constat)}</p>
+                    ${descente.ap && surfaceSpecifieeForPopup ? `
+                        <p><strong>Catégorie surface:</strong> ${surfaceClass}</p>
+                        <p><strong>Type d'affichage:</strong> Cercle proportionnel (${Math.round(layer.options?.radius || 0)} m)</p>
+                    ` : ''}
                     <p><strong>Coordonnées Laborde:</strong> X=${x}, Y=${y}</p>
                     <p><strong>Coordonnées WGS84:</strong> ${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}</p>
                 </div>
@@ -1045,14 +1279,14 @@ function addDescentesToMap(descentes) {
                 </button>
             </div>
         `;
-        marker.bindPopup(popupContent);
+        layer.bindPopup(popupContent);
 
-        descentesLayers[`descente_${descente.id}`] = marker;
-        markers.addLayer(marker);
+        descentesLayers[`descente_${descente.id}`] = layer;
+        targetGroup.addLayer(layer);
     });
 
     console.log(`📊 RÉSULTAT DESCENTES: ${coordsValides} valides, ${coordsInvalides} invalides`);
-    console.log(`📊 RÉPARTITION FT: ${descentesAvecFT} avec FT, ${descentesSansFT} sans FT`);
+    console.log(`📊 RÉPARTITION: ${descentesAvecAP} AP (${descentesAvecSurface} avec surface, ${descentesSansSurface} sans surface), ${descentesAvecFT} FT, ${descentesSansFT} sans FT`);
 }
 
 // FONCTION POUR AJOUTER LES ARCHIVES
@@ -1060,6 +1294,7 @@ function addArchivesToMap(archives) {
     let archivesValides = 0;
     let archivesAvecSurface = 0;
     let archivesSansSurface = 0;
+    let archivesMarron = 0; // Compteur pour les archives marron
     
     console.log(`🗺️ Début ajout des ${archives.length} archives à la carte`);
 
@@ -1082,6 +1317,33 @@ function addArchivesToMap(archives) {
         
         archivesValides++;
         
+        // Vérifier si l'archive correspond aux critères pour être marron
+        const findingofLower = (archive.findingof || '').toLowerCase();
+        const isMarron = findingofLower.includes('lit') ||
+                        findingofLower.includes('digue') ||
+                        findingofLower.includes('alignement') ||
+                        findingofLower.includes('canal') ||
+                        findingofLower.includes('voie') ||
+                        findingofLower.includes('voi') ||
+                        findingofLower.includes('publique') ||
+                        findingofLower.includes('public') ||
+                        findingofLower.includes('emprise');
+        
+        // Définir les couleurs selon la condition
+        let pointColor, borderColor;
+        let targetGroup = archiveMarkers;
+        
+        if (isMarron) {
+            pointColor = '#8B4513'; // Marron
+            borderColor = '#654321'; // Marron foncé
+            targetGroup = specialMarkers;
+            archivesMarron++;
+        } else {
+            pointColor = '#3b82f6'; // Bleu normal
+            borderColor = '#1d4ed8'; // Bleu foncé normal
+            targetGroup = archiveMarkers;
+        }
+        
         // Vérifier si la surface est spécifiée
         const surfaceSpecifiee = isSurfaceSpecified(archive.backfilledarea);
         const surfaceClass = getSurfaceClass(archive.backfilledarea);
@@ -1089,11 +1351,11 @@ function addArchivesToMap(archives) {
         let layer;
         
         if (!surfaceSpecifiee) {
-            // Surface non spécifiée - POINT SIMPLE BLEU
+            // Surface non spécifiée - POINT SIMPLE
             archivesSansSurface++;
             layer = L.marker(coords, {
                 icon: L.divIcon({
-                    html: `<div class="simple-point" style="background-color: #3b82f6; border: 2px solid #1d4ed8;"></div>`,
+                    html: `<div class="simple-point" style="background-color: ${pointColor}; border: 2px solid ${borderColor};"></div>`,
                     className: 'simple-point-container',
                     iconSize: [8, 8],
                     iconAnchor: [4, 4]
@@ -1102,11 +1364,11 @@ function addArchivesToMap(archives) {
         } else {
             // Surface spécifiée - CERCLE PROPORTIONNEL
             archivesAvecSurface++;
-            const radius = calculateRadiusFromBackfilledArea(archive.backfilledarea);
+            const radius = calculateRadiusFromSurface(archive.backfilledarea);
             layer = L.circle(coords, {
                 radius: radius,
-                color: '#3b82f6',
-                fillColor: '#3b82f6',
+                color: pointColor,
+                fillColor: pointColor,
                 fillOpacity: 0.3,
                 weight: 2
             });
@@ -1114,8 +1376,8 @@ function addArchivesToMap(archives) {
 
         const popupContent = `
             <div style="font-family: 'Inter', sans-serif; max-width: 300px;">
-                <h3 style="color: #3b82f6; margin-bottom: 0.5rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.5rem;">
-                    Archive #${archive.id}
+                <h3 style="color: ${pointColor}; margin-bottom: 0.5rem; border-bottom: 2px solid ${pointColor}; padding-bottom: 0.5rem;">
+                    Archive #${archive.id} ${isMarron ? '🚨' : ''}
                 </h3>
                 <div style="font-size: 0.85rem; color: #666;">
                     <p><strong>Réf. Arrivée:</strong> ${getValueOrNotSpecified(archive.arrivalid)}</p>
@@ -1124,12 +1386,14 @@ function addArchivesToMap(archives) {
                     <p><strong>Demandeur:</strong> ${getValueOrNotSpecified(archive.applicantname)}</p>
                     <p><strong>Commune:</strong> ${getValueOrNotSpecified(archive.municipality)}</p>
                     <p><strong>Propriétaire:</strong> ${getValueOrNotSpecified(archive.property0wner)}</p>
+                    <p><strong>Constat:</strong> ${getValueOrNotSpecified(archive.findingof)}</p>
                     <p><strong>Surface totale:</strong> ${getValueOrNotSpecified(archive.surfacearea, true)}</p>
                     <p><strong>Surface remblayée:</strong> ${getValueOrNotSpecified(archive.backfilledarea, true)}</p>
                     <p><strong>Catégorie surface:</strong> ${surfaceClass}</p>
+                    ${isMarron ? '<p><strong style="color: #8B4513;">⚠️ Archive spéciale (marron)</strong></p>' : ''}
                     ${surfaceSpecifiee ? `<p><strong>Type d'affichage:</strong> Cercle proportionnel (${Math.round(layer.options.radius)} m)</p>` : '<p><strong>Type d\'affichage:</strong> Point simple (surface non spécifiée)</p>'}
                 </div>
-                <button style="width: 100%; padding: 0.4rem; background-color: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showArchiveDetail('${archive.id}')">
+                <button style="width: 100%; padding: 0.4rem; background-color: ${pointColor}; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; font-size: 0.8rem;" onclick="showArchiveDetail('${archive.id}')">
                     Voir Détails Complets
                 </button>
             </div>
@@ -1137,10 +1401,10 @@ function addArchivesToMap(archives) {
         layer.bindPopup(popupContent);
 
         descentesLayers[`archive_${archive.id}`] = layer;
-        markers.addLayer(layer);
+        targetGroup.addLayer(layer);
     });
 
-    console.log(`✅ ${archivesValides} archives affichées (${archivesAvecSurface} avec surface, ${archivesSansSurface} sans surface)`);
+    console.log(`✅ ${archivesValides} archives affichées (${archivesAvecSurface} avec surface, ${archivesSansSurface} sans surface, ${archivesMarron} archives marron)`);
 }
 
 // Fonctions pour afficher les détails
@@ -1149,9 +1413,21 @@ function showDescenteDetail(descenteId) {
     if (!descente) return;
 
     // Déterminer le type et la couleur
-    const hasFT = descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié';
-    const typeColor = hasFT ? '#10b981' : '#f6c23e';
-    const typeLabel = hasFT ? 'FT établi' : 'Descente';
+    let typeColor, typeLabel;
+    
+    if (descente.ap) {
+        typeColor = '#FF8C00'; // Orange foncé pour AP
+        typeLabel = 'AP établi';
+    } else if (descente.ft_id && descente.ft_id !== 'null' && descente.ft_id !== '' && descente.ft_id !== 'Non spécifié') {
+        typeColor = '#10b981';
+        typeLabel = 'FT établi';
+    } else {
+        typeColor = '#f50b0bff';
+        typeLabel = 'Descente';
+    }
+
+    const surfaceClass = getSurfaceClass(descente.sup_remblais);
+    const surfaceSpecifiee = isSurfaceSpecified(descente.sup_remblais);
 
     const detailContent = `
         <div class="detail-section">
@@ -1164,6 +1440,10 @@ function showDescenteDetail(descenteId) {
                 <div class="detail-item">
                     <span class="detail-label">FT ID</span>
                     <span class="detail-value">${getValueOrNotSpecified(descente.ft_id)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">AP</span>
+                    <span class="detail-value">${descente.ap ? 'Oui' : 'Non'}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Date</span>
@@ -1198,6 +1478,25 @@ function showDescenteDetail(descenteId) {
                     <span class="detail-label">Fokontany</span>
                     <span class="detail-value">${getValueOrNotSpecified(descente.fkt)}</span>
                 </div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <h4 style="color: ${typeColor};">Informations techniques</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Surface (m²)</span>
+                    <span class="detail-value">${getValueOrNotSpecified(descente.sup_remblais, true)}</span>
+                </div>
+                ${descente.ap ? `
+                <div class="detail-item">
+                    <span class="detail-label">Catégorie surface</span>
+                    <span class="detail-value">${surfaceClass}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Type d'affichage</span>
+                    <span class="detail-value">${surfaceSpecifiee ? 'Cercle proportionnel' : 'Point simple (surface non spécifiée)'}</span>
+                </div>
+                ` : ''}
             </div>
         </div>
         <div class="detail-section">
@@ -1334,21 +1633,6 @@ function showArchiveDetail(archiveId) {
     document.getElementById('descente-detail').classList.add('active');
 }
 
-// Gestion de la légende
-function toggleLegend() {
-    const legendContainer = document.getElementById('legend-container');
-    legendContainer.classList.toggle('collapsed');
-    localStorage.setItem('legendCollapsed', legendContainer.classList.contains('collapsed'));
-}
-
-function restoreLegendState() {
-    const legendContainer = document.getElementById('legend-container');
-    const isCollapsed = localStorage.getItem('legendCollapsed') === 'true';
-    if (isCollapsed) {
-        legendContainer.classList.add('collapsed');
-    }
-}
-
 // Fonctions pour les contrôles de carte
 function changeMapStyle(style) {
     mapStyles[currentMapStyle].remove();
@@ -1464,18 +1748,6 @@ function changeCoordType(type) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Début du chargement des données...');
     
-    // Événements pour la légende
-    const legendToggle = document.getElementById('legend-toggle');
-    const legendArrow = document.getElementById('legend-arrow');
-    
-    if (legendToggle) legendToggle.addEventListener('click', toggleLegend);
-    if (legendArrow) legendArrow.addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleLegend();
-    });
-    
-    restoreLegendState();
-
     // Contrôles de carte
     document.getElementById('zoom-in').addEventListener('click', () => map.zoomIn());
     document.getElementById('zoom-out').addEventListener('click', () => map.zoomOut());
@@ -1527,13 +1799,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.getElementById('search-by-coord').addEventListener('click', searchByCoordinates);
 
+    // Filtres
+    document.getElementById('apply-filters').addEventListener('click', applyFilters);
+    document.getElementById('reset-filters').addEventListener('click', resetFilters);
+
     // Afficher le loading
     document.getElementById('loading').style.display = 'block';
     
     setTimeout(() => {
         try {
-            // Ajouter le groupe de marqueurs à la carte
-            map.addLayer(markers);
+            // Ajouter les groupes de marqueurs à la carte (initialement tous visibles)
+            map.addLayer(descenteMarkers);
+            map.addLayer(ftMarkers);
+            map.addLayer(apMarkers);
+            map.addLayer(archiveMarkers);
+            map.addLayer(specialMarkers);
             
             console.log('🔍 FILTRAGE DES DONNÉES...');
             
