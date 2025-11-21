@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Tableau Bord')
+@section('title', 'Tableau Bord Archive APIPA')
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -381,7 +381,7 @@
     <div class="dashboard-container container py-3">
         <!-- Header -->
         <header class="header px-3 py-2 d-flex justify-content-between align-items-center">
-            <h1>Tableau de Bord APIPA</h1>
+            <h1>Tableau de Bord Archive APIPA</h1>
             <div class="d-flex align-items-center gap-3">
                 <div class="date-display" id="currentDate"></div>
             </div>
@@ -396,7 +396,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>DESCENTE</h3>
-                        <div class="stat-value">{{$total}}</div>
+                        <div class="stat-value">156</div>
                         <div class="stat-change positive">
                         </div>
                     </div>
@@ -410,7 +410,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>FITANANA AN-TSORATRA</h3>
-                        <div class="stat-value">{{$fts_total}}</div>
+                        <div class="stat-value">89</div>
                         <div class="stat-change positive">
                         </div>
                     </div>
@@ -423,8 +423,8 @@
                         💰
                     </div>
                     <div class="stat-info">
-                        <h3>AVIS DE PAIEMENT ETABLIE</h3>
-                        <div class="stat-value">{{$ap_total}}</div>
+                        <h3>AVIS DE PAIEMENT</h3>
+                        <div class="stat-value">342</div>
                         <div class="stat-change positive">
                         </div>
                     </div>

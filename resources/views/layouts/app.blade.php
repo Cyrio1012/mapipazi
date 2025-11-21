@@ -128,7 +128,7 @@
     </style>
     @stack('styles')
 </head>
-<body>
+<body  class="@if(request()->routeIs('cartographie.index')) sidebar-collapsed @endif">
 
   <!-- Topbar -->
    
@@ -139,6 +139,20 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top">
   
   <div class="container-fluid">
+    @if(request()->routeIs('cartographie.index'))
+      <style>
+        :root {
+          --sidebar-collapsed-width: 0px !important;
+        }
+
+      </style>
+      <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                    toggleSidebar();
+                }
+            );
+        </script>
+    @endif
     <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
     <!-- Logo -->
     <a class="navbar-brand" href="{{ route('dashboard') }}">
@@ -197,16 +211,22 @@
 
     <nav class="nav flex-column mt-3">
       <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a>
-      
+      <a class="nav-link {{ request()->routeIs('dashboardArchive') ? 'active' : '' }}" href="{{ route('dashboardArchive') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard Archive</span></a>
+      @if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin' )
       <a class="nav-link {{ request()->routeIs('descentes.*') ? 'active' : '' }}" href="{{ route('descentes.index') }}"><i class="bi bi-arrow-down-circle"></i> <span>Descentes</span></a>
-      
+      @endif
       <a class="nav-link {{ request()->routeIs('aps.*') ? 'active' : '' }}" href="{{ route('aps.index') }}"><i class="bi bi-clipboard-check"></i> <span>Avis de payement</span></a>
-      
+      @if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin' )
      <a class="nav-link {{ request()->routeIs('descente.rdv') ? 'active' : '' }}" href="{{ route('descente.rdv') }}"><i class="bi bi-building"></i> <span>RDV</span></a>
+      @endif
       <a class="nav-link {{ request()->routeIs('cartographie.*') ? 'active' : '' }}" href="{{ route('cartographie.index') }}"><i class="bi bi-map"></i> <span>Cartographie</span></a>
+      @if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin' )
       <a class="nav-link {{ request()->routeIs('matros.*') ? 'active' : '' }}" href="{{ route('matros.index') }}"><i class="bi bi-file-earmark-text"></i> <span>Materielle roulante</span></a>
+      @endif
       <a class="nav-link {{ request()->routeIs('archives.*') ? 'active' : '' }}" href="{{ route('archives.index') }}"><i class="bi bi-file-earmark-text"></i> <span>Archives</span></a>
-
+      @if(auth()->user()->statut === 'admin')
+      <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="bi bi-people"></i> <span>Utilisateurs</span></a>
+      @endif
       <hr>
     </nav>
   </div>

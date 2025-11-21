@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin' )
 @section('content')
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
@@ -53,3 +53,8 @@
   </div>
 </div>
 @endsection
+@else
+    @php
+        abort(404);
+    @endphp
+@endif

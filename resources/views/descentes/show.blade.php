@@ -89,11 +89,16 @@
 
     <div class="material-actions">
         <a href="{{ route('descentes.index') }}" class="btn btn-outline-secondary">Retour</a>
+        @if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin')
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">FT liée</button>
-        @if($fts->count() != 0)
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticAp">Établir AP</button>
+          @if(auth()->user()->statut === 'admin')
+            @if($fts->count() != 0)
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticAp">Établir AP</button>
+            @endif
+          @endif
         @endif
         <a href="{{ route('descentes.edit', $descente->id) }}" class="btn btn-outline-warning">Modifier</a>
+       
     </div>
 
     {{-- Modals --}}

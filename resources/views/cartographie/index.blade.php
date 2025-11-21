@@ -1595,7 +1595,7 @@ function addDescentesToMap(descentes) {
                 <div style="font-size: 0.85rem; color: #666;">
                     <p><strong>Réf. OM:</strong> ${getValueOrNotSpecified(descente.ref_om)}</p>
                     <p><strong>Surface:</strong> ${getValueOrNotSpecified(descente.sup_remblais, true)}</p>
-                    <p><strong>Constat:</strong> ${shortConstat}</p>
+                    <p><strong>Constat:</strong> ${descente.constat}</p>
                     <p><strong>Commune:</strong> ${getValueOrNotSpecified(descente.comm)}</p>
                     <p><strong>Date:</strong> ${formatDate(descente.date)}</p>
                 </div>
@@ -1610,7 +1610,7 @@ function addDescentesToMap(descentes) {
             coords, 
             pointColor, 
             borderColor, 
-            shortConstat, 
+            descente.constat, 
             popupContent, 
             customData, 
             markerType

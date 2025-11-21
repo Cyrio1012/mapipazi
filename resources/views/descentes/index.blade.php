@@ -8,9 +8,11 @@
       <h2 class="h4 mb-1">Liste des descentes</h2>
       <p class="text-muted mb-0">Gestion des procès-verbaux de descente</p>
     </div>
+    @if(auth()->user()->statut === 'agent')
     <a href="{{ route('descentes.create') }}" class="btn btn-primary">
       <i class="bi bi-plus-circle me-2"></i>Nouvelle descente
     </a>
+    @endif
   </div>
 
   @if(session('success'))
@@ -62,6 +64,7 @@
                        data-bs-toggle="tooltip" title="Voir détails">
                       <i class="bi bi-eye"></i>
                     </a>
+                    @if(auth()->user()->statut === 'agent')
                     <a href="{{ route('descentes.edit', $descente->id) }}" 
                        class="btn btn-sm btn-light"
                        data-bs-toggle="tooltip" title="Modifier">
@@ -75,6 +78,7 @@
                               data-bs-toggle="tooltip" title="Supprimer">
                         <i class="bi bi-trash"></i>
                       </button>
+                      @endif
                     </form>
                   </div>
                 </td>

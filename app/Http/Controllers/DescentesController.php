@@ -13,6 +13,8 @@ class DescentesController extends Controller
     public function dashboard()
     {
         $descentes = Descentes::latest()->paginate(10);
+        $fts_total = Ft::count();
+        $ap_total = ap::count();
         $total = Descentes::count();
         $parMois = Descentes::selectRaw('EXTRACT(MONTH FROM date) AS mois, COUNT(*) AS total')
                 ->groupByRaw('EXTRACT(MONTH FROM date)')
@@ -32,13 +34,9 @@ class DescentesController extends Controller
                 ->whereDate('date_rdv_ft', '>=', now()->toDateString())
                 ->whereNull('ft_id')
                 ->count();
-        // surface terrain remblayée par zonage
-        
+        //dd($total, $parMois, $parAn, $parComm, $totalRDV, $rdvEnAttente);
 
-
-        // dd($total, $parMois, $parAn, $parComm, $totalRDV, $rdvEnAttente);
-
-        return view('dashboard', compact('descentes', 'total', 'parMois', 'parAn', 'parComm', 'totalRDV', 'rdvEnAttente'));
+        return view('dashboard', compact('descentes', 'total', 'parMois', 'parAn', 'parComm', 'totalRDV', 'rdvEnAttente','fts_total','ap_total'));
     }
     public function index()
     {

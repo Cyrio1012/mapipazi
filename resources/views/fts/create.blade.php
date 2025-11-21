@@ -47,7 +47,7 @@
         <div class="row g-3 mb-3">
             <div class="col-md-3">
                 <label class="form-label">Num FT</label>
-                <input type="number" name="num_ft" class="form-control" value="{{ old('num_ft') }}">
+                <input type="text" name="num_ft" class="form-control" value="{{ old('num_ft') }}">
             </div>
             <div class="col-md-3">
                 <label class="form-label">Date</label>
@@ -122,7 +122,80 @@
                 </div>
                 <div class="col-md-4">
                     <label for="pu" class="form-label">PU</label>
-                    <input type="text" name="pu" class="form-control" value="{{ old('pu') }}">
+                <input type="text" name="zone" list="zoneOptions" class="form-control" 
+                    value="{{ old('zone', '') }}" placeholder="Tapez zc, zi ou zd">
+
+                <datalist id="zoneOptions">
+                    <option value="">Sélectionnez une zone</option>
+                    
+                    <!-- Zones Commerciales -->
+                    <optgroup label="Zones Commerciales">
+                        <option value="CC">Corridor commercial</option>
+                        <option value="ZC">Zone Commerciale</option>
+                        <option value="ZCP">Zone commerciale primaire</option>
+                    </optgroup>
+                    
+                    <!-- Zones Résidentielles -->
+                    <optgroup label="Zones Résidentielles">
+                        <option value="ZHF">Zone d'habitat de densité forte</option>
+                        <option value="ZRF">Zone résidentielle à forte densité</option>
+                        <option value="ZRM">Zone résidentielle à moyenne densité</option>
+                        <option value="ZRT">Zone résidentielle à très forte densité</option>
+                    </optgroup>
+                    
+                    <!-- Zones de Développement -->
+                    <optgroup label="Zones de Développement">
+                        <option value="ZCM">Zone de développement mixte</option>
+                        <option value="ZDMI">Zone de développement mixte, terrain enclavé</option>
+                        <option value="ZU">Zone à urbaniser</option>
+                        <option value="ZR">Zone à restructurer</option>
+                    </optgroup>
+                    
+                    <!-- Zones Industrielles -->
+                    <optgroup label="Zones Industrielles">
+                        <option value="ZEI">Zone d'extension industrielle</option>
+                        <option value="ZEN">Zone d'extension industrielle surface insuffisante</option>
+                        <option value="ZIU">Zone industrielle Zone à urbaniser</option>
+                    </optgroup>
+                    
+                    <!-- Zones d'Équipement et Administratives -->
+                    <optgroup label="Zones d'Équipement et Administratives">
+                        <option value="ZEA">Zone d'équipement public et administratif</option>
+                        <option value="ZIA">Zone d'implantation d'activité Administrative</option>
+                    </optgroup>
+                    
+                    <!-- Zones d'Extension -->
+                    <optgroup label="Zones d'Extension">
+                        <option value="ZE">Zone d'extension</option>
+                    </optgroup>
+                    
+                    <!-- Espaces Verts et Loisirs -->
+                    <optgroup label="Espaces Verts et Loisirs">
+                        <option value="EPL">Espace vert et Loisirs</option>
+                    </optgroup>
+                    
+                    <!-- Zones Hydrauliques et Eau -->
+                    <optgroup label="Zones Hydrauliques et Eau">
+                        <option value="ECP">Emprise du Canal public</option>
+                        <option value="EOH">Ouvrages Hydrauliques (emprise)</option>
+                        <option value="ZHW">Plan d'eau, inconstructible</option>
+                    </optgroup>
+                    
+                    <!-- Zones Inconstructibles et Protégées -->
+                    <optgroup label="Zones Inconstructibles et Protégées">
+                        <option value="ZNC">Zone inconstructible</option>
+                        <option value="ZNA">Zone agricole inconstructible</option>
+                        <option value="ZNH">Zone humide, non constructible</option>
+                        <option value="ZNP">Zone/périmètre de protection</option>
+                        <option value="ZRI">Zone à remblayer, terrain enclavé</option>
+                    </optgroup>
+                    
+                    <!-- Réserves Publiques -->
+                    <optgroup label="Réserves Publiques">
+                        <option value="REP">Reserves d'emprise publique</option>
+                    </optgroup>
+                </datalist>
+
                 </div>
                 <div class="col-md-4">
                     <label for="zone" class="form-label">Zone</label>
@@ -145,14 +218,17 @@
         </div>
         <div class="mb-3">
                 <label class="form-label">pieces apporter</label><br>
-                @foreach ($descente->pieces_a_fournir as $act)
+
+                @forelse ($descente->pieces_a_fournir ?? [] as $act)
                     <div class="form-check form-check-inline">
                         <input type="checkbox" name="piece_apporter[]" value="{{ $act }}" class="form-check-input"
                             {{ is_array(old('piece_apporter')) && in_array($act, old('piece_apporter')) ? 'checked' : '' }}>
                         <label class="form-check-label">{{ $act }}</label>
                     </div>
-                @endforeach
-            </div>
+                @empty
+                <span>-</span>
+                @endforelse
+        </div>
 
         <label for="" class="form-label mt-2"> Objet </label>
         <div class="col-md-12 mt-1">

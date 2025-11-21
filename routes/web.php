@@ -12,16 +12,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MatroController;
 use App\Models\Descentes;
 use App\Http\Controllers\ArchivesController;
+use App\Http\Controllers\guserController;
 Route::middleware(['auth'])->group(function () {
 
-
-
-
-
     Route::resource('archives', ArchivesController::class);
+    Route::resource('users', guserController::class);
 
     Route::resource('descentes', DescentesController::class);
     Route::get('/', [DescentesController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboardArchive', [ArchivesController::class, 'dashboard'])->name('dashboardArchive');
     
     Route::resource('fts', FtController::class);
     // Route::get('descentes/{descente}/create-ft', [FtController::class, 'createFromDescente'])->name('fts.create.from.descente');
