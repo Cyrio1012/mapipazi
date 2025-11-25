@@ -52,7 +52,7 @@ margin:0 !important;
 .location-filter-controls {
     position: absolute;
     top: 4rem;
-    left: 16rem;
+    left: 1rem;
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -62,6 +62,12 @@ margin:0 !important;
     padding: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     min-width: 250px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.location-filter-controls.hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
 }
 .location-filter-title {
     font-size: 1rem;
@@ -70,9 +76,24 @@ margin:0 !important;
     color: #1e40af;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #e5e7eb;
+}
+.toggle-filter-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 0.2rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.toggle-filter-btn:hover {
+    background-color: #f3f4f6;
+    color: #374151;
 }
 .location-filter-type {
     display: flex;
@@ -288,6 +309,12 @@ font-size: 0.9rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     max-width: 280px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.legend-container.hidden {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
 }
 .legend-title {
     font-size: 1rem;
@@ -296,6 +323,7 @@ font-size: 0.9rem;
     color: #1e40af;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #e5e7eb;
@@ -333,7 +361,7 @@ font-size: 0.9rem;
 .filter-container {
     position: absolute;
     bottom: 1rem;
-    left: 17rem;
+    left: 1rem;
     background-color: white;
     border-radius: 8px;
     padding: 1rem;
@@ -341,6 +369,12 @@ font-size: 0.9rem;
     z-index: 1000;
     max-width: 280px;
     min-width: 250px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.filter-container.hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
 }
 .filter-title {
     font-size: 1rem;
@@ -349,6 +383,7 @@ font-size: 0.9rem;
     color: #1e40af;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #e5e7eb;
@@ -657,6 +692,39 @@ display: none;
     margin-top: 0.3rem;
     font-style: italic;
 }
+/* NOUVEAUX BOUTONS POUR MASQUER/AFFICHER LES FILTRES */
+.toggle-controls-container {
+    position: absolute;
+    top: 4rem;
+    margin-left:1rem;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.toggle-control-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: white;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 1.2rem;
+    color: #4b5563;
+}
+.toggle-control-btn:hover {
+    background-color: #f8fafc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+.toggle-control-btn.active {
+    background-color: #2563eb;
+    color: white;
+}
 /* Ajustement responsive */
 @media (max-width: 768px) {
     .descente-detail {
@@ -684,6 +752,11 @@ display: none;
     .location-filter-controls {
         min-width: 200px;
     }
+    
+    .toggle-controls-container {
+        top: 1rem;
+        left: 1rem;
+    }
 }
 </style>
 </head>
@@ -693,10 +766,27 @@ display: none;
         <div id="map"></div>
     </div>
 </div>
+
+<!-- CONTRÔLES POUR MASQUER/AFFICHER LES FILTRES -->
+<div class="toggle-controls-container">
+    <button class="toggle-control-btn" id="toggle-location-filter" title="Masquer/Afficher le filtre par localisation">
+        <i class="fas fa-map-marker-alt"></i>
+    </button>
+    <button class="toggle-control-btn" id="toggle-display-filter" title="Masquer/Afficher les filtres d'affichage">
+        <i class="fas fa-filter"></i>
+    </button>
+    <button class="toggle-control-btn" id="toggle-legend" title="Masquer/Afficher la légende">
+        <i class="fas fa-key"></i>
+    </button>
+</div>
+
 <!-- NOUVEAU CONTRÔLE DE FILTRE PAR COMMUNE/DISTRICT -->
 <div class="location-filter-controls" id="location-filter-controls">
     <h3 class="location-filter-title">
         <i class="fas fa-map-marker-alt"></i> Filtre par Localisation
+        <button class="toggle-filter-btn" id="close-location-filter" title="Masquer">
+            <i class="fas fa-eye-slash"></i>
+        </button>
     </h3>
    
     <div class="location-filter-type">
@@ -722,6 +812,7 @@ display: none;
         </button>
     </div>
 </div>
+
 <!-- MODAL DE RECHERCHE -->
 <div class="search-modal" id="search-modal">
     <div class="search-modal-header">
@@ -774,6 +865,7 @@ display: none;
         <div class="coord-result" id="coord-result"></div>
     </div>
 </div>
+
 <!-- CONTRÔLES -->
 <div class="map-type-controls">
     <button class="map-btn active" id="view-oms" title="Vue OSM">
@@ -800,10 +892,14 @@ display: none;
         <i class="fas fa-location-arrow"></i>
     </button>
 </div>
+
 <!-- CADRE FILTRE EN BAS À GAUCHE -->
 <div class="filter-container" id="filter-container">
     <h3 class="filter-title">
         <i class="fas fa-filter"></i> Filtres d'affichage
+        <button class="toggle-filter-btn" id="close-display-filter" title="Masquer">
+            <i class="fas fa-eye-slash"></i>
+        </button>
     </h3>
     <div class="filter-content">
         <div class="filter-group">
@@ -852,10 +948,14 @@ display: none;
         </div>
     </div>
 </div>
+
 <!-- LÉGENDE - SIMPLIFIÉE ET TOUJOURS VISIBLE -->
 <div class="legend-container" id="legend-container">
     <h3 class="legend-title">
         <i class="fas fa-key"></i> Légende
+        <button class="toggle-filter-btn" id="close-legend" title="Masquer">
+            <i class="fas fa-eye-slash"></i>
+        </button>
     </h3>
     <div class="legend-content">
         <div class="legend-item">
@@ -880,6 +980,7 @@ display: none;
 </div>
     </div>
 </div>
+
 <!-- DÉTAILS -->
 <div class="descente-detail" id="descente-detail">
     <div class="detail-header">
@@ -890,10 +991,12 @@ display: none;
         Sélectionnez un point pour voir les détails
     </div>
 </div>
+
 <!-- LOADING -->
 <div class="loading" id="loading">
     <i class="fas fa-spinner fa-spin"></i> Chargement des données...
 </div>
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
 <script>
@@ -923,6 +1026,14 @@ let activeLayers = {
 let currentLocationFilter = null;
 let currentLocationType = 'commune';
 let allMarkers = L.featureGroup();
+
+// État de visibilité des panneaux
+let panelVisibility = {
+    locationFilter: true,
+    displayFilter: true,
+    legend: true
+};
+
 // Initialiser la carte centrée sur Madagascar
 const map = L.map('map').setView([-18.766947, 46.869107], 6);
 // Styles de carte
@@ -955,6 +1066,58 @@ try {
     console.log("✅ Projection EPSG:8441 configurée");
 } catch (e) {
     console.error("❌ Erreur configuration EPSG:8441:", e);
+}
+
+// FONCTIONS POUR MASQUER/AFFICHER LES FILTRES
+function toggleLocationFilter() {
+    const locationFilter = document.getElementById('location-filter-controls');
+    const toggleBtn = document.getElementById('toggle-location-filter');
+    
+    panelVisibility.locationFilter = !panelVisibility.locationFilter;
+    
+    if (panelVisibility.locationFilter) {
+        locationFilter.classList.remove('hidden');
+        toggleBtn.classList.add('active');
+        toggleBtn.title = 'Masquer le filtre par localisation';
+    } else {
+        locationFilter.classList.add('hidden');
+        toggleBtn.classList.remove('active');
+        toggleBtn.title = 'Afficher le filtre par localisation';
+    }
+}
+
+function toggleDisplayFilter() {
+    const displayFilter = document.getElementById('filter-container');
+    const toggleBtn = document.getElementById('toggle-display-filter');
+    
+    panelVisibility.displayFilter = !panelVisibility.displayFilter;
+    
+    if (panelVisibility.displayFilter) {
+        displayFilter.classList.remove('hidden');
+        toggleBtn.classList.add('active');
+        toggleBtn.title = 'Masquer les filtres d\'affichage';
+    } else {
+        displayFilter.classList.add('hidden');
+        toggleBtn.classList.remove('active');
+        toggleBtn.title = 'Afficher les filtres d\'affichage';
+    }
+}
+
+function toggleLegend() {
+    const legend = document.getElementById('legend-container');
+    const toggleBtn = document.getElementById('toggle-legend');
+    
+    panelVisibility.legend = !panelVisibility.legend;
+    
+    if (panelVisibility.legend) {
+        legend.classList.remove('hidden');
+        toggleBtn.classList.add('active');
+        toggleBtn.title = 'Masquer la légende';
+    } else {
+        legend.classList.add('hidden');
+        toggleBtn.classList.remove('active');
+        toggleBtn.title = 'Afficher la légende';
+    }
 }
 
 // FONCTION POUR OBTENIR UN TEXTE DE CONSTAT COURT - CORRIGÉE
@@ -1249,7 +1412,7 @@ function exportToPDF() {
     loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération du PDF...';
    
     // Temporairement cacher les contrôles pour une capture propre
-    const controls = document.querySelectorAll('.map-controls, .map-type-controls, .filter-container, .legend-container, .location-filter-controls');
+    const controls = document.querySelectorAll('.map-controls, .map-type-controls, .filter-container, .legend-container, .location-filter-controls, .toggle-controls-container');
     const originalDisplay = [];
     controls.forEach(control => {
         originalDisplay.push(control.style.display);
@@ -1644,16 +1807,16 @@ function addArchivesToMap(archives) {
             return;
         }
        
-        const findingofLower = (archive.findingof || '').toLowerCase();
-        const isMarron = findingofLower.includes('lit') ||
-                        findingofLower.includes('digue') ||
-                        findingofLower.includes('alignement') ||
-                        findingofLower.includes('canal') ||
-                        findingofLower.includes('voie') ||
-                        findingofLower.includes('voi') ||
-                        findingofLower.includes('publique') ||
-                        findingofLower.includes('public') ||
-                        findingofLower.includes('emprise');
+            const findingofLower = (archive.findingof || '').toLowerCase();
+            const isMarron = findingofLower.includes('lit') ||
+                            findingofLower.includes('digue') ||
+                            findingofLower.includes('alignement') ||
+                            findingofLower.includes('canal') ||
+                            findingofLower.includes('voie') ||
+                            findingofLower.includes('voi') ||
+                            findingofLower.includes('publique') ||
+                            findingofLower.includes('public') ||
+                            findingofLower.includes('emprise');
        
         let pointColor, borderColor, targetGroup, markerType;
        
@@ -1719,6 +1882,15 @@ function addArchivesToMap(archives) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Début du chargement des données...');
    
+    // Initialiser les écouteurs d'événements pour les boutons de masquage/affichage
+    document.getElementById('toggle-location-filter').addEventListener('click', toggleLocationFilter);
+    document.getElementById('toggle-display-filter').addEventListener('click', toggleDisplayFilter);
+    document.getElementById('toggle-legend').addEventListener('click', toggleLegend);
+    
+    document.getElementById('close-location-filter').addEventListener('click', toggleLocationFilter);
+    document.getElementById('close-display-filter').addEventListener('click', toggleDisplayFilter);
+    document.getElementById('close-legend').addEventListener('click', toggleLegend);
+
     // Initialiser les écouteurs d'événements pour le filtre de localisation
     document.querySelectorAll('.location-filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {

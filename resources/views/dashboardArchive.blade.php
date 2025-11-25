@@ -396,7 +396,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>DESCENTE</h3>
-                        <div class="stat-value">156</div>
+                        <div class="stat-value">{{$stats['total']}}</div>
                         <div class="stat-change positive">
                         </div>
                     </div>
