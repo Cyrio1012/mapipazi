@@ -223,7 +223,7 @@
             <div class="card-header">Personnes & Contact</div>
             <div class="card-body">
                 <p><strong>Personne verbalisée :</strong> {{ $descente->pers_verb }}</p>
-                <p><strong>Qualité :</strong> {{ $descente->qte_pers }}</p>
+                <p><strong>Nom complet :</strong> {{ $descente->qte_pers }}</p>
                 <p><strong>Adresse :</strong> {{ $descente->adresse }}</p>
                 <p><strong>Contact :</strong> {{ $descente->contact }}</p>
             </div>

@@ -56,41 +56,71 @@ class DescentesController extends Controller
         return view('descentes.create', compact('locations','equipeOptions', 'actionOptions', 'constatOptions', 'pvOptions' , 'piecesOption'));
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'date' => 'nullable|date',
-            'heure' => 'nullable|date_format:H:i',
+public function store(Request $request)
+{
+    // Liste des champs à vérifier comme "vides"
+    $champs = [
+        'date', 'heure', 'ref_om', 'ref_pv', 'ref_rapport', 'num_pv',
+        'pers_verb', 'qte_pers', 'adresse', 'contact',
+        'dist', 'comm', 'fkt', 'x', 'y', 'geom',
+        'date_rdv_ft', 'heure_rdv_ft'
+    ];
 
-            'ref_om' => 'string|max:255',
-            'ref_pv' => 'nullable|in:pat,fifafi',
-            'ref_rapport' => 'nullable|string|max:255',
-            'num_pv' => 'string|max:255',
+    // Compter les champs vides
+    $champsVides = 0;
 
-            'equipe' => 'nullable|array',
-            'action' => 'nullable|array',
-            'constat' => 'nullable|array',
-
-            'pers_verb' => 'string|max:255',
-            'qte_pers' => 'nullable|string|max:255',
-
-            'adresse' => 'nullable|string|max:255',
-            'contact' => 'nullable|string|max:255',
-
-            'dist' => 'nullable|string|max:255',
-            'comm' => 'nullable|string|max:255',
-            'fkt' => 'nullable|string|max:255',
-            'x'=> 'nullable|numeric',
-            'y' => 'nullable|numeric',
-            'geom' => 'nullable|json',
-            'date_rdv_ft' => 'date',
-            'heure_rdv_ft' => 'date_format:H:i',
-
-            'pieces_a_fournir' => 'nullable|array',
-        ]);
-        Descentes::create($validated);
-        return redirect()->route('descentes.index')->with('success', 'Descente créée avec succès.');
+    foreach ($champs as $champ) {
+        if (!$request->filled($champ)) {
+            $champsVides++;
+        }
     }
+
+    // Si plus de 5 champs sont vides → erreur
+    if ($champsVides > 5) {
+        return back()
+            ->withErrors(['global' => 'Tous les champs sont obligatoires.'])
+            ->withInput();
+    }
+
+    // Validation normale ensuite
+    $validated = $request->validate([
+        'date' => 'nullable|date',
+        'heure' => 'nullable|date_format:H:i',
+
+        'ref_om' => 'nullable|string|max:255',
+        'ref_pv' => 'nullable|in:pat,fifafi',
+        'ref_rapport' => 'nullable|string|max:255',
+        'num_pv' => 'nullable|string|max:255',
+
+        'equipe' => 'nullable|array',
+        'action' => 'nullable|array',
+        'constat' => 'nullable|array',
+
+        'pers_verb' => 'nullable|string|max:255',
+        'qte_pers' => 'nullable|string|max:255',
+
+        'adresse' => 'nullable|string|max:255',
+        'contact' => 'nullable|string|max:255',
+
+        'dist' => 'nullable|string|max:255',
+        'comm' => 'nullable|string|max:255',
+        'fkt' => 'nullable|string|max:255',
+
+        'x'=> 'nullable|numeric',
+        'y' => 'nullable|numeric',
+        'geom' => 'nullable|json',
+
+        'date_rdv_ft' => 'nullable|date',
+        'heure_rdv_ft' => 'nullable|date_format:H:i',
+
+        'pieces_a_fournir' => 'nullable|array',
+    ]);
+
+    Descentes::create($validated);
+
+    return redirect()->route('descentes.index')->with('success', 'Descente créée avec succès.');
+}
+
 
     public function show(Descentes $descente)
     {

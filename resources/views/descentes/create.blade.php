@@ -62,16 +62,12 @@
 <div class="container py-4">
     <h2 class="mb-4 text-primary">Nouvelle Descente</h2>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Oups !</strong> Il y a des erreurs dans le formulaire :
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>⚠️ {{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+  @if($errors->has('global'))
+    <div class="alert alert-danger">
+        {{ $errors->first('global') }}
+    </div>
+@endif
+
 
     <form action="{{ route('descentes.store') }}" method="POST">
         @csrf
@@ -150,12 +146,17 @@
         <div class="form-section">
             <h5>Personne & Localisation</h5>
             <div class="row g-3">
+        <div class="col-md-6">
+            <label for="pers_verb" class="form-label">Personne verbalisée</label>
+            <select name="pers_verb" id="pers_verb" class="form-select">
+                <option value="">-- Choisir --</option>
+                <option value="Propriétaire" {{ old('pers_verb') == 'Propriétaire' ? 'selected' : '' }}>Propriétaire</option>
+                <option value="Représentant" {{ old('pers_verb') == 'Représentant' ? 'selected' : '' }}>Représentant</option>
+            </select>
+        </div>
+               
                 <div class="col-md-6">
-                    <label for="pers_verb" class="form-label">Personne verbalisée</label>
-                    <input type="text" name="pers_verb" class="form-control" value="{{ old('pers_verb') }}">
-                </div>
-                <div class="col-md-6">
-                    <label for="qte_pers" class="form-label">Qualité personnes</label>
+                    <label for="qte_pers" class="form-label">Nom complet</label>
                     <input type="text" name="qte_pers" class="form-control" value="{{ old('qte_pers') }}">
                 </div>
                 <div class="col-md-6">
