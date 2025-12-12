@@ -94,26 +94,26 @@ class Archives extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'exoyear' => 'string',
-        'arrivaldate' => 'date',
-        'descentdate' => 'date',
-        'summondate' => 'date',
-        'minutesdate' => 'date',
-        'submissiondate' => 'date',
-        'invoicingdate' => 'date',
-        'daftransmissiondate' => 'date',
-        'commissiondate' => 'date',
-        'opiniondfdate' => 'date',
-        'surfacearea' => 'decimal:2',
-        'backfilledarea' => 'decimal:2',
-        'xv' => 'decimal:10,6',
-        'yv' => 'decimal:10,6',
-        'svr_fine' => 'decimal:2',
-        'svr_roalty' => 'decimal:2',
-        'fineamount' => 'decimal:2',
-        'roaltyamount' => 'decimal:2',
-    ];
+    'id' => 'integer',
+    'exoyear' => 'integer',
+    'arrivaldate' => 'date',
+    'descentdate' => 'date',
+    'summondate' => 'date',
+    'minutesdate' => 'date',
+    'submissiondate' => 'date',
+    'invoicingdate' => 'date',
+    'daftransmissiondate' => 'date',
+    'commissiondate' => 'date',
+    'opiniondfdate' => 'date',
+    'surfacearea' => 'decimal:2',
+    'backfilledarea' => 'decimal:2',
+    'xv' => 'float',
+    'yv' => 'float',
+    'svr_fine' => 'decimal:2',
+    'svr_roalty' => 'decimal:2',
+    'fineamount' => 'decimal:2',
+    'roaltyamount' => 'decimal:2',
+];
 
     /**
      * The attributes that should be mutated to dates.

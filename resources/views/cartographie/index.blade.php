@@ -1399,10 +1399,12 @@ function searchLocations(query) {
     }
 }
 
-// FONCTION POUR EXPORTER EN PDF
+// FONCTION MODIFIÉE POUR EXPORTER EN PDF EN FORMAT PAYSAGE
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
+    
+    // Créer un document en format paysage (landscape)
+    const doc = new jsPDF('l', 'mm', 'a4'); // 'l' pour landscape
     const mapContainer = document.getElementById('map');
     const communeName = currentLocationFilter ? currentLocationFilter.location : 'Madagascar';
    
@@ -1419,12 +1421,17 @@ function exportToPDF() {
         control.style.display = 'none';
     });
    
+    // Attendre que les contrôles soient cachés
     setTimeout(() => {
         html2canvas(mapContainer, {
             useCORS: true,
-            scale: 2,
+            scale: 2, // Augmenter la qualité
             logging: false,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            width: mapContainer.scrollWidth,
+            height: mapContainer.scrollHeight,
+            windowWidth: mapContainer.scrollWidth,
+            windowHeight: mapContainer.scrollHeight
         }).then(canvas => {
             // Restaurer les contrôles
             controls.forEach((control, index) => {
@@ -1432,51 +1439,89 @@ function exportToPDF() {
             });
            
             const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 190; // Largeur A4 moins marges
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            // Dimensions en format paysage A4 (297x210mm)
+            const pageWidth = 297; // Largeur A4 paysage
+            const pageHeight = 210; // Hauteur A4 paysage
+            const margin = 5; // Marge réduite pour maximiser l'espace
+            
+            // Calculer les dimensions de l'image pour occuper toute la page
+            const imgWidth = pageWidth - (2 * margin);
+            const imgHeight = pageHeight - (2 * margin);
+            
+            // Adapter l'image aux dimensions de la page
+            const aspectRatio = canvas.width / canvas.height;
+            let finalWidth, finalHeight;
+            
+            if (aspectRatio > imgWidth / imgHeight) {
+                // Image plus large que la page
+                finalWidth = imgWidth;
+                finalHeight = imgWidth / aspectRatio;
+            } else {
+                // Image plus haute que la page
+                finalHeight = imgHeight;
+                finalWidth = imgHeight * aspectRatio;
+            }
+            
+            // Centrer l'image sur la page
+            const x = margin + (imgWidth - finalWidth) / 2;
+            const y = margin + (imgHeight - finalHeight) / 2;
            
-            // Ajouter le titre
+            // Ajouter le titre en haut
             doc.setFontSize(16);
             doc.setFont('helvetica', 'bold');
-            doc.text(`Commune: ${communeName}`, 105, 15, { align: 'center' });
+            doc.text(`Cartographie - Commune: ${communeName}`, pageWidth / 2, 10, { align: 'center' });
            
             // Ajouter la date
             doc.setFontSize(10);
             doc.setFont('helvetica', 'normal');
             const date = new Date().toLocaleDateString('fr-FR');
-            doc.text(`Généré le: ${date}`, 105, 22, { align: 'center' });
+            doc.text(`Généré le: ${date}`, pageWidth / 2, 15, { align: 'center' });
            
-            // Ajouter l'image de la carte
-            doc.addImage(imgData, 'PNG', 10, 30, imgWidth, imgHeight);
+            // Ajouter l'image de la carte (occupe toute la page)
+            doc.addImage(imgData, 'PNG', x, y + 8, finalWidth, finalHeight); // +8 pour laisser l'espace du titre
            
-            // Ajouter la légende
-            const legendY = 30 + imgHeight + 10;
-            doc.setFontSize(12);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Légende:', 10, legendY);
-           
-            doc.setFontSize(10);
-            doc.setFont('helvetica', 'normal');
-            const legendItems = [
-                { color: '#f50b0bff', label: 'Descentes (sans FT)' },
-                { color: '#10b981', label: 'FT établis' },
-                { color: '#FF8C00', label: 'AP établis' },
-                { color: '#3b82f6', label: 'Archives' },
-                { color: '#8B4513', label: 'Constructions sur zone de protection' }
-            ];
-           
-            legendItems.forEach((item, index) => {
-                const yPos = legendY + 8 + (index * 5);
-                doc.setFillColor(item.color);
-                doc.rect(10, yPos - 3, 3, 3, 'F');
-                doc.text(item.label, 15, yPos);
-            });
+            // Ajouter la légende en bas de page
+            const legendY = y + finalHeight + 12;
+            
+            // Vérifier si on dépasse la page
+            if (legendY < pageHeight - 15) {
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Légende:', margin, legendY);
+               
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                const legendItems = [
+                    { color: '#f50b0bff', label: 'Descentes (sans FT)' },
+                    { color: '#10b981', label: 'FT établis' },
+                    { color: '#FF8C00', label: 'AP établis' },
+                    { color: '#3b82f6', label: 'Archives' },
+                    { color: '#8B4513', label: 'Constructions sur zone de protection' }
+                ];
+               
+                let currentX = margin;
+                legendItems.forEach((item, index) => {
+                    if (currentX > pageWidth - 60) {
+                        currentX = margin;
+                        legendY += 6;
+                    }
+                    
+                    doc.setFillColor(item.color);
+                    doc.rect(currentX, legendY - 3, 3, 3, 'F');
+                    doc.text(item.label, currentX + 5, legendY);
+                    currentX += 45; // Espacement entre les items
+                });
+            }
            
             // Sauvegarder le PDF
-            doc.save(`carte_${communeName.replace(/\s+/g, '_')}_${date.replace(/\//g, '-')}.pdf`);
+            const fileName = `carte_${communeName.replace(/\s+/g, '_')}_${date.replace(/\//g, '-')}.pdf`;
+            doc.save(fileName);
            
             // Cacher le loading
             loading.style.display = 'none';
+            
+            console.log('✅ PDF généré avec succès en format paysage');
         }).catch(error => {
             console.error('Erreur lors de la génération du PDF:', error);
             alert('Erreur lors de la génération du PDF: ' + error.message);
