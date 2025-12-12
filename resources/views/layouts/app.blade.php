@@ -8,15 +8,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<<<<<<< Updated upstream
   <link rel="icon" type="image/png" href="/assets/img/fav.png">
-=======
   <link href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/autofill/2.7.1/css/autoFill.dataTables.min.css" rel="stylesheet">
 
 
->>>>>>> Stashed changes
   <style>
     :root {
       --sidebar-width: 250px;
@@ -149,7 +146,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm fixed-top">
   
   <div class="container-fluid">
-<<<<<<< Updated upstream
     @if(request()->routeIs('cartographie.index'))
       <style>
         :root {
@@ -165,9 +161,6 @@
         </script>
     @endif
     <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button>
-=======
-    <button class="btn btn-light btn-sm me-3" onclick="toggleSidebar()">☰</button> 
->>>>>>> Stashed changes
     <!-- Logo -->
     <a class="navbar-brand" href="{{ route('dashboard') }}">
       <img src="{{ asset('assets/img/logo30ans.png') }}" alt="Logo" height="30">
@@ -225,16 +218,10 @@
 
     <nav class="nav flex-column mt-3">
       <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a>
-<<<<<<< Updated upstream
       <a class="nav-link {{ request()->routeIs('dashboardArchive') ? 'active' : '' }}" href="{{ route('dashboardArchive') }}"><i class="bi bi-speedometer2"></i> <span>Dashboard Archive</span></a>
       @if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin' )
       <a class="nav-link {{ request()->routeIs('descentes.*') ? 'active' : '' }}" href="{{ route('descentes.index') }}"><i class="bi bi-arrow-down-circle"></i> <span>Descentes</span></a>
       @endif
-=======
-      
-      <a class="nav-link {{ request()->routeIs('descentes.*') ? 'active' : '' }}" href="{{ route('descentes.index') }}"><i class="fa fa-light fa-gavel"></i><span>Descentes</span></a>
-      
->>>>>>> Stashed changes
       <a class="nav-link {{ request()->routeIs('aps.*') ? 'active' : '' }}" href="{{ route('aps.index') }}"><i class="bi bi-clipboard-check"></i> <span>Avis de payement</span></a>
       @if(auth()->user()->statut === 'agent' || auth()->user()->statut === 'admin' )
      <a class="nav-link {{ request()->routeIs('descente.rdv') ? 'active' : '' }}" href="{{ route('descente.rdv') }}"><i class="bi bi-building"></i> <span>RDV</span></a>

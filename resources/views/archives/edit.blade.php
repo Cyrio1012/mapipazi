@@ -75,7 +75,7 @@
                                     <div class="col-md-3 mb-3">
                                         <label for="arrivaldate" class="form-label">Date d'arrivée *</label>
                                         <input type="date" class="form-control" id="arrivaldate" name="arrivaldate" 
-                                               value="{{ old('arrivaldate', $archive->arrivaldate ?? '') }}">
+                                               value="{{ old('arrivaldate', $archive->arrivaldate ? $archive->arrivaldate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-3 mb-3">
@@ -239,7 +239,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="descentdate" class="form-label">Date de descente</label>
                                         <input type="date" class="form-control" id="descentdate" name="descentdate" 
-                                               value="{{ old('descentdate', $archive->descentdate ?? '') }}">
+                                               value="{{ old('descentdate',$archive->descentdate ? $archive->descentdate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-4 mb-3">
@@ -251,7 +251,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="summondate" class="form-label">Date de convocation</label>
                                         <input type="date" class="form-control" id="summondate" name="summondate" 
-                                               value="{{ old('summondate', $archive->summondate ?? '') }}">
+                                               value="{{ old('summondate', $archive->summondate ? $archive->summodate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-4 mb-3">
@@ -263,7 +263,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="minutesdate" class="form-label">Date PV</label>
                                         <input type="date" class="form-control" id="minutesdate" name="minutesdate" 
-                                               value="{{ old('minutesdate', $archive->minutesdate ?? '') }}">
+                                               value="{{ old('minutesdate', $archive->minutesdate ? $archive->minutesdate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-4 mb-3">
@@ -275,7 +275,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="submissiondate" class="form-label">Date de soumission</label>
                                         <input type="date" class="form-control" id="submissiondate" name="submissiondate" 
-                                               value="{{ old('submissiondate', $archive->submissiondate ?? '') }}">
+                                               value="{{ old('submissiondate', $archive->submissiondate ? $archive->submissiondate->format('Y-m-d') : '') }}">
                                     </div>
                                 </div>
                             </div>
@@ -304,13 +304,13 @@
                                     <div class="col-md-3 mb-3">
                                         <label for="invoicingdate" class="form-label">Date facturation</label>
                                         <input type="date" class="form-control" id="invoicingdate" name="invoicingdate" 
-                                               value="{{ old('invoicingdate', $archive->invoicingdate ?? '') }}">
+                                               value="{{ old('invoicingdate', $archive->invoicingdate ?$archive->invoicingdate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-3 mb-3">
                                         <label for="fineamount" class="form-label">Montant amende (€)</label>
                                         <input type="number" class="form-control" id="fineamount" name="fineamount" 
-                                               value="{{ old('fineamount', $archive->fineamount ?? '') }}" step="0.01" min="0">
+                                               value="{{ old('fineamount', $archive->fineamount ? $archive->fineamount->format('Y-m-d') : '') }}" step="0.01" min="0">
                                     </div>
                                     
                                     <div class="col-md-3 mb-3">
@@ -339,7 +339,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="daftransmissiondate" class="form-label">Date transmission DAF</label>
                                         <input type="date" class="form-control" id="daftransmissiondate" name="daftransmissiondate" 
-                                               value="{{ old('daftransmissiondate', $archive->daftransmissiondate ?? '') }}">
+                                               value="{{ old('daftransmissiondate', $archive->daftransmissiondate ? $archive->daftrasmissiondate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-4 mb-3">
@@ -368,7 +368,7 @@
                                     <div class="col-md-4 mb-3">
                                         <label for="commissiondate" class="form-label">Date commission</label>
                                         <input type="date" class="form-control" id="commissiondate" name="commissiondate" 
-                                               value="{{ old('commissiondate', $archive->commissiondate ?? '') }}">
+                                               value="{{ old('commissiondate', $archive->commissiondate ? $archive->commissiondate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-8 mb-3">
@@ -395,7 +395,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="opiniondfdate" class="form-label">Date avis DF</label>
                                         <input type="date" class="form-control" id="opiniondfdate" name="opiniondfdate" 
-                                               value="{{ old('opiniondfdate', $archive->opiniondfdate ?? '') }}">
+                                               value="{{ old('opiniondfdate', $archive->opiniondfdate ? $archive->opiniondfdate->format('Y-m-d') : '') }}">
                                     </div>
                                     
                                     <div class="col-md-6 mb-3">
