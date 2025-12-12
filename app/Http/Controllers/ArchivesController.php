@@ -34,34 +34,71 @@ class ArchivesController extends Controller
 
 
     public function update(Request $request, $id)
-    {
-        $archive = Archives::findOrFail($id);
-        dd( $archive, $request->all());
-        $validator = $this->validateArchive($request, $archive->id);
-        
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        
-        try {
-            DB::beginTransaction();
-            
-            $archive->update($request->all());
-            
-            DB::commit();
-            
-            return redirect()->route('archives.show', $archive->id)
-                ->with('success', 'Archive mise à jour avec succès.');
-                
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()
-                ->with('error', 'Erreur lors de la mise à jour: ' . $e->getMessage())
-                ->withInput();
-        }
-    }
+{
+    $archive = Archives::findOrFail($id);
+
+    $data = $request->validate([
+        'exoyear'                => 'nullable|integer',
+        'arrivaldate'            => 'nullable|date',
+        'descentdate'            => 'nullable|date',
+        'summondate'             => 'nullable|date',
+        'minutesdate'            => 'nullable|date',
+        'submissiondate'         => 'nullable|date',
+        'invoicingdate'          => 'nullable|date',
+        'daftransmissiondate'    => 'nullable|date',
+        'commissiondate'         => 'nullable|date',
+
+        'surfacearea'            => 'nullable|decimal:2',
+        'backfilledarea'         => 'nullable|decimal:2',
+
+        'xv'                     => 'nullable|numeric',
+        'yv'                     => 'nullable|numeric',
+
+        'svr_fine'               => 'nullable|decimal:2',
+        'svr_roalty'             => 'nullable|decimal:2',
+        'fineamount'             => 'nullable|decimal:2',
+        'roaltyamount'           => 'nullable|decimal:2',
+
+        // Ajoute ici les autres champs sans type particulier si pas besoin de validation stricte
+        'arrivalid'              => 'nullable',
+        'sendersce'              => 'nullable',
+        'actiontaken'            => 'nullable',
+        'measures'               => 'nullable',
+        'findingof'              => 'nullable',
+        'applicantname'          => 'nullable',
+        'applicantcontact'       => 'nullable',
+        'applicantaddress'       => 'nullable',
+        'municipality'           => 'nullable',
+        'locality'               => 'nullable',
+        'property0wner'          => 'nullable',
+        'propertytitle'          => 'nullable',
+        'propertyname'           => 'nullable',
+        'urbanplanningregulations' => 'nullable',
+        'upr'                    => 'nullable',
+        'zoning'                 => 'nullable',
+        'destination'            => 'nullable',
+        'reportid'               => 'nullable',
+        'minutesid'              => 'nullable',
+        'partsupplied'           => 'nullable',
+        'invoicingid'            => 'nullable',
+        'convention'             => 'nullable',
+        'payementmethod'         => 'nullable',
+        'ref_quitus'             => 'nullable',
+        'sit_r'                  => 'nullable',
+        'sit_a'                  => 'nullable',
+        'commissionopinion'      => 'nullable',
+        'recommandationobs'      => 'nullable',
+        'opfinal'                => 'nullable',
+        'opiniondfdate'          => 'nullable|date',
+        'category'               => 'nullable',
+    ]);
+
+    $archive->update($data);
+
+    return redirect()->route('archives.show', $archive->id)
+                     ->with('success', 'Archive mise à jour avec succès.');
+}
+
 
     // Validation
     private function validateArchive(Request $request, $id = null)

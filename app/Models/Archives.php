@@ -24,7 +24,8 @@ class Archives extends Model
      */
     protected $primaryKey = 'id';
 
-    /**
+    public $timestamps = false;
+     /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
