@@ -65,7 +65,7 @@ class ApController extends Controller
             }else {
                 $base = $base;
             }
-            if($type ==='amande'){
+            if($type ==='amende'){
                 if ($isCUA) {
                     $base *= 2;
                 }else {
@@ -96,7 +96,7 @@ class ApController extends Controller
             }else {
                 $base = $base;
             }
-            if($type ==='amande'){
+            if($type ==='amende'){
                 if ($isCUA) {
                     $base *= 2;
                 }else {

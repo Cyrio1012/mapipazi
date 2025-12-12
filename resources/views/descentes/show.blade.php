@@ -128,34 +128,34 @@
                 <div class="modal-body"> 
                    @php
                         $apRedevance = $info_ap->firstWhere('type', 'redevance');
-                        $apAmande = $info_ap->firstWhere('type', 'amande');
+                        $apamende = $info_ap->firstWhere('type', 'amende');
                     @endphp
-                    @if ($apRedevance && $apAmande)
+                    @if ($apRedevance && $apamende)
                         {{-- ✅ Les deux AP existent --}}
                         <p class="alert alert-success">
                             Avis de paiement redevance déjà émis
                             <a href="{{ route('aps.show', $apRedevance) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
                         </p>
                         <p class="alert alert-success">
-                            Avis de paiement amande déjà émis
-                            <a href="{{ route('aps.show', $apAmande) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
+                            Avis de paiement amende déjà émis
+                            <a href="{{ route('aps.show', $apamende) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
                         </p>
 
-                    @elseif ($apRedevance && !$apAmande)
+                    @elseif ($apRedevance && !$apamende)
                         {{-- ✅ Seulement redevance existe --}}
                         <p class="alert alert-success">
                             Avis de paiement redevance déjà émis
                             <a href="{{ route('aps.show', $apRedevance) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
                         </p>
-                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
-                            <p class="alert alert-secondary">Etablir Avis de paiement Amande</p>
+                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amende']) }}">
+                            <p class="alert alert-secondary">Etablir Avis de paiement amende</p>
                         </a>
 
-                    @elseif (!$apRedevance && $apAmande)
-                        {{-- ✅ Seulement amande existe --}}
+                    @elseif (!$apRedevance && $apamende)
+                        {{-- ✅ Seulement amende existe --}}
                         <p class="alert alert-success">
-                            Avis de paiement amande déjà émis
-                            <a href="{{ route('aps.show', $apAmande) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
+                            Avis de paiement amende déjà émis
+                            <a href="{{ route('aps.show', $apamende) }}" class="btn btn-sm btn-outline-primary">🔍 Voir</a>
                         </p>
                         <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'redevance']) }}">
                             <p class="alert alert-secondary">Etablir Avis de paiement Redevance</p>
@@ -168,8 +168,8 @@
                                 <p class="alert alert-secondary">Etablir Avis de paiement Redevance</p>
                             </a>
                         @endif
-                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amande']) }}">
-                            <p class="alert alert-secondary">Etablir Avis de paiement Amande</p>
+                        <a href="{{ route('aps.create', ['descente' => $descente->id, 'type' => 'amende']) }}">
+                            <p class="alert alert-secondary">Etablir Avis de paiement amende</p>
                         </a>
                     @endif
                 

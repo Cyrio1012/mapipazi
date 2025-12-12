@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cartographie', [CartographieController::class, 'index'])->name('cartographie.index');
     Route::resource('matros', MatroController::class);
 
-
+    Route::get('/archives/data', [ArchivesController::class, 'getData'])->name('archives.data');
 });    
 
 

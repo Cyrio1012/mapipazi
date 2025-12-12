@@ -268,7 +268,7 @@
                 
                 <p>Par la présente,</p>
                 
-                <p>Nous vous informons que le montant de <strong>{{ $taux_lettre }}</strong> (<strong>{{ number_format($ap->taux, 0, '', ' ') }} Ar</strong>), dont les détails se trouvent au verso de ce document, est dû à l'Autorité pour la Protection contre les Inondations de la Plaine d'Antananarivo (APIPA) à titre <u>d'<strong>amande</strong></u> relative aux travaux de remblai et/ou de déblai illicites effectués sur votre propriété correspondant aux coordonnées « X = 519888 et Y = 796060»</p>
+                <p>Nous vous informons que le montant de <strong>{{ $taux_lettre }}</strong> (<strong>{{ number_format($ap->taux, 0, '', ' ') }} Ar</strong>), dont les détails se trouvent au verso de ce document, est dû à l'Autorité pour la Protection contre les Inondations de la Plaine d'Antananarivo (APIPA) à titre <u>d'<strong>amende</strong></u> relative aux travaux de remblai et/ou de déblai illicites effectués sur votre propriété correspondant aux coordonnées « X = 519888 et Y = 796060»</p>
                 
                 <p>Vous êtes contraint de procéder au règlement de ce montant dans les quinzaines (15 jours) à compter de la réception de la présente par le moyen <em>d'un chèque de banque dûment légalisé par l'établissement bancaire auquel vous êtes affilié, et adressé à l'ordre de « Monsieur l'Agent Comptable de l'Autorité pour la Protection contre les Inondations de la Plaine d'Antananarivo (APIPA) ».</em></p>
             </div>
@@ -314,7 +314,7 @@
                         <th style="width: 20%;">N° Titre</th>
                         <th style="width: 20%;">Destination</th>
                         <th style="width: 20%;">Superficie</th>
-                        <th style="width: 20%;">Valeur de l'amande/redevance par unité</th>
+                        <th style="width: 20%;">Valeur de l'amende/redevance par unité</th>
                         <th style="width: 20%;">Montant</th>
                     </tr>
                     <tr>

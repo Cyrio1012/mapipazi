@@ -13,11 +13,16 @@ class ArchivesController extends Controller
 {
     public function index()
     {
+<<<<<<< Updated upstream
         // Récupérer TOUTES les archives sans limite
         $archives = Archives::orderBy('id', 'desc')->get();
         
         // Debug
         \Log::info("Archives récupérées: " . $archives->count());
+=======
+        // Récupérer toutes les archives sans pagination
+        $archives = Archives::orderBy('date_arriv', 'desc')->get();
+>>>>>>> Stashed changes
         
         return view('archives.index', compact('archives'));
     }
