@@ -4,11 +4,11 @@
 <div class="container-fluid py-4">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="fas fa-arrow-down"></i> Liste des Descentes</h4>
+            <h4 class="mb-0"><i class="fas fa-file-alt"></i> Liste des Demandes</h4>
             <div>
-                <span class="badge bg-light text-dark me-2">Total: {{ $descentes->count() }}</span>
-                <a href="{{ route('descentes.create') }}" class="btn btn-light btn-sm">
-                    <i class="fas fa-plus"></i> Nouvelle descente
+                <span class="badge bg-light text-dark me-2">Total: {{ $demandes->count() }}</span>
+                <a href="{{ route('demandes.create') }}" class="btn btn-light btn-sm">
+                    <i class="fas fa-plus"></i> Nouvelle demande
                 </a>
                 <button class="btn btn-light btn-sm ms-2" onclick="toggleColumnFilter()">
                     <i class="fas fa-columns"></i> Filtrer colonnes
@@ -91,17 +91,17 @@
                 </div>
             </div>
 
-            <!-- Tableau des descentes -->
+            <!-- Tableau des demandes -->
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-light" id="tableHeader">
                         <!-- L'en-tête sera généré dynamiquement -->
                     </thead>
-                    <tbody id="descenteTableBody">
-                        @foreach($descentes as $descente)
-                        <tr class="descente-row" data-id="{{ $descente->id }}"
-                            data-descente='@json($descente)'>
-                            <!-- Les données sont stockées dans l'attribut data-descente -->
+                    <tbody id="demandeTableBody">
+                        @foreach($demandes as $demande)
+                        <tr class="demande-row" data-id="{{ $demande->id }}"
+                            data-demande='@json($demande)'>
+                            <!-- Les données sont stockées dans l'attribut data-demande -->
                         </tr>
                         @endforeach
                     </tbody>
@@ -111,8 +111,8 @@
             <!-- Pagination -->
             <div class="d-flex justify-content-between align-items-center mt-3">
                 <div class="text-muted">
-                    Affichage de <span id="startRow">1</span> à <span id="endRow">{{ min(25, $descentes->count()) }}</span> 
-                    sur <strong id="totalRows">{{ $descentes->count() }}</strong> descentes
+                    Affichage de <span id="startRow">1</span> à <span id="endRow">{{ min(25, $demandes->count()) }}</span> 
+                    sur <strong id="totalRows">{{ $demandes->count() }}</strong> demandes
                 </div>
                 <nav>
                     <ul class="pagination mb-0" id="pagination">
@@ -127,7 +127,7 @@
 
 <!-- Styles personnalisés -->
 <style>
-.descente-row:hover {
+.demande-row:hover {
     background-color: #f8f9fa !important;
     transform: translateY(-1px);
     transition: all 0.2s ease;
@@ -205,34 +205,14 @@
     transition: all 0.3s ease;
 }
 
+.status-badge {
+    font-size: 0.7em;
+    padding: 3px 8px;
+}
+
+/* Ajout pour la cellule Actions */
 .actions-cell {
     white-space: nowrap;
-}
-
-/* Badges pour les statuts */
-.badge-comparution-0 {
-    background-color: #dc3545;
-    color: white;
-}
-
-.badge-comparution-1 {
-    background-color: #28a745;
-    color: white;
-}
-
-/* Pour les données JSON */
-.json-preview {
-    max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.coordinate-badge {
-    font-family: 'Courier New', monospace;
-    font-size: 0.8em;
-    background-color: #e9ecef;
-    color: #495057;
 }
 </style>
 
@@ -242,40 +222,42 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// Définition des colonnes disponibles pour les descentes
+// Définition des colonnes disponibles pour les demandes
 const availableColumns = [
     { id: 'id', label: 'ID', default: true, width: '60' },
-    { id: 'date', label: 'Date descente', default: true, width: '120' },
-    { id: 'heure', label: 'Heure', default: true, width: '80' },
-    { id: 'ref_om', label: 'Réf. OM', default: true, width: '120' },
-    { id: 'ref_pv', label: 'Réf. PV', default: true, width: '120' },
-    { id: 'ref_rapport', label: 'Réf. Rapport', default: false, width: '120' },
-    { id: 'num_pv', label: 'N° PV', default: true, width: '100' },
-    { id: 'ft_id', label: 'ID FT', default: false, width: '100' },
-    { id: 'pers_verb', label: 'Personne verbale', default: true, width: '150' },
-    { id: 'qte_pers', label: 'Quantité pers.', default: false, width: '100' },
-    { id: 'adresse', label: 'Adresse', default: true, width: '200' },
-    { id: 'contact', label: 'Contact', default: true, width: '120' },
-    { id: 'dist', label: 'District', default: true, width: '100' },
-    { id: 'comm', label: 'Commune', default: true, width: '120' },
-    { id: 'fkt', label: 'Fokontany', default: true, width: '120' },
-    { id: 'x', label: 'Longitude (X)', default: false, width: '120' },
-    { id: 'y', label: 'Latitude (Y)', default: false, width: '120' },
-    { id: 'comparution', label: 'Comparution', default: true, width: '100' },
-    { id: 'date_rdv_ft', label: 'Date RDV FT', default: false, width: '120' },
-    { id: 'heure_rdv_ft', label: 'Heure RDV FT', default: false, width: '100' },
-    { id: 'equipe', label: 'Équipe', default: false, width: '150' },
-    { id: 'action', label: 'Actions', default: false, width: '150' },
-    { id: 'constat', label: 'Constat', default: false, width: '150' },
-    { id: 'pieces_a_fournir', label: 'Pièces à fournir', default: false, width: '150' },
-    { id: 'pieces_fournis', label: 'Pièces fournies', default: false, width: '150' }
+    { id: 'exoyear', label: 'Année d\'exercice', default: true, width: '100' },
+    { id: 'arrivaldate', label: 'Date d\'arrivée', default: true, width: '120' },
+    { id: 'arrivalid', label: 'Réf. Arrivée', default: true, width: '120' },
+    { id: 'sendersce', label: 'Service émetteur', default: true, width: '150' },
+    { id: 'applicantname', label: 'Nom du demandeur', default: true, width: '180' },
+    { id: 'applicantaddress', label: 'Adresse du demandeur', default: false, width: '200' },
+    { id: 'propertyname', label: 'Nom de la propriété', default: true, width: '180' },
+    { id: 'propertyowner', label: 'Propriétaire', default: true, width: '180' },
+    { id: 'propertytitle', label: 'Titre de propriété', default: false, width: '150' },
+    { id: 'locality', label: 'Localité', default: true, width: '120' },
+    { id: 'municipality', label: 'Commune', default: true, width: '120' },
+    { id: 'surfacearea', label: 'Surface (m²)', default: true, width: '100' },
+    { id: 'backfilledarea', label: 'Surface remblayée (m²)', default: false, width: '130' },
+    { id: 'roaltyamount', label: 'Montant ', default: true, width: '130' },
+    { id: 'xv', label: 'Coordonnée X', default: false, width: '100' },
+    { id: 'yv', label: 'Coordonnée Y', default: false, width: '100' },
+    { id: 'upr', label: 'UPR', default: true, width: '80' },
+    { id: 'sit_r', label: 'SIT_R', default: true, width: '80' },
+    { id: 'category', label: 'Catégorie', default: true, width: '120' },
+    { id: 'opfinal', label: 'Avis final OP', default: true, width: '120' },
+    { id: 'invoicingid', label: 'Réf. Facturation', default: false, width: '120' },
+    { id: 'invoicingdate', label: 'Date de facturation', default: false, width: '130' },
+    { id: 'commissiondate', label: 'Date commission', default: false, width: '130' },
+    { id: 'commissionopinion', label: 'Avis commission', default: false, width: '150' },
+    { id: 'opiniondfdate', label: 'Date avis DF', default: false, width: '120' },
+    { id: 'urbanplanningregulations', label: 'Règlements d\'urbanisme', default: false, width: '180' }
 ];
 
-class DescenteTable {
+class DemandeTable {
     constructor() {
         this.currentPage = 1;
         this.pageSize = 25;
-        this.allRows = document.querySelectorAll('.descente-row');
+        this.allRows = document.querySelectorAll('.demande-row');
         this.totalRows = this.allRows.length;
         this.filteredRows = Array.from(this.allRows);
         this.selectedColumns = this.getDefaultColumns();
@@ -377,7 +359,7 @@ class DescenteTable {
         manageDiv.className = 'd-flex align-items-center ms-2';
         manageDiv.innerHTML = `
             <button class="btn btn-sm btn-outline-secondary" onclick="toggleColumnFilter()" title="Gérer les colonnes">
-                <i class="fas fa-plus"></i>+
+                <i class="fas fa-plus"></i>
             </button>
         `;
         container.appendChild(manageDiv);
@@ -413,7 +395,7 @@ class DescenteTable {
         // Ajouter la colonne Actions
         const actionsTh = document.createElement('th');
         actionsTh.className = 'text-center actions-cell';
-        actionsTh.style.width = '120px';
+        actionsTh.style.width = '100px';
         actionsTh.innerHTML = `
             <span>Actions</span>
             <div class="column-actions">
@@ -431,7 +413,7 @@ class DescenteTable {
 
     renderTableBody() {
         this.allRows.forEach(row => {
-            const descenteData = this.getDescenteData(row);
+            const demandeData = this.getDemandeData(row);
             row.innerHTML = '';
             
             // Ajouter les cellules pour chaque colonne sélectionnée
@@ -440,7 +422,7 @@ class DescenteTable {
                 td.className = 'table-column';
                 
                 // Récupérer la valeur depuis les données
-                const value = descenteData[columnId] || null;
+                const value = demandeData[columnId] || null;
                 const formattedValue = this.formatCellValue(value, columnId);
                 td.innerHTML = formattedValue;
                 
@@ -452,18 +434,18 @@ class DescenteTable {
             actionsTd.className = 'text-center actions-cell';
             actionsTd.innerHTML = `
                 <div class="btn-group btn-group-sm" role="group">
-                    <a href="/descentes/${descenteData.id}" 
+                    <a href="/demandes/${demandeData.id}" 
                        class="btn btn-outline-info" 
                        title="Voir les détails">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <a href="/descentes/${descenteData.id}/edit" 
+                    <a href="/demandes/${demandeData.id}/edit" 
                        class="btn btn-outline-warning" 
                        title="Modifier">
                         <i class="fas fa-edit"></i>
                     </a>
                     <button class="btn btn-outline-danger" 
-                            onclick="confirmDelete(${descenteData.id})"
+                            onclick="confirmDelete(${demandeData.id})"
                             title="Supprimer">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -473,32 +455,16 @@ class DescenteTable {
         });
     }
 
-    getDescenteData(row) {
+    getDemandeData(row) {
         try {
-            const dataJson = row.getAttribute('data-descente');
+            const dataJson = row.getAttribute('data-demande');
             if (dataJson) {
                 const data = JSON.parse(dataJson);
                 // Convertir les dates pour le formatage
-                if (data.date) data.date = new Date(data.date);
-                if (data.date_rdv_ft) data.date_rdv_ft = new Date(data.date_rdv_ft);
-                
-                // Parser les champs JSON si nécessaire
-                if (data.equipe && typeof data.equipe === 'string') {
-                    try { data.equipe = JSON.parse(data.equipe); } catch(e) { data.equipe = []; }
-                }
-                if (data.action && typeof data.action === 'string') {
-                    try { data.action = JSON.parse(data.action); } catch(e) { data.action = []; }
-                }
-                if (data.constat && typeof data.constat === 'string') {
-                    try { data.constat = JSON.parse(data.constat); } catch(e) { data.constat = []; }
-                }
-                if (data.pieces_a_fournir && typeof data.pieces_a_fournir === 'string') {
-                    try { data.pieces_a_fournir = JSON.parse(data.pieces_a_fournir); } catch(e) { data.pieces_a_fournir = []; }
-                }
-                if (data.pieces_fournis && typeof data.pieces_fournis === 'string') {
-                    try { data.pieces_fournis = JSON.parse(data.pieces_fournis); } catch(e) { data.pieces_fournis = []; }
-                }
-                
+                if (data.arrivaldate) data.arrivaldate = new Date(data.arrivaldate);
+                if (data.invoicingdate) data.invoicingdate = new Date(data.invoicingdate);
+                if (data.commissiondate) data.commissiondate = new Date(data.commissiondate);
+                if (data.opiniondfdate) data.opiniondfdate = new Date(data.opiniondfdate);
                 return data;
             }
         } catch (e) {
@@ -514,92 +480,84 @@ class DescenteTable {
         
         switch(columnId) {
             case 'id':
-                return `<span class="fw-bold">#${value}</span>`;
-            case 'date':
-            case 'date_rdv_ft':
+                return `<span class="fw-bold">${value}</span>`;
+            case 'arrivalid':
+            case 'invoicingid':
+                return `<strong class="text-primary">${value}</strong>`;
+            case 'arrivaldate':
+            case 'invoicingdate':
+            case 'commissiondate':
+            case 'opiniondfdate':
                 if (value instanceof Date && !isNaN(value)) {
                     return `<span class="badge bg-light text-dark">${this.formatDate(value)}</span>`;
                 } else if (typeof value === 'string') {
                     return `<span class="badge bg-light text-dark">${this.formatDateString(value)}</span>`;
                 }
                 return value;
-            case 'heure':
-            case 'heure_rdv_ft':
+            case 'exoyear':
                 return `<span class="badge bg-secondary">${value}</span>`;
-            case 'ref_om':
-            case 'ref_pv':
-            case 'ref_rapport':
-                return `<strong class="text-primary">${value}</strong>`;
-            case 'num_pv':
-                return `<code class="bg-light px-2 rounded">${value}</code>`;
-            case 'ft_id':
-                return `<span class="text-info fw-bold">${value}</span>`;
-            case 'pers_verb':
-                return `<span class="fw-bold">${this.truncateText(value, 20)}</span>`;
-            case 'qte_pers':
-                return `<span class="badge bg-info">${value} pers.</span>`;
-            case 'adresse':
+            case 'applicantname':
+            case 'propertyowner':
+                return `<span class="fw-bold">${this.truncateText(value, 25)}</span>`;
+            case 'applicantaddress':
                 return `<small>${this.truncateText(value, 30)}</small>`;
-            case 'contact':
-                return `<span class="text-success">${value}</span>`;
-            case 'dist':
-                return `<span class="text-truncate" title="${value}">${value}</span>`;
-            case 'comm':
-                return `<span class="fw-semibold">${value}</span>`;
-            case 'fkt':
-                return `<span class="text-truncate" title="${value}">${value}</span>`;
-            case 'x':
-            case 'y':
+            case 'propertyname':
+                return `<span class="text-truncate" title="${value}">${this.truncateText(value, 20)}</span>`;
+            case 'propertytitle':
+                return `<code>${this.truncateText(value, 15)}</code>`;
+            case 'locality':
+            case 'municipality':
+                return `<span>${value}</span>`;
+            case 'sendersce':
+                return `<span class="badge bg-info text-dark">${value}</span>`;
+            case 'roaltyamount':
                 if (!isNaN(parseFloat(value))) {
-                    return `<span class="coordinate-badge badge">${parseFloat(value).toFixed(6)}</span>`;
+                    return `<span class="text-success fw-bold">${parseFloat(value).toFixed(2)} €</span>`;
                 }
                 return value;
-            case 'comparution':
-                if (value === 1) {
-                    return `<span class="badge badge-comparution-1">Comparu ✓</span>`;
-                } else {
-                    return `<span class="badge badge-comparution-0">Non comparu ✗</span>`;
+            case 'surfacearea':
+            case 'backfilledarea':
+                if (!isNaN(parseFloat(value))) {
+                    return `<span>${parseFloat(value).toFixed(2)} m²</span>`;
                 }
-            case 'equipe':
-            case 'action':
-            case 'constat':
-            case 'pieces_a_fournir':
-            case 'pieces_fournis':
-                return this.formatJsonArray(value, 3);
+                return value;
+            case 'xv':
+            case 'yv':
+                if (!isNaN(parseFloat(value))) {
+                    return `<span>${parseFloat(value).toFixed(4)}</span>`;
+                }
+                return value;
+            case 'upr':
+            case 'sit_r':
+                return `<code class="bg-light px-1 rounded">${value}</code>`;
+            case 'category':
+                const categoryColors = {
+                    'A': 'bg-primary',
+                    'B': 'bg-success',
+                    'C': 'bg-warning',
+                    'D': 'bg-danger'
+                };
+                const color = categoryColors[value] || 'bg-secondary';
+                return `<span class="badge ${color}">${value}</span>`;
+            case 'opfinal':
+                if (typeof value === 'string') {
+                    const lowerVal = value.toLowerCase();
+                    if (lowerVal.includes('favorable') || lowerVal.includes('apprové') || lowerVal.includes('accepté')) {
+                        return `<span class="badge bg-success">Favorable</span>`;
+                    } else if (lowerVal.includes('défavorable') || lowerVal.includes('rejeté') || lowerVal.includes('refusé')) {
+                        return `<span class="badge bg-danger">Défavorable</span>`;
+                    } else {
+                        return `<span class="badge bg-warning text-dark">${value}</span>`;
+                    }
+                }
+                return value;
+            case 'commissionopinion':
+                return `<small>${this.truncateText(value, 40)}</small>`;
+            case 'urbanplanningregulations':
+                return `<small class="text-truncate d-block" style="max-width: 250px;">${value}</small>`;
             default:
                 return value;
         }
-    }
-
-    formatJsonArray(value, maxItems = 3) {
-        if (!value) return '<span class="text-muted">-</span>';
-        
-        let items = [];
-        if (Array.isArray(value)) {
-            items = value;
-        } else if (typeof value === 'string') {
-            try {
-                const parsed = JSON.parse(value);
-                if (Array.isArray(parsed)) items = parsed;
-            } catch(e) {
-                items = [value];
-            }
-        }
-        
-        if (items.length === 0) return '<span class="text-muted">-</span>';
-        
-        const displayedItems = items.slice(0, maxItems);
-        const remaining = items.length - maxItems;
-        
-        let html = displayedItems.map(item => 
-            `<span class="badge bg-light text-dark me-1 mb-1">${this.truncateText(String(item), 20)}</span>`
-        ).join('');
-        
-        if (remaining > 0) {
-            html += `<span class="badge bg-secondary" title="${remaining} autres">+${remaining}</span>`;
-        }
-        
-        return `<div class="json-preview">${html}</div>`;
     }
 
     truncateText(text, maxLength) {
@@ -640,8 +598,8 @@ class DescenteTable {
         } else {
             this.filteredRows = Array.from(this.allRows).filter(row => {
                 // Rechercher dans toutes les données de la ligne
-                const descenteData = this.getDescenteData(row);
-                const rowText = Object.values(descenteData)
+                const demandeData = this.getDemandeData(row);
+                const rowText = Object.values(demandeData)
                     .join(' ')
                     .toLowerCase();
                 return rowText.includes(term);
@@ -777,7 +735,7 @@ class DescenteTable {
 }
 
 // Variables globales
-let descenteTable;
+let demandeTable;
 
 // Fonctions globales
 function toggleColumnFilter() {
@@ -805,16 +763,16 @@ function applyColumnFilter() {
         selectedColumns.push(checkbox.value);
     });
     
-    descenteTable.updateSelectedColumns(selectedColumns);
+    demandeTable.updateSelectedColumns(selectedColumns);
     toggleColumnFilter();
 }
 
 function toggleColumnVisibility(columnId, show) {
-    descenteTable.toggleColumn(columnId, show);
+    demandeTable.toggleColumn(columnId, show);
 }
 
 function hideColumn(columnId) {
-    descenteTable.hideColumn(columnId);
+    demandeTable.hideColumn(columnId);
     // Mettre à jour la checkbox correspondante
     const checkbox = document.getElementById(`visible_col_${columnId}`);
     if (checkbox) {
@@ -823,12 +781,12 @@ function hideColumn(columnId) {
 }
 
 // Fonction de confirmation pour la suppression
-function confirmDelete(descenteId) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette descente ? Cette action est irréversible.')) {
+function confirmDelete(demandeId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) {
         // Créer un formulaire de suppression
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = `/descentes/${descenteId}`;
+        form.action = `/demandes/${demandeId}`;
         form.style.display = 'none';
         
         const csrfToken = document.createElement('input');
@@ -851,8 +809,8 @@ function confirmDelete(descenteId) {
 // Export Excel de toutes les colonnes
 function exportToExcel() {
     const table = document.querySelector('table');
-    const workbook = XLSX.utils.table_to_book(table, {sheet: "Descentes"});
-    XLSX.writeFile(workbook, `descentes_${new Date().toISOString().split('T')[0]}.xlsx`);
+    const workbook = XLSX.utils.table_to_book(table, {sheet: "Demandes"});
+    XLSX.writeFile(workbook, `demandes_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
 
 // Export Excel uniquement des colonnes visibles
@@ -866,22 +824,22 @@ function exportVisibleToExcel() {
     tempTable.appendChild(originalHeader);
     
     // Ajouter les données visibles
-    document.querySelectorAll('.descente-row:not([style*="display: none"])').forEach(row => {
+    document.querySelectorAll('.demande-row:not([style*="display: none"])').forEach(row => {
         const clonedRow = row.cloneNode(true);
         clonedRow.deleteCell(clonedRow.cells.length - 1); // Supprimer Actions
         tempTable.appendChild(clonedRow);
     });
     
-    const workbook = XLSX.utils.table_to_book(tempTable, {sheet: "Descentes"});
-    XLSX.writeFile(workbook, `descentes_colonnes_${new Date().toISOString().split('T')[0]}.xlsx`);
+    const workbook = XLSX.utils.table_to_book(tempTable, {sheet: "Demandes"});
+    XLSX.writeFile(workbook, `demandes_colonnes_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
 
 // Initialisation quand la page est chargée
 document.addEventListener('DOMContentLoaded', function() {
-    descenteTable = new DescenteTable();
+    demandeTable = new DemandeTable();
     
     // Afficher un message de confirmation
-    console.log(`Tableau des descentes initialisé avec ${document.querySelectorAll('.descente-row').length} lignes`);
+    console.log(`Tableau des demandes initialisé avec ${document.querySelectorAll('.demande-row').length} lignes`);
 });
 </script>
 

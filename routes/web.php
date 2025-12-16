@@ -7,19 +7,32 @@ use App\Http\Controllers\ProprieteController;
 use App\Http\Controllers\FtController;
 use App\Http\Controllers\ApController;
 use App\Http\Controllers\CartographieController;
-use App\Http\Controllers\DescenteController;
+use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MatroController;
+use App\Http\Controllers\Home;
 use App\Models\Descentes;
 use App\Http\Controllers\ArchivesController;
 use App\Http\Controllers\guserController;
+use App\Http\Controllers\DoleanceController;
+
+ Route::get('/', [Home::class, 'home'])->name('home');
+ Route::post('/doleances', [DoleanceController::class, 'store'])
+    ->name('doleances.store');
 Route::middleware(['auth'])->group(function () {
 
     Route::resource('archives', ArchivesController::class);
     Route::resource('users', guserController::class);
-
+    Route::resource('doleances', DoleanceController::class)->except(['create', 'store']);
+    Route::patch('/doleances/{doleance}/status', [DoleanceController::class, 'updateStatus'])
+        ->name('doleances.update.status');
+    Route::get('/doleances/dashboard', [DoleanceController::class, 'dashboard'])
+        ->name('doleances.dashboard');
     Route::resource('descentes', DescentesController::class);
-    Route::get('/', [DescentesController::class, 'dashboard'])->name('dashboard');
+    Route::resource('demandes', DemandeController::class);
+
+   
+    Route::get('/dashboardDescente', [DescentesController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboardArchive', [ArchivesController::class, 'dashboard'])->name('dashboardArchive');
     
     Route::resource('fts', FtController::class);
