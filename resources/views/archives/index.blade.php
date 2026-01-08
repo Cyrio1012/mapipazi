@@ -505,7 +505,7 @@ class ArchiveTable {
             case 'svr_fine':
             case 'svr_roalty':
                 if (!isNaN(parseFloat(value))) {
-                    return `<span class="text-danger fw-bold">${parseFloat(value).toFixed(2)} €</span>`;
+                    return `<span class="text-danger fw-bold">${parseFloat(value).toFixed(2)} Ar</span>`;
                 }
                 return value;
             case 'surfacearea':

@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/descentes/{descente}/aps/create', [ApController::class, 'etablir_ap'])->name('aps.create');
     Route::post('/aps', [ApController::class, 'store'])->name('aps.store');
-    Route::resource('aps', ApController::class);
+    Route::resource('aps', ApController::class)->except(['create']); // Exclure 'create' du resource
     Route::get('/aps/{id}/export', [ApController::class, 'export'])->name('aps.export');
     
     Route::get('/cartographie', [CartographieController::class, 'index'])->name('cartographie.index');

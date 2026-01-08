@@ -512,7 +512,7 @@ class DemandeTable {
                 return `<span class="badge bg-info text-dark">${value}</span>`;
             case 'roaltyamount':
                 if (!isNaN(parseFloat(value))) {
-                    return `<span class="text-success fw-bold">${parseFloat(value).toFixed(2)} €</span>`;
+                    return `<span class="text-success fw-bold">${parseFloat(value).toFixed(2)} Ar</span>`;
                 }
                 return value;
             case 'surfacearea':

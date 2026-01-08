@@ -87,12 +87,12 @@
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(84, 185, 219, 0.8), rgba(0, 77, 153, 0.9)), 
-                        url('https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background: linear-gradient(rgba(84, 185, 219, 0.2), rgba(0, 77, 153, 0.9)), 
+                        url('{{ asset('assets/img/pelleAmphibie.png?auto=format&fit=crop&w=2070&q=80')}}');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 120px 0 100px;
+            padding: 100px 0 90px;
             position: relative;
             overflow: hidden;
         }
@@ -605,10 +605,10 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="position-relative">
-                        <div class="img-fluid rounded-3 shadow" style="background: linear-gradient(rgba(0, 102, 204, 0.8), rgba(0, 77, 153, 0.9)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80'); height: 500px; background-size: cover; background-position: center;"></div>
-                        <div class="position-absolute bottom-0 start-0 p-4 bg-white rounded-end shadow" style="width: 80%;">
-                            <h4 class="text-primary">Depuis 2010</h4>
-                            <p class="mb-0">Plus d'une décennie au service de la protection contre les inondations</p>
+                        <div class="img-fluid rounded-3 shadow" style="background: linear-gradient(rgba(0, 102, 204, 0.7), rgba(0, 77, 153, 0.07)), url('{{ asset('assets/img/logo-30ans.png?fit=crop&w=350&q=80')}}'); height: 500px; background-size: cover; background-position: center;"></div>
+                        <div class="position-absolute bottom-0 start-0 p-4 bg-white rounded-end shadow" style="width: 100%;">
+                            <h4 class="text-primary">Antananarivo - L'APIPA</h4>
+                            <p class="mb-0">veille la capitale depuis de trentenaire...</p>
                         </div>
                     </div>
                 </div>
@@ -671,20 +671,20 @@
         <div class="container">
             <div class="row text-center">
                 <div class="col-md-3 col-6 mb-5">
-                    <span class="stat-number" data-count="150">0</span>
-                    <span class="stat-label">Projets réalisés</span>
+                    <span class="stat-number" data-count="150">150 émis</span>
+                    <span class="stat-label">Avis de Paiement</span>
                 </div>
                 <div class="col-md-3 col-6 mb-5">
-                    <span class="stat-number" data-count="12">0</span>
-                    <span class="stat-label">Communes couvertes</span>
+                    <span class="stat-number" data-count="85">75 %</span>
+                    <span class="stat-label">Exécution budgetaire</span>
                 </div>
                 <div class="col-md-3 col-6 mb-5">
-                    <span class="stat-number" data-count="2500">0</span>
-                    <span class="stat-label">Familles protégées</span>
+                    <span class="stat-number" data-count="2500">600 m</span>
+                    <span class="stat-label">Digues entretenues</span>
                 </div>
                 <div class="col-md-3 col-6 mb-5">
-                    <span class="stat-number" data-count="85">0</span>
-                    <span class="stat-label">% de risque réduit</span>
+                    <span class="stat-number" data-count="55">55 com.</span>
+                    <span class="stat-label">Zones d'interventions</span>
                 </div>
             </div>
         </div>
@@ -767,7 +767,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="service-card">
                         <div class="service-img">
-                            <img src="https://images.unsplash.com/photo-1581540229133-2e860df7c414?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2076&q=80" alt="Études techniques">
+                            <img src="{{ asset('assets/img/remblai.webp?auto=format&fit=crop&w=2070&q=80') }}" alt="Études techniques">
                         </div>
                         <div class="service-content">
                             <h4>Études techniques</h4>
@@ -779,7 +779,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="service-card">
                         <div class="service-img">
-                            <img src="https://images.unsplash.com/photo-1590650213165-c1f7771f4d73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Permis et autorisations">
+                            <img src="{{ asset('assets/img/remblai1.webp?auto=format&fit=crop&w=2070&q=80') }}" alt="Permis et autorisations">
                         </div>
                         <div class="service-content">
                             <h4>Permis et autorisations</h4>
@@ -791,11 +791,11 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="service-card">
                         <div class="service-img">
-                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Formation et conseil">
+                            <img src="{{ asset('assets/img/remblai.jpg?auto=format&fit=crop&w=2070&q=80') }}" alt="Formation et conseil">
                         </div>
                         <div class="service-content">
                             <h4>Formation et conseil</h4>
-                            <p>Formations sur la gestion des risques et conseils techniques pour les professionnels du BTP.</p>
+                            <p>Formations sur la gestion des risques et conseils techniques pour les CTD.</p>
                             <a href="#contact" class="btn btn-outline-primary mt-3">S'inscrire</a>
                         </div>
                     </div>
@@ -821,7 +821,7 @@
                             </div>
                             <div>
                                 <h5>Adresse</h5>
-                                <p>BP 1234, Rue de l'Indépendance<br>Antananarivo 101, Madagascar</p>
+                                <p>Rue Pasteur RAHAJASON<br>lot IVW 18 E, Anisizato-Est II</p>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -830,7 +830,7 @@
                             </div>
                             <div>
                                 <h5>Téléphone</h5>
-                                <p>+261 20 22 222 22<br>+261 34 00 000 00</p>
+                                <p>+261 34 44 273 32<br>+261 34 05 578 90</p>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -839,7 +839,7 @@
                             </div>
                             <div>
                                 <h5>Email</h5>
-                                <p>contact@apipa.mg<br>info@apipa.mg</p>
+                                <p>apipatana.dg@gmail.com<br>dg.apipa@sadex.mg</p>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -847,8 +847,8 @@
                                 <i class="fas fa-clock"></i>
                             </div>
                             <div>
-                                <h5>Horaires d'ouverture</h5>
-                                <p>Lundi - Vendredi: 8h00 - 16h00<br>Samedi: 8h00 - 12h00</p>
+                                <h5>Horaires de bureau</h5>
+                                <p>Lundi-Vendredi: 8h00 - 16h00<br>
                             </div>
                         </div>
                     </div>
@@ -946,7 +946,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 APIPA - Autorité pour la Protection contre les Inondations de la Plaine d'Antananarivo. Tous droits réservés.</p>
+                <p>Copyright &copy; SADEx MapPezi (APIPA 2025 - 2026). Tous droits réservés.</p>
             </div>
         </div>
     </footer>

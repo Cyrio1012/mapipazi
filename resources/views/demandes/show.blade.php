@@ -133,7 +133,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-muted small">Montant Royalty</label>
-                        <p class="fw-bold">{{ $demande->roaltyamount ? number_format($demande->roaltyamount, 2) . ' €' : '0.00 €' }}</p>
+                        <p class="fw-bold">{{ $demande->roaltyamount ? number_format($demande->roaltyamount, 2) . ' Ar' : '0.00 Ar' }}</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-muted small">Année Exercice</label>

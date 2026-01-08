@@ -308,13 +308,13 @@
                                     </div>
                                     
                                     <div class="col-md-3 mb-3">
-                                        <label for="fineamount" class="form-label">Montant amende (€)</label>
+                                        <label for="fineamount" class="form-label">Montant amende (Ar)</label>
                                         <input type="number" class="form-control" id="fineamount" name="fineamount" 
                                                value="{{ old('fineamount', $archive->fineamount ?? '') }}" step="0.01" min="0">
                                     </div>
                                     
                                     <div class="col-md-3 mb-3">
-                                        <label for="roaltyamount" class="form-label">Montant redevance (€)</label>
+                                        <label for="roaltyamount" class="form-label">Montant redevance (Ar)</label>
                                         <input type="number" class="form-control" id="roaltyamount" name="roaltyamount" 
                                                value="{{ old('roaltyamount', $archive->roaltyamount ?? '') }}" step="0.01" min="0">
                                     </div>

@@ -1,0 +1,36 @@
+{
+    "dbcode.connections": [
+        {
+            "connectionId": "CNTjxsqdZ67K1EW78TI81",
+            "name": "pgc",
+            "driver": "postgres",
+            "color": "#00E3A9",
+            "connectionType": "host",
+            "host": "localhost",
+            "port": 5432,
+            "ssl": false,
+            "authMethod": "password",
+            "username": "csrpo",
+            "password": "pk0ARRzc1YyF1qE8JSvXCsjNguVyg+6ECrY6Q96AVfcEH5s=",
+            "savePassword": "encrypted",
+            "salt": "84WNWDvSbnZHePF+ymQbrQ==",
+            "database": "bddApipa",
+            "readOnly": false,
+            "postConnectionSqlType": "inline",
+            "connectionTimeout": 30
+        }
+    ],
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "pgconnex",
+            "database": "bddApipa",
+            "username": "csrpo"
+        }
+    ]
+}
