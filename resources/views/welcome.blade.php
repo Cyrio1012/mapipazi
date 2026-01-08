@@ -605,10 +605,10 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="position-relative">
-                        <div class="img-fluid rounded-3 shadow" style="background: linear-gradient(rgba(0, 102, 204, 0.7), rgba(0, 77, 153, 0.07)), url('{{ asset('assets/img/logo-30ans.png?fit=crop&w=350&q=80')}}'); height: 500px; background-size: cover; background-position: center;"></div>
+                        <div class="img-fluid rounded-3 shadow" style="background: linear-gradient(rgba(0, 102, 204, 0.7), rgba(0, 77, 153, 0.07)), url('{{ asset('assets/img/logo-30ans.png?fit=crop&w=350&q=80')}}'); height: 600px; background-size: cover; background-position: center;"></div>
                         <div class="position-absolute bottom-0 start-0 p-4 bg-white rounded-end shadow" style="width: 100%;">
-                            <h4 class="text-primary">Antananarivo - L'APIPA</h4>
-                            <p class="mb-0">veille la capitale depuis de trentenaire...</p>
+                            <h4 class="text-primary">Antananarivo | APIPA</h4>
+                            <p class="mb-0">protège la capitale depuis de trentenaire...</p>
                         </div>
                     </div>
                 </div>
@@ -904,13 +904,13 @@
             <div class="row">
                 <div class="col-lg-4 mb-5 mb-lg-0">
                     <a href="#" class="footer-logo d-flex align-items-center">
-                        <img src="https://via.placeholder.com/40x40/ffffff/0066cc?text=APIPA" alt="APIPA Logo" class="me-2">
-                        APIPA
+                        <img src="{{ asset('assets/img/fav.png') }}" alt="APIPA Page" class="me-3"> L'APIPA 
+                        <img src="{{ asset('assets/img/fbQr.png') }}" alt="APIPA Logo" class="me-3">
                     </a>
-                    <p class="mt-3 mb-4" style="color: #bbb;">L'Autorité pour la Protection contre les Inondations de la Plaine d'Antananarivo veille à la sécurité des populations et des infrastructures face aux risques d'inondation.</p>
+                    <p class="mt-3 mb-4" style="color: #bbb;">veille à la sécurité des populations et des infrastructures face aux risques d'inondation.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/share/17dR3rAVPc/https://www.facebook.com/share/17dR3rAVPc/"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://api.whatsapp.com/send?phone=%2B261344427332"><i class="fab fa-whatsapp"></i></a>
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
@@ -946,7 +946,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>Copyright &copy; SADEx MapPezi (APIPA 2025 - 2026). Tous droits réservés.</p>
+                <p>Copyright &copy; 2025 APIPA (SADEx MapPezi). Tous droits réservés.</p>
             </div>
         </div>
     </footer>
